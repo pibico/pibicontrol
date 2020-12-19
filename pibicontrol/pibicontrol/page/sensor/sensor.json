@@ -1,0 +1,20 @@
+{
+ "content": null,
+ "creation": "2020-12-17 16:34:20.172680",
+ "docstatus": 0,
+ "doctype": "Page",
+ "icon": "fa fa-anchor",
+ "idx": 0,
+ "modified": "2020-12-17 18:04:14.978860",
+ "modified_by": "Administrator",
+ "module": "Pibicontrol",
+ "name": "sensor",
+ "owner": "Administrator",
+ "page_name": "sensor",
+ "roles": [],
+ "script": null,
+ "standard": "Yes",
+ "style": null,
+ "system_page": 0,
+ "title": "Sensor"
+}

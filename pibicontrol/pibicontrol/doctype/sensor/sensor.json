@@ -1,0 +1,235 @@
+{
+ "allow_rename": 1,
+ "autoname": "field:sensor_shortcut",
+ "creation": "2020-12-15 13:02:19.231828",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "sensor_group",
+  "hostname",
+  "serial",
+  "user",
+  "stock_item",
+  "sensor_shortcut",
+  "room",
+  "dashboard_chart",
+  "notes",
+  "col_break_1",
+  "disabled",
+  "location",
+  "mqtt_commands",
+  "telegram_commands",
+  "alerts_active",
+  "pictures",
+  "gallery",
+  "sec_break_1",
+  "sms_alert",
+  "sms_recipients",
+  "col_break_2",
+  "telegram_alert",
+  "telegram_recipients",
+  "col_break_3",
+  "mqtt_alert",
+  "mqtt_recipients",
+  "col_break_4",
+  "email_alert",
+  "email_recipients",
+  "sec_break_2",
+  "threshold_item"
+ ],
+ "fields": [
+  {
+   "fieldname": "serial",
+   "fieldtype": "Data",
+   "label": "Serial"
+  },
+  {
+   "default": "0",
+   "fieldname": "disabled",
+   "fieldtype": "Check",
+   "label": "Disabled"
+  },
+  {
+   "fieldname": "hostname",
+   "fieldtype": "Data",
+   "label": "Hostname"
+  },
+  {
+   "fieldname": "col_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "alerts_active",
+   "fieldtype": "Check",
+   "label": "Alerts active"
+  },
+  {
+   "fieldname": "user",
+   "fieldtype": "Link",
+   "label": "User",
+   "options": "User"
+  },
+  {
+   "fieldname": "sensor_shortcut",
+   "fieldtype": "Data",
+   "label": "Sensor Shortcut",
+   "unique": 1
+  },
+  {
+   "fieldname": "location",
+   "fieldtype": "Geolocation",
+   "label": "Location"
+  },
+  {
+   "collapsible": 1,
+   "collapsible_depends_on": "eval:!doc.alerts_active",
+   "fieldname": "sec_break_1",
+   "fieldtype": "Section Break",
+   "label": "Alert Channels"
+  },
+  {
+   "default": "0",
+   "fieldname": "sms_alert",
+   "fieldtype": "Check",
+   "label": "SMS alert"
+  },
+  {
+   "default": "0",
+   "fieldname": "telegram_alert",
+   "fieldtype": "Check",
+   "label": "Telegram alert"
+  },
+  {
+   "default": "0",
+   "fieldname": "mqtt_alert",
+   "fieldtype": "Check",
+   "label": "MQTT alert"
+  },
+  {
+   "default": "0",
+   "fieldname": "email_alert",
+   "fieldtype": "Check",
+   "label": "Email alert"
+  },
+  {
+   "fieldname": "sensor_group",
+   "fieldtype": "Link",
+   "label": "Sensor Group",
+   "options": "Sensor Group"
+  },
+  {
+   "fieldname": "col_break_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "mqtt_commands",
+   "fieldtype": "Data",
+   "label": "MQTT Commands"
+  },
+  {
+   "description": "Enter commands separated by commas",
+   "fieldname": "telegram_commands",
+   "fieldtype": "Data",
+   "label": "Telegram Commands"
+  },
+  {
+   "fieldname": "stock_item",
+   "fieldtype": "Link",
+   "label": "Stock Item",
+   "options": "Stock Item"
+  },
+  {
+   "fieldname": "room",
+   "fieldtype": "Data",
+   "label": "Room"
+  },
+  {
+   "fieldname": "pictures",
+   "fieldtype": "Link",
+   "label": "Pictures",
+   "options": "Website Slideshow"
+  },
+  {
+   "fieldname": "gallery",
+   "fieldtype": "HTML",
+   "label": "Gallery"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Long Text",
+   "label": "Notes"
+  },
+  {
+   "collapsible": 1,
+   "collapsible_depends_on": "eval:!doc.alerts_active",
+   "fieldname": "sec_break_2",
+   "fieldtype": "Section Break",
+   "label": "Alert Thresholds"
+  },
+  {
+   "fieldname": "threshold_item",
+   "fieldtype": "Table",
+   "label": "Threshold Item",
+   "options": "Threshold Item"
+  },
+  {
+   "fieldname": "dashboard_chart",
+   "fieldtype": "Link",
+   "label": "Dashboard Chart",
+   "options": "Dashboard Chart"
+  },
+  {
+   "fieldname": "sms_recipients",
+   "fieldtype": "Data",
+   "label": "SMS Recipients"
+  },
+  {
+   "fieldname": "telegram_recipients",
+   "fieldtype": "Data",
+   "label": "Telegram Recipients"
+  },
+  {
+   "fieldname": "col_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "col_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "mqtt_recipients",
+   "fieldtype": "Data",
+   "label": "MQTT Recipients"
+  },
+  {
+   "fieldname": "email_recipients",
+   "fieldtype": "Data",
+   "label": "Email Recipients"
+  }
+ ],
+ "modified": "2020-12-18 16:33:21.275680",
+ "modified_by": "Administrator",
+ "module": "Pibicontrol",
+ "name": "Sensor",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

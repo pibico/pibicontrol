@@ -1,0 +1,77 @@
+{
+ "creation": "2020-12-15 21:22:19.743840",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "active",
+  "variable",
+  "description",
+  "col_break_0",
+  "lower_value",
+  "upper_value",
+  "uom"
+ ],
+ "fields": [
+  {
+   "columns": 1,
+   "fieldname": "variable",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Variable"
+  },
+  {
+   "columns": 1,
+   "fieldname": "uom",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "UOM"
+  },
+  {
+   "columns": 1,
+   "fieldname": "lower_value",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Lower Value"
+  },
+  {
+   "columns": 1,
+   "fieldname": "upper_value",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Upper Value"
+  },
+  {
+   "fieldname": "col_break_0",
+   "fieldtype": "Column Break"
+  },
+  {
+   "columns": 2,
+   "fieldname": "description",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Description"
+  },
+  {
+   "columns": 1,
+   "default": "0",
+   "fieldname": "active",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Active"
+  }
+ ],
+ "istable": 1,
+ "modified": "2020-12-16 07:26:09.524134",
+ "modified_by": "Administrator",
+ "module": "Pibicontrol",
+ "name": "Threshold Item",
+ "owner": "Administrator",
+ "permissions": [],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

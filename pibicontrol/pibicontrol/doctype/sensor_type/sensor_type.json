@@ -1,0 +1,65 @@
+{
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "track_changes": 1,
+ "field_order": [
+  "abbreviation",
+  "description",
+  "col_break_2",
+  "uom"
+ ],
+ "owner": "Administrator",
+ "autoname": "field:abbreviation",
+ "engine": "InnoDB",
+ "permissions": [
+  {
+   "print": 1,
+   "email": 1,
+   "write": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "create": 1,
+   "export": 1,
+   "share": 1,
+   "delete": 1
+  }
+ ],
+ "fields": [
+  {
+   "unique": 1,
+   "fieldname": "abbreviation",
+   "label": "Abbreviation",
+   "fieldtype": "Data"
+  },
+  {
+   "translatable": 1,
+   "fieldname": "description",
+   "label": "Description",
+   "in_list_view": 1,
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "col_break_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "uom",
+   "label": "UOM",
+   "in_list_view": 1,
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "in_standard_filter": 1
+  }
+ ],
+ "editable_grid": 1,
+ "doctype": "DocType",
+ "modified_by": "Administrator",
+ "module": "Pibicontrol",
+ "creation": "2020-12-15 13:12:22.605027",
+ "sort_order": "DESC",
+ "name": "Sensor Type",
+ "modified": "2020-12-15 13:37:15.349505"
+}

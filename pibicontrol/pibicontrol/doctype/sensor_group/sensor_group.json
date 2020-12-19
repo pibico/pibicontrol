@@ -1,0 +1,47 @@
+{
+ "field_order": [
+  "title",
+  "description"
+ ],
+ "sort_order": "DESC",
+ "permissions": [
+  {
+   "report": 1,
+   "write": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "delete": 1,
+   "share": 1,
+   "email": 1,
+   "create": 1,
+   "role": "System Manager"
+  }
+ ],
+ "modified": "2020-12-15 14:37:27.709156",
+ "track_changes": 1,
+ "sort_field": "modified",
+ "autoname": "field:title",
+ "modified_by": "Administrator",
+ "engine": "InnoDB",
+ "quick_entry": 1,
+ "doctype": "DocType",
+ "creation": "2020-12-15 13:24:37.697999",
+ "module": "Pibicontrol",
+ "editable_grid": 1,
+ "owner": "Administrator",
+ "fields": [
+  {
+   "label": "Title",
+   "fieldtype": "Data",
+   "unique": 1,
+   "fieldname": "title"
+  },
+  {
+   "label": "Description",
+   "fieldtype": "Data",
+   "fieldname": "description"
+  }
+ ],
+ "name": "Sensor Group"
+}

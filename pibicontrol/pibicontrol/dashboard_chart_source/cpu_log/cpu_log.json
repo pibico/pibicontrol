@@ -1,0 +1,13 @@
+{
+ "creation": "2020-12-17 18:14:18.501749",
+ "docstatus": 0,
+ "doctype": "Dashboard Chart Source",
+ "idx": 0,
+ "modified": "2020-12-17 18:28:39.819680",
+ "modified_by": "Administrator",
+ "module": "Pibicontrol",
+ "name": "CPU Log",
+ "owner": "Administrator",
+ "source_name": "CPU Log",
+ "timeseries": 1
+}

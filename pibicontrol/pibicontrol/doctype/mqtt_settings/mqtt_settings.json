@@ -1,0 +1,108 @@
+{
+ "module": "Pibicontrol",
+ "track_changes": 1,
+ "owner": "Administrator",
+ "field_order": [
+  "broker_gateway",
+  "port",
+  "col_break_0",
+  "user",
+  "secret",
+  "is_ssl",
+  "sec_break_0",
+  "ssl_port",
+  "ca",
+  "col_break_1",
+  "client_crt",
+  "client_key"
+ ],
+ "permissions": [
+  {
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1,
+   "create": 1,
+   "role": "System Manager"
+  }
+ ],
+ "name": "MQTT Settings",
+ "editable_grid": 1,
+ "modified": "2020-12-15 19:10:48.356583",
+ "engine": "InnoDB",
+ "sort_field": "modified",
+ "fields": [
+  {
+   "fieldname": "broker_gateway",
+   "in_list_view": 1,
+   "label": "Broker Gateway",
+   "fieldtype": "Data",
+   "reqd": 1
+  },
+  {
+   "fieldname": "port",
+   "in_list_view": 1,
+   "label": "Port",
+   "fieldtype": "Int",
+   "reqd": 1
+  },
+  {
+   "fieldname": "col_break_0",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "user",
+   "label": "User",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "secret",
+   "label": "Secret",
+   "fieldtype": "Password"
+  },
+  {
+   "fieldname": "is_ssl",
+   "label": "Is SSL",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "sec_break_0",
+   "collapsible": 1,
+   "label": "Security Settings",
+   "collapsible_depends_on": "eval:doc.is_ssl",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "ssl_port",
+   "label": "SSL Port",
+   "fieldtype": "Int"
+  },
+  {
+   "fieldname": "ca",
+   "label": "CA",
+   "fieldtype": "Attach"
+  },
+  {
+   "fieldname": "col_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "client_crt",
+   "label": "Client CRT",
+   "fieldtype": "Attach"
+  },
+  {
+   "fieldname": "client_key",
+   "label": "Client KEY",
+   "fieldtype": "Attach"
+  }
+ ],
+ "sort_order": "DESC",
+ "modified_by": "Administrator",
+ "creation": "2020-12-15 19:10:41.918290",
+ "issingle": 1,
+ "doctype": "DocType"
+}

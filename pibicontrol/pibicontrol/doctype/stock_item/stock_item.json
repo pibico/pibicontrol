@@ -1,0 +1,86 @@
+{
+ "autoname": "field:model",
+ "creation": "2020-12-15 13:43:32.707965",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "model",
+  "item_code",
+  "item_group",
+  "brand",
+  "sensor_type",
+  "col_break_1",
+  "description"
+ ],
+ "fields": [
+  {
+   "fieldname": "item_code",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Item Code",
+   "unique": 1
+  },
+  {
+   "fieldname": "item_group",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Item Group"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Text Editor",
+   "in_global_search": 1,
+   "in_standard_filter": 1,
+   "label": "Description"
+  },
+  {
+   "fieldname": "model",
+   "fieldtype": "Data",
+   "label": "Model",
+   "unique": 1
+  },
+  {
+   "fieldname": "brand",
+   "fieldtype": "Data",
+   "label": "Brand"
+  },
+  {
+   "fieldname": "col_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sensor_type",
+   "fieldtype": "Link",
+   "label": "Sensor Type",
+   "options": "Sensor Type"
+  }
+ ],
+ "modified": "2020-12-15 19:18:36.654903",
+ "modified_by": "Administrator",
+ "module": "Pibicontrol",
+ "name": "Stock Item",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
