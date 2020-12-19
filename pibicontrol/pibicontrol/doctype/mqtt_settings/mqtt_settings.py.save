@@ -1,0 +1,105 @@
+# -*- coding: utf-8 -*-
+# Copyright (c) 2020, Frappe Technologies Pvt. Ltd. and Contributors
+# License: GNU General Public License v3. See license.txt
+from __future__ import unicode_literals
+import frappe
+
+from frappe import _, throw, msgprint
+from frappe.utils import nowdate
+
+from frappe.model.document import Document
+import six
+from six import string_types
+
+import paho.mqtt.client as mqtt
+import os, ssl, urllib
+from frappe.utils.password import get_decrypted_password
+
+class MQTTSettings(Document):
+	pass
+
+def validate_receiver_nos(receiver_list):
+	validated_receiver_list = []
+	for d in receiver_list:
+		# remove invalid character
+		for x in [' ','-', '(', ')']:
+			d = d.replace(x, '')
+
+		validated_receiver_list.append(d)
+
+	if not validated_receiver_list:
+		throw(_("Please enter valid mqtt topic"))
+
+	return validated_receiver_list
+
+@frappe.whitelist()
+def send_mqtt(receiver_list, msg, sender_name = '', success_msg = True):
+
+	import json
+	if isinstance(receiver_list, string_types):
+		receiver_list = json.loads(receiver_list)
+		if not isinstance(receiver_list, list):
+			receiver_list = [receiver_list]
+
+	receiver_list = validate_receiver_nos(receiver_list)
+
+	arg = {
+		'receiver_list' : receiver_list,
+		'message'		: frappe.safe_decode(msg).encode('utf-8'),
+		'success_msg'	: success_msg
+	}
+
+	if frappe.db.get_value('MQTT Settings', None, 'broker_gateway'):
+		send_via_gateway(arg)
+	else:
+		msgprint(_("Please Update MQTT Settings"))
+
+def send_via_gateway(arg):
+	path = "/home/erpnext/erpnext-prd/sites/" 
+	client = frappe.get_doc('MQTT Settings', 'MQTT Settings'
+	msg = arg.get('message')
+	success_list = []
+	for d in arg.get('receiver_list'):
+	  success_list.append(d)
+
+	if len(success_list) > 0:
+    server = client.broker_gateway
+    port = client.port
+    user = client.user
+    client.secret = get_decrypted_password('MQTT Settings', 'MQTT Settings', 'secret', False)
+    secret = client.secret
+    do_ssl = client.is_ssl
+    ca = path + frappe.utils.get_url().replace("http://","").replace("https://","") + client.ca
+    client_crt = path + frappe.utils.get_url().replace("http://","").replace("https://","") + client.client_crt
+    client_key = path + frappe.utils.get_url().replace("http://","").replace("https://","") + client.client_key
+    port_ssl = client.ssl_port
+    #frappe.msgprint(frappe.get_site_path('private', 'files', 'ca.crt').replace("./","/")
+    # connect to MQTT Broker to Publish Message
+    import os
+    
+    pid = os.getpid()
+    client_id = '{}:{}'.format('client', str(pid))
+    try:
+      backend = mqtt.Client(client_id=client_id, clean_session=True)
+      backend.username_pw_set(user, password=secret)
+      if do_ssl == True:
+        backend.tls_set(ca_certs=ca, certfile=client_crt, keyfile=client_key, cert_reqs=ssl.CERT_REQUIRED, ciphers=None)
+        backend.tls_insecure_set(False)
+        time.sleep(.5)
+        backend.connect(server, port_ssl)
+      else:  
+        backend.connect(server, port)
+
+      payload = cstr(msg)
+      for dev in success_list:
+        mqtt_topic = dev
+        backend.publish(mqtt_topic, payload)
+      backend.disconnect()
+        
+    except:
+      frappe.msgprint(_("Error in MQTT Broker sending to ", str(mqtt_list)))
+      #raise
+      pass	
+   
+		if arg.get('success_msg'):
+			frappe.msgprint(_("MQTT sent to following topics: {0}").format("\n" + "\n".join(success_list)))

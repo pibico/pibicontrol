@@ -14,6 +14,7 @@
   "sensor_shortcut",
   "room",
   "dashboard_chart",
+  "dashboard_view",
   "notes",
   "col_break_1",
   "disabled",
@@ -26,13 +27,11 @@
   "sec_break_1",
   "sms_alert",
   "sms_recipients",
-  "col_break_2",
   "telegram_alert",
   "telegram_recipients",
   "col_break_3",
   "mqtt_alert",
   "mqtt_recipients",
-  "col_break_4",
   "email_alert",
   "email_recipients",
   "sec_break_2",
@@ -120,10 +119,6 @@
    "options": "Sensor Group"
   },
   {
-   "fieldname": "col_break_2",
-   "fieldtype": "Column Break"
-  },
-  {
    "fieldname": "mqtt_commands",
    "fieldtype": "Data",
    "label": "MQTT Commands"
@@ -195,10 +190,6 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "col_break_4",
-   "fieldtype": "Column Break"
-  },
-  {
    "fieldname": "mqtt_recipients",
    "fieldtype": "Data",
    "label": "MQTT Recipients"
@@ -207,9 +198,15 @@
    "fieldname": "email_recipients",
    "fieldtype": "Data",
    "label": "Email Recipients"
+  },
+  {
+   "fieldname": "dashboard_view",
+   "fieldtype": "Link",
+   "label": "Dashboard View",
+   "options": "Dashboard"
   }
  ],
- "modified": "2020-12-18 16:33:21.275680",
+ "modified": "2020-12-19 10:29:04.388571",
  "modified_by": "Administrator",
  "module": "Pibicontrol",
  "name": "Sensor",
