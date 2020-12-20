@@ -90,10 +90,10 @@ app_license = "MIT"
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-# 	"all": [
-# 		"pibicontrol.tasks.all"
-# 	],
+scheduler_events = {
+ 	"all": [
+ 		"pibicontrol.pibicontrol.api.ping_devices_via_mqtt"
+ 	]
 # 	"daily": [
 # 		"pibicontrol.tasks.daily"
 # 	],
@@ -106,7 +106,7 @@ app_license = "MIT"
 # 	"monthly": [
 # 		"pibicontrol.tasks.monthly"
 # 	]
-# }
+ }
 
 # Testing
 # -------
@@ -126,5 +126,11 @@ app_license = "MIT"
 # override_doctype_dashboards = {
 # 	"Task": "pibicontrol.task.get_dashboard_data"
 # }
+
+default_mail_footer = """
+    <div>
+        Sent via <a href="http://assistant.pibico.es:8080" target="_blank">Assistant</a>
+    </div>
+"""
 
 fixtures = ['Report', 'Role Profile', 'Role', 'Custom Field', 'Custom Script', 'Property Setter', 'Workflow', 'Workflow State', 'Workflow Action', 'Translation']
