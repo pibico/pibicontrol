@@ -141,7 +141,11 @@ class SensorLog(Document):
 def mng_alert(log, sensor, variable, value, start, alert_log):
   if not sensor.disabled and sensor.alerts_active:
     ## Prepare message to send
-    msg = log.sensor + " Detected " + str(value) + " in " + variable + ". Please Check!"
+    if start:
+      msg = log.sensor + " Detected High Value " + str(value) + " in " + variable + ". Please Check!"
+    else:
+      msg = log.sensor + " Recovered Normal Value " + str(value) + " in " + variable + ". Rest Easy!"
+       
     ## Check Active Channels and prepare a thread to alert
     ## Fill main parameters
     doSend = True
