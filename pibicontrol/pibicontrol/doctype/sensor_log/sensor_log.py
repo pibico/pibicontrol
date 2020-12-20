@@ -48,12 +48,18 @@ class SensorLog(Document):
           ## Primary Common Reading to all sensors
           if ts.variable == mainread:
             (active_alert, start) = get_alert(ts.variable, doc.name)         
-            if ts.upper_value or ts.lower_value:
-              if (float(value) > float(ts.upper_value)) or (float(value) < float(ts.lower_value)) and start == True:
+            if ts.upper_value:
+              if float(value) > float(ts.upper_value) and start == True:
                 start = True
-              elif (float(value) <= float(ts.upper_value)) or (float(value) >= float(ts.lower_value))  and start == False:
+              elif float(value) <= float(ts.upper_value) and start == False:
                 start = False
-              mng_alert(self, doc, ts.variable, float(value), start, active_alert)    
+              mng_alert(self, doc, ts.variable, float(value), start, active_alert)
+            if ts.lower_value:
+              if float(value) < float(ts.lower_value) and start == True:
+                start = True
+              elif float(value) >= float(ts.lower_value) and start == False:
+                start = False
+              mng_alert(self, doc, ts.variable, float(value), start, active_alert)      
           ## Specific Readings taken in payload depending on sensor type
           ## Sensor CPU
           if stock.sensor_type == "cpu":
@@ -61,22 +67,34 @@ class SensorLog(Document):
             if ts.variable == "mem_pct":
               (active_alert, start) = get_alert(ts.variable, doc.name)
               mem_pct = float(payload['payload']['mem']['mem_pct'])
-              if ts.upper_value or ts.lower_value:
-                if (mem_pct > float(ts.upper_value)) or (mem_pct < float(ts.lower_value)) and start == True:
+              if ts.upper_value:
+                if mem_pct > float(ts.upper_value) and start == True:
                   start = True
-                elif (mem_pct <= float(ts.upper_value)) or (mem_pct >= float(ts.lower_value)) and start == False:
+                elif mem_pct <= float(ts.upper_value) and start == False:
                   start = False
                 mng_alert(self, doc, ts.variable, mem_pct, start, active_alert) 
+              if ts.lower_value:
+                if mem_pct < float(ts.lower_value) and start == True:
+                  start = True
+                elif mem_pct >= float(ts.lower_value) and start == False:
+                  start = False
+                mng_alert(self, doc, ts.variable, mem_pct, start, active_alert)  
             ## Third CPU Reading    
             elif ts.variable == "disk_pct":
               (active_alert, start) = get_alert(ts.variable, doc.name)
               disk_pct = float(payload['payload']['disk']['disk_pct'])
-              if ts.upper_value or ts.lower_value:
-                if  (disk_pct > float(ts.upper_value)) or (disk_pct < float(ts.lower_value)) and start == True:
+              if ts.upper_value:
+                if disk_pct > float(ts.upper_value) and start == True:
                   start = True
-                elif (disk_pct <= float(ts.upper_value)) or (disk_pct >= float(ts.lower_value)) and start == False:
+                elif disk_pct <= float(ts.upper_value) and start == False:
                   start = False
-                mng_alert(self, doc, ts.variable, disk_pct, start, active_alert) 
+                mng_alert(self, doc, ts.variable, disk_pct, start, active_alert)
+              if ts.lower_value:
+                if  disk_pct < float(ts.lower_value) and start == True:
+                  start = True
+                elif disk_pct >= float(ts.lower_value) and start == False:
+                  start = False
+                mng_alert(self, doc, ts.variable, disk_pct, start, active_alert)   
           ## Sensor other type  
 
 def get_alert(variable, name):
