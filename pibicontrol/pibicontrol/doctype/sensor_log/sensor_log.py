@@ -47,24 +47,7 @@ class SensorLog(Document):
         if ts.active:
           ## Primary Common Reading to all sensors
           if ts.variable == mainread:
-            start = True
-            ## Get active alerts for the Sensor based on not having to_time value in record
-            last_log = frappe.get_list(
-              doctype = "Alert Log",
-              fields = ['*'],
-              filters = [['date', '=', datetime.now().strftime(DATE_FORMAT)],['docstatus', '<', 2], ['sensor', '=', doc.name], ['variable','=',ts.variable]],
-              order_by = 'date desc',
-              limit_start = 0,
-              limit_page_length = 1
-            )
-            ## Get last Alert Log
-            active_alert = None
-            if len(last_log) > 0:
-              active_alert = frappe.get_doc("Alert Log", last_log[0].name)
-            ## If recorded alert is not closed then will be a starting alert
-            if active_alert:
-              if not active_alert.alert_item[len(active_alert.alert_item)-1].to_time:
-                start = False
+            (active_alert, start) = get_alert(ts.variable, doc.name)         
             if ts.upper_value:
               if float(value) > float(ts.upper_value) and start == True:
                 mng_alert(self, doc, ts.variable, float(value), start, active_alert)
@@ -79,24 +62,7 @@ class SensorLog(Document):
           if stock.sensor_type == "cpu":
             ## Secondary CPU Reading    
             if ts.variable == "mem_pct":
-              start = True
-              ## Get active alerts for the Sensor based on not having to_time value in record
-              last_log = frappe.get_list(
-                doctype = "Alert Log",
-                fields = ['*'],
-                filters = [['date', '=', datetime.now().strftime(DATE_FORMAT)],['docstatus', '<', 2], ['sensor', '=', doc.name], ['variable','=',ts.variable]],
-                order_by = 'date desc',
-                limit_start = 0,
-                limit_page_length = 1
-              )
-              ## Get last Alert Log
-              active_alert = None
-              if len(last_log) > 0:
-                active_alert = frappe.get_doc("Alert Log", last_log[0].name)
-              ## If recorded alert is not closed then will be a starting alert
-              if active_alert:
-                if not active_alert.alert_item[len(active_alert.alert_item)-1].to_time:
-                  start = False
+              (active_alert, start) = get_alert(ts.variable, doc.name)
               if ts.upper_value:
                 if float(payload['payload']['mem']['mem_pct']) > float(ts.upper_value) and start == True:
                   mng_alert(self, doc, ts.variable, float(payload['payload']['mem']['mem_pct']), start, active_alert)
@@ -109,24 +75,7 @@ class SensorLog(Document):
                   mng_alert(self, doc, ts.variable, float(payload['payload']['mem']['mem_pct']), start, active_alert) 
             ## Third CPU Reading    
             elif ts.variable == "disk_pct":
-              start = True
-              ## Get active alerts for the Sensor based on not having to_time value in record
-              last_log = frappe.get_list(
-                doctype = "Alert Log",
-                fields = ['*'],
-                filters = [['date', '=', datetime.now().strftime(DATE_FORMAT)],['docstatus', '<', 2], ['sensor', '=', doc.name], ['variable','=',ts.variable]],
-                order_by = 'date desc',
-                limit_start = 0,
-                limit_page_length = 1
-              )
-              ## Get last Alert Log
-              active_alert = None
-              if len(last_log) > 0:
-                active_alert = frappe.get_doc("Alert Log", last_log[0].name)
-              ## If recorded alert is not closed then will be a starting alert
-              if active_alert:
-                if not active_alert.alert_item[len(active_alert.alert_item)-1].to_time:
-                  start = False
+              (active_alert, start) = get_alert(ts.variable, doc.name)
               if ts.upper_value:
                 if float(payload['payload']['disk']['disk_pct']) > float(ts.upper_value) and start == True:
                   mng_alert(self, doc, ts.variable, float(payload['payload']['disk']['disk_pct']), start, active_alert)
@@ -137,6 +86,27 @@ class SensorLog(Document):
                   mng_alert(self, doc, ts.variable, float(payload['payload']['disk']['disk_pct']), start, active_alert)
                 elif float(payload['payload']['disk']['disk_pct']) >= float(ts.lower_value) and start == False:
                   mng_alert(self, doc, ts.variable, float(payload['payload']['disk']['disk_pct']), start, active_alert) 
+
+def get_alert(variable, name):
+  start = True
+  ## Get active alerts for the Sensor based on not having to_time value in record
+  last_log = frappe.get_list(
+    doctype = "Alert Log",
+    fields = ['*'],
+    filters = [['date', '=', datetime.now().strftime(DATE_FORMAT)],['docstatus', '<', 2], ['sensor', '=', name], ['variable','=', variable]],
+    order_by = 'date desc',
+    limit_start = 0,
+    limit_page_length = 1
+  )
+  ## Get last Alert Log
+  active_alert = None
+  if len(last_log) > 0:
+    active_alert = frappe.get_doc("Alert Log", last_log[0].name)
+    ## If recorded alert is not closed then will be a starting alert
+    if active_alert:
+      if not active_alert.alert_item[len(active_alert.alert_item)-1].to_time:
+        start = False
+  return (active_alert, start)
 
 def mng_alert(log, sensor, variable, value, start, alert_log):
   if not sensor.disabled and sensor.alerts_active:
@@ -171,7 +141,10 @@ def mng_alert(log, sensor, variable, value, start, alert_log):
       by_mqtt = 1
       mqtt_list = sensor.mqtt_recipients.split(",")
     if sensor.email_alert and sensor.email_recipients != '':
-      subject = "Alert from " + log.sensor
+      if start:
+        subject = "Alert from " + log.sensor
+      else:
+        subject = "Finished Alert from " + log.sensor  
       alert_email = msg
       #frappe.msgprint(_(alert, sensor.email_recipients))      
       by_email = 1
