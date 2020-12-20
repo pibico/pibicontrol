@@ -6,6 +6,7 @@
  "engine": "InnoDB",
  "field_order": [
   "sensor",
+  "variable",
   "col_break_0",
   "date",
   "sec_break_0",
@@ -36,9 +37,14 @@
   {
    "fieldname": "sec_break_0",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "variable",
+   "fieldtype": "Data",
+   "label": "Variable"
   }
  ],
- "modified": "2020-12-18 17:22:28.675623",
+ "modified": "2020-12-20 11:43:40.370166",
  "modified_by": "Administrator",
  "module": "Pibicontrol",
  "name": "Alert Log",

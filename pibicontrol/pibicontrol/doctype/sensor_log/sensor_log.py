@@ -22,48 +22,123 @@ DATETIME_FORMAT = DATE_FORMAT + " " + TIME_FORMAT
 
 class SensorLog(Document):
   def before_save(self):
-    ## Complete the read only attributes based on date logs
-    self.points = len(self.log_item)
-    values = []
-    for data in self.log_item:
-      values.append(data.value)
-    self.min = min(values)
-    self.max = max(values)
-    self.average = sum(values)/len(values)
-    
-    ## Select the last recorded value, variable and payload coming from outside
-    value = self.log_item[len(self.log_item)-1].value
-    mainread = self.log_item[len(self.log_item)-1].main_reading
-    payload = json.loads(self.log_item[len(self.log_item)-1].payload)
     ## Get data parameters from Sensor
     doc = frappe.get_doc("Sensor", self.sensor)
-    ## Get sensor type from Sensor
-    stock = frappe.get_doc("Stock Item", doc.stock_item)
     ## Check if sensor is enabled
     if not doc.disabled:
-      ## Get active alerts for the Sensor based on not having to_time value in record
-      
-      
+      ## Initialize
+      values = []
+      ## Get sensor type from Sensor
+      stock = frappe.get_doc("Stock Item", doc.stock_item)
+      ## Complete the read only attributes based on taken measures
+      self.points = len(self.log_item)
+      for data in self.log_item:
+        values.append(data.value)
+      self.min = min(values)
+      self.max = max(values)
+      self.average = sum(values)/len(values)
+      ## Select the last recorded value, variable and payload coming from outside
+      value = self.log_item[len(self.log_item)-1].value
+      mainread = self.log_item[len(self.log_item)-1].main_reading
+      payload = json.loads(self.log_item[len(self.log_item)-1].payload)
       ## Search in threshold alerts
       for ts in doc.threshold_item:
         ## Check threshold data from active variables
         if ts.active:
           ## Primary Common Reading to all sensors
           if ts.variable == mainread:
-            if float(value) >= float(ts.upper_value):
-              mng_alert(self, doc, ts.variable, float(value), start=True)
+            start = True
+            ## Get active alerts for the Sensor based on not having to_time value in record
+            last_log = frappe.get_list(
+              doctype = "Alert Log",
+              fields = ['*'],
+              filters = [['date', '=', datetime.now().strftime(DATE_FORMAT)],['docstatus', '<', 2], ['sensor', '=', doc.name], ['variable','=',ts.variable]],
+              order_by = 'date desc',
+              limit_start = 0,
+              limit_page_length = 1
+            )
+            ## Get last Alert Log
+            active_alert = None
+            if len(last_log) > 0:
+              active_alert = frappe.get_doc("Alert Log", last_log[0].name)
+            ## If recorded alert is not closed then will be a starting alert
+            if active_alert:
+              if not active_alert.alert_item[len(active_alert.alert_item)-1].to_time:
+                start = False
+            if ts.upper_value:
+              if float(value) > float(ts.upper_value) and start == True:
+                mng_alert(self, doc, ts.variable, float(value), start, active_alert)
+              elif float(value) <= float(ts.upper_value) and start == False:
+                mng_alert(self, doc, ts.variable, float(value), start, active_alert)
+            if ts.lower_value:
+              if float(value) < float(ts.lower_value) and start == True:
+                mng_alert(self, doc, ts.variable, float(value), start, active_alert)
+              elif float(value) >= float(ts.lower_value) and start == False:
+                mng_alert(self, doc, ts.varialble, float(value), start, active_alert)    
           ## Specific Readings taken in payload depending on sensor type
           if stock.sensor_type == "cpu":
             ## Secondary CPU Reading    
             if ts.variable == "mem_pct":
-              if float(payload['payload']['mem']['mem_pct']) >= float(ts.upper_value):
-                mng_alert(self, doc, ts.variable, float(payload['payload']['mem']['mem_pct']), start=True)
+              start = True
+              ## Get active alerts for the Sensor based on not having to_time value in record
+              last_log = frappe.get_list(
+                doctype = "Alert Log",
+                fields = ['*'],
+                filters = [['date', '=', datetime.now().strftime(DATE_FORMAT)],['docstatus', '<', 2], ['sensor', '=', doc.name], ['variable','=',ts.variable]],
+                order_by = 'date desc',
+                limit_start = 0,
+                limit_page_length = 1
+              )
+              ## Get last Alert Log
+              active_alert = None
+              if len(last_log) > 0:
+                active_alert = frappe.get_doc("Alert Log", last_log[0].name)
+              ## If recorded alert is not closed then will be a starting alert
+              if active_alert:
+                if not active_alert.alert_item[len(active_alert.alert_item)-1].to_time:
+                  start = False
+              if ts.upper_value:
+                if float(payload['payload']['mem']['mem_pct']) > float(ts.upper_value) and start == True:
+                  mng_alert(self, doc, ts.variable, float(payload['payload']['mem']['mem_pct']), start, active_alert)
+                elif float(payload['payload']['mem']['mem_pct']) <= float(ts.upper_value) and start == False:
+                  mng_alert(self, doc, ts.variable, float(payload['payload']['mem']['mem_pct']), start, active_alert)
+              if ts.lower_value:
+                if float(payload['payload']['mem']['mem_pct']) < float(ts.lower_value) and start == True:
+                  mng_alert(self, doc, ts.variable, float(payload['payload']['mem']['mem_pct']), start, active_alert)
+                elif float(payload['payload']['mem']['mem_pct']) >= float(ts.lower_value) and start == False:
+                  mng_alert(self, doc, ts.variable, float(payload['payload']['mem']['mem_pct']), start, active_alert) 
             ## Third CPU Reading    
             elif ts.variable == "disk_pct":
-              if float(payload['payload']['disk']['disk_pct']) >= float(ts.upper_value):
-                mng_alert(self, doc, ts.variable, float(payload['payload']['disk']['disk_pct']), start=True)
+              start = True
+              ## Get active alerts for the Sensor based on not having to_time value in record
+              last_log = frappe.get_list(
+                doctype = "Alert Log",
+                fields = ['*'],
+                filters = [['date', '=', datetime.now().strftime(DATE_FORMAT)],['docstatus', '<', 2], ['sensor', '=', doc.name], ['variable','=',ts.variable]],
+                order_by = 'date desc',
+                limit_start = 0,
+                limit_page_length = 1
+              )
+              ## Get last Alert Log
+              active_alert = None
+              if len(last_log) > 0:
+                active_alert = frappe.get_doc("Alert Log", last_log[0].name)
+              ## If recorded alert is not closed then will be a starting alert
+              if active_alert:
+                if not active_alert.alert_item[len(active_alert.alert_item)-1].to_time:
+                  start = False
+              if ts.upper_value:
+                if float(payload['payload']['disk']['disk_pct']) > float(ts.upper_value) and start == True:
+                  mng_alert(self, doc, ts.variable, float(payload['payload']['disk']['disk_pct']), start, active_alert)
+                elif float(payload['payload']['disk']['disk_pct']) <= float(ts.upper_value) and start == False:
+                  mng_alert(self, doc, ts.variable, float(payload['payload']['disk']['disk_pct']), start, active_alert)
+              if ts.lower_value:
+                if float(payload['payload']['disk']['disk_pct']) < float(ts.lower_value) and start == True:
+                  mng_alert(self, doc, ts.variable, float(payload['payload']['disk']['disk_pct']), start, active_alert)
+                elif float(payload['payload']['disk']['disk_pct']) >= float(ts.lower_value) and start == False:
+                  mng_alert(self, doc, ts.variable, float(payload['payload']['disk']['disk_pct']), start, active_alert) 
 
-def mng_alert(log, sensor, variable, value, start):
+def mng_alert(log, sensor, variable, value, start, alert_log):
   if not sensor.disabled and sensor.alerts_active:
     ## Prepare message to send
     msg = log.sensor + " Detected " + str(value) + " in " + variable + ". Please Check!"
@@ -97,15 +172,7 @@ def mng_alert(log, sensor, variable, value, start):
       #frappe.msgprint(_(alert, sensor.email_recipients))      
       by_email = 1
       email_list = sensor.email_recipients.split(",")
-    ## Check if exists alert log
-    last_log = frappe.get_list(
-      doctype = "Alert Log",
-      fields = ['*'],
-      filters = [['date', '=', datadate.strftime(DATE_FORMAT)],['docstatus', '<', 2], ['sensor', '=', log.sensor]],
-      order_by = 'date desc',
-      limit_start = 0,
-      limit_page_length = 1
-    )
+    ## Write Data for new Alert
     alert_json = {
       "variable": variable,
       "value": value,
@@ -116,8 +183,8 @@ def mng_alert(log, sensor, variable, value, start):
       "by_mqtt": by_mqtt,
       "by_email": by_email
     }
-    if len(last_log) > 0:
-      alert_log = frappe.get_doc("Alert Log", last_log[0].name)
+    if alert_log:
+      ##if len(alert_log) > 0:
       last_alert = alert_log.alert_item[len(alert_log.alert_item)-1]
       if alert_log.date.strftime(DATE_FORMAT) == datadate.strftime(DATE_FORMAT):
         if not last_alert.to_time and not start:
@@ -138,6 +205,7 @@ def mng_alert(log, sensor, variable, value, start):
         alert_log = frappe.new_doc('Alert Log')
         alert_log.sensor = log.sensor
         alert_log.date = datadate.strftime(DATETIME_FORMAT)
+        alert_log.variable = variable
         ## Adds log to array  
         alert_log.append("alert_item", alert_json)
         alert_log.save()
@@ -153,4 +221,5 @@ def mng_alert(log, sensor, variable, value, start):
       #frappe.msgprint(_("[INFO] Send MQTT to " + str(mqtt_list)))
       send_mqtt(mqtt_list, cstr(alert_mqtt))
     if len(email_list) > 0 and doSend:
-      frappe.msgprint(_("[INFO] Send Email to " + str(email_list)))
+      #frappe.msgprint(_("[INFO] Send Email to " + str(email_list)))
+      frappe.sendmail(recipients=email_list, subject=subject, message=cstr(alert_email))

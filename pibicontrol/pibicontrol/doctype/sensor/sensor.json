@@ -19,7 +19,6 @@
   "col_break_1",
   "disabled",
   "location",
-  "mqtt_commands",
   "telegram_commands",
   "alerts_active",
   "pictures",
@@ -31,6 +30,7 @@
   "telegram_recipients",
   "col_break_3",
   "mqtt_alert",
+  "mqtt_command",
   "mqtt_recipients",
   "email_alert",
   "email_recipients",
@@ -119,11 +119,6 @@
    "options": "Sensor Group"
   },
   {
-   "fieldname": "mqtt_commands",
-   "fieldtype": "Data",
-   "label": "MQTT Commands"
-  },
-  {
    "description": "Enter commands separated by commas",
    "fieldname": "telegram_commands",
    "fieldtype": "Data",
@@ -176,11 +171,13 @@
    "options": "Dashboard Chart"
   },
   {
+   "description": "Enter Phone Numbers with International Indicative 00 plus Country Code (ie 34 for Spain) and number without spaces or symbols. For several numbers separate by comma.",
    "fieldname": "sms_recipients",
    "fieldtype": "Data",
    "label": "SMS Recipients"
   },
   {
+   "description": "Enter Phone Numbers with International Indicative 00 plus Country Code (ie 34 for Spain) and number without spaces or symbols. For several numbers separate by comma.",
    "fieldname": "telegram_recipients",
    "fieldtype": "Data",
    "label": "Telegram Recipients"
@@ -190,11 +187,13 @@
    "fieldtype": "Column Break"
   },
   {
+   "description": "Enter the topic (ie /home/mqtt  or whatsover)",
    "fieldname": "mqtt_recipients",
    "fieldtype": "Data",
    "label": "MQTT Recipients"
   },
   {
+   "description": "Enter valid emails separated by comma",
    "fieldname": "email_recipients",
    "fieldtype": "Data",
    "label": "Email Recipients"
@@ -204,9 +203,15 @@
    "fieldtype": "Link",
    "label": "Dashboard View",
    "options": "Dashboard"
+  },
+  {
+   "description": "Enter the command to be sent in case of Alert present",
+   "fieldname": "mqtt_command",
+   "fieldtype": "Data",
+   "label": "MQTT Command"
   }
  ],
- "modified": "2020-12-19 10:29:04.388571",
+ "modified": "2020-12-20 12:24:20.993568",
  "modified_by": "Administrator",
  "module": "Pibicontrol",
  "name": "Sensor",
