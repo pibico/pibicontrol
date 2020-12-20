@@ -91,9 +91,11 @@ app_license = "MIT"
 # ---------------
 
 scheduler_events = {
- 	"all": [
- 		"pibicontrol.pibicontrol.api.ping_devices_via_mqtt"
- 	]
+ 	"cron": {
+    "*/5 * * * *": [
+ 		  "pibicontrol.pibicontrol.api.ping_devices_via_mqtt"
+ 	  ]
+  }
 # 	"daily": [
 # 		"pibicontrol.tasks.daily"
 # 	],
