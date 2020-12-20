@@ -116,10 +116,9 @@ def mng_alert(log, sensor, variable, value, start, alert_log):
   if not sensor.disabled and sensor.alerts_active:
     ## Prepare message to send
     if start:
-      msg = log.sensor + " Detected AbNormal Value " + str(value) + " in " + variable + ". Please Check!"
+      msg = log.sensor + " detected abnormal value " + str(value) + " in " + variable + ". Please check!"
     else:
-      msg = log.sensor + " Recovered Normal Value " + str(value) + " in " + variable + ". Rest Easy!"
-       
+      msg = log.sensor + " recovered normal value " + str(value) + " in " + variable + ". Rest easy!"
     ## Check Active Channels and prepare a thread to alert
     ## Fill main parameters
     doSend = True
@@ -131,17 +130,14 @@ def mng_alert(log, sensor, variable, value, start, alert_log):
     email_list = []
     if sensor.sms_alert and sensor.sms_recipients != '':
       alert_sms = "SMS from " + msg 
-      #frappe.msgprint(_(alert, sensor.sms_recipients))
       by_sms = 1
       sms_list = sensor.sms_recipients.split(",")
     if sensor.telegram_alert and sensor.telegram_recipients != '':
       alert_telegram = "Telegram from " + msg
-      #frappe.msgprint(_(alert, sensor.telegram_recipients))
       by_telegram = 1
       telegram_list = sensor.telegram_recipients.split(",")
     if sensor.mqtt_alert and sensor.mqtt_recipients != '':
       alert_mqtt = "MQTT from " + msg
-      #frappe.msgprint(_(alert), sensor.mqtt_recipients)
       by_mqtt = 1
       mqtt_list = sensor.mqtt_recipients.split(",")
     if sensor.email_alert and sensor.email_recipients != '':
@@ -150,7 +146,6 @@ def mng_alert(log, sensor, variable, value, start, alert_log):
       else:
         subject = "Finished Alert from " + log.sensor  
       alert_email = msg
-      #frappe.msgprint(_(alert, sensor.email_recipients))      
       by_email = 1
       email_list = sensor.email_recipients.split(",")
     ## Write Data for new Alert
@@ -168,8 +163,8 @@ def mng_alert(log, sensor, variable, value, start, alert_log):
       ##if len(alert_log) > 0:
       last_alert = alert_log.alert_item[len(alert_log.alert_item)-1]
       if alert_log.date.strftime(DATE_FORMAT) == datadate.strftime(DATE_FORMAT):
+        ## Code for update child item in doc
         if not last_alert.to_time and not start:
-          ## Code for update child item in doc
           last_alert.to_time = datadate.strftime(DATETIME_FORMAT)
           alert_log.save()
           frappe.msgprint(_("[INFO] Alert Finished"))
@@ -193,14 +188,10 @@ def mng_alert(log, sensor, variable, value, start, alert_log):
         frappe.msgprint(_("[INFO] Created New Log"))
     ## Sending messages to recipients
     if len(sms_list) > 0 and doSend:
-      #frappe.msgprint(_("[INFO] Send SMS to " + str(sms_list)))
       send_sms(sms_list, cstr(alert_sms))
     if len(telegram_list) > 0 and doSend:
-      #frappe.msgprint(_("[INFO] Send Telegram to " + str(telegram_list)))
       send_telegram(telegram_list, cstr(alert_telegram))
     if len(mqtt_list) > 0 and doSend:
-      #frappe.msgprint(_("[INFO] Send MQTT to " + str(mqtt_list)))
       send_mqtt(mqtt_list, cstr(alert_mqtt))
     if len(email_list) > 0 and doSend:
-      #frappe.msgprint(_("[INFO] Send Email to " + str(email_list)))
       frappe.sendmail(recipients=email_list, subject=subject, message=cstr(alert_email))
