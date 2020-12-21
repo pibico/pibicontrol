@@ -210,7 +210,7 @@
    "label": "Last Seen"
   }
  ],
- "modified": "2020-12-21 08:18:43.742730",
+ "modified": "2020-12-21 13:40:07.283217",
  "modified_by": "Administrator",
  "module": "Pibicontrol",
  "name": "Sensor",
@@ -231,6 +231,5 @@
  ],
  "quick_entry": 1,
  "sort_field": "modified",
- "sort_order": "DESC",
- "track_changes": 1
+ "sort_order": "DESC"
 }
