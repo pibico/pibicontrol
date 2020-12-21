@@ -17,10 +17,10 @@
   "dashboard_view",
   "notes",
   "col_break_1",
+  "lastseen",
   "disabled",
-  "location",
-  "telegram_commands",
   "alerts_active",
+  "location",
   "pictures",
   "gallery",
   "sec_break_1",
@@ -119,12 +119,6 @@
    "options": "Sensor Group"
   },
   {
-   "description": "Enter commands separated by commas",
-   "fieldname": "telegram_commands",
-   "fieldtype": "Data",
-   "label": "Telegram Commands"
-  },
-  {
    "fieldname": "stock_item",
    "fieldtype": "Link",
    "label": "Stock Item",
@@ -209,9 +203,14 @@
    "fieldname": "mqtt_command",
    "fieldtype": "Data",
    "label": "MQTT Command"
+  },
+  {
+   "fieldname": "lastseen",
+   "fieldtype": "Datetime",
+   "label": "Last Seen"
   }
  ],
- "modified": "2020-12-20 12:24:20.993568",
+ "modified": "2020-12-21 08:18:43.742730",
  "modified_by": "Administrator",
  "module": "Pibicontrol",
  "name": "Sensor",
