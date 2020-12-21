@@ -49,9 +49,15 @@ def mng_alert(sensor, variable, value, start, alert_log):
   if not sensor.disabled and sensor.alerts_active:
     ## Prepare message to send
     if start:
-      msg = sensor.name + " detected abnormal value " + str(value) + " in " + variable + ". Please check!"
+      if variable == "last_seen":
+        msg = sensor.name + " offline. Please check!"
+      else:
+        msg = sensor.name + " detected abnormal value " + str(value) + " in " + variable + ". Please check!"
     else:
-      msg = sensor.name + " recovered normal value " + str(value) + " in " + variable + ". Rest easy!"
+      if variable == "last_seen":
+        msg = sensor.name + " again online. Rest easy!"
+      else:
+        msg = sensor.name + " recovered normal value " + str(value) + " in " + variable + ". Rest easy!"
     ## Check Active Channels and prepare a thread to alert
     ## Fill main parameters
     doSend = True
