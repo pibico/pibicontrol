@@ -48,6 +48,12 @@ def get_data():
           "name": "Sensor Type",
           "description": _("Sensor Type"),
           "onboard": 1,
+        },    
+        {
+          "type": "doctype",
+          "name": "Variable",
+          "description": _("Measuring Variable"),
+          "onboard": 1,
         }
       ]
     },

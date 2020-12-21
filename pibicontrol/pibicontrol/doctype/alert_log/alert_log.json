@@ -40,11 +40,12 @@
   },
   {
    "fieldname": "variable",
-   "fieldtype": "Data",
-   "label": "Variable"
+   "fieldtype": "Link",
+   "label": "Variable",
+   "options": "Variable"
   }
  ],
- "modified": "2020-12-20 11:43:40.370166",
+ "modified": "2020-12-21 17:36:58.117936",
  "modified_by": "Administrator",
  "module": "Pibicontrol",
  "name": "Alert Log",
