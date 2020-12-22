@@ -207,10 +207,11 @@
   {
    "fieldname": "lastseen",
    "fieldtype": "Datetime",
+   "in_list_view": 1,
    "label": "Last Seen"
   }
  ],
- "modified": "2020-12-21 13:40:07.283217",
+ "modified": "2020-12-21 19:36:04.533125",
  "modified_by": "Administrator",
  "module": "Pibicontrol",
  "name": "Sensor",

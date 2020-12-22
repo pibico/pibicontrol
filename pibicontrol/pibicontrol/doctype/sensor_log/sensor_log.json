@@ -12,6 +12,10 @@
   "date",
   "average",
   "points",
+  "sec_break",
+  "main_chart",
+  "col_nbreak_1",
+  "second_chart",
   "sec_break_0",
   "log_item"
  ],
@@ -50,18 +54,21 @@
   {
    "fieldname": "min",
    "fieldtype": "Float",
+   "in_list_view": 1,
    "label": "Min",
    "read_only": 1
   },
   {
    "fieldname": "max",
    "fieldtype": "Float",
+   "in_list_view": 1,
    "label": "Max",
    "read_only": 1
   },
   {
    "fieldname": "average",
    "fieldtype": "Float",
+   "in_list_view": 1,
    "label": "Average",
    "read_only": 1
   },
@@ -70,9 +77,30 @@
    "fieldtype": "Int",
    "label": "Points",
    "read_only": 1
+  },
+  {
+   "fieldname": "sec_break",
+   "fieldtype": "Section Break",
+   "label": "Dashboard"
+  },
+  {
+   "fieldname": "main_chart",
+   "fieldtype": "HTML",
+   "label": "Main Chart",
+   "options": "<div id=\"main_chart\"></div>"
+  },
+  {
+   "fieldname": "col_nbreak_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "second_chart",
+   "fieldtype": "HTML",
+   "label": "Sec Chart",
+   "options": "<div id=\"second_chart\"></div>"
   }
  ],
- "modified": "2020-12-21 17:37:16.275159",
+ "modified": "2020-12-22 14:05:20.550670",
  "modified_by": "Administrator",
  "module": "Pibicontrol",
  "name": "Sensor Log",

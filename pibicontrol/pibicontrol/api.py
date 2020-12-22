@@ -4,7 +4,7 @@
 
 from __future__ import unicode_literals
 import frappe
-import datetime
+import datetime, json
 from frappe import _, msgprint
 
 from frappe.utils import cstr
@@ -14,6 +14,7 @@ from pibicontrol.pibicontrol.doctype.mqtt_settings.mqtt_settings import send_mqt
 
 DATE_FORMAT = "%Y-%m-%d"
 TIME_FORMAT = "%H:%M:%S.%f"
+CHART_FORMAT = "%H:%M"
 DATETIME_FORMAT = DATE_FORMAT + " " + TIME_FORMAT
 
 @frappe.whitelist()
@@ -22,6 +23,45 @@ def get_image(slide):
   data = frappe.db.sql("""
 		SELECT * FROM `tabWebsite Slideshow Item` WHERE  parent=%s and docstatus<2""", slide, True)
   return data
+
+@frappe.whitelist()
+def get_chart_dataset (doc):
+  label = []
+  main_read = []
+  second_read = []
+  third_read = []
+  data = frappe.get_doc("Sensor Log", doc)
+  #print("data = {}".format(frappe.as_json(data)))
+  if data.log_item:
+    if len(data.log_item) > 0:
+      variable = data.log_item[0].main_reading
+      uom = data.log_item[0].uom
+      if "cpu-" in data.sensor:
+        second_var = "mem_pct"
+        second_uom = "%"
+        third_var = "disk_pct"
+        third_uom = "%"       
+      for item in data.log_item:
+        main_read.append(item.value)
+        label.append(item.datadate.strftime(CHART_FORMAT))
+        if "cpu-" in data.sensor:
+          payload = json.loads(item.payload)
+          second_read.append(payload['payload']['mem']['mem_pct']) 
+          third_read.append(payload['payload']['disk']['disk_pct'])          
+    
+  return {
+    'label': label,
+    'main_read': main_read,
+    'variable': variable,
+    'uom': uom,
+    'second_read': second_read,
+    'second_var': second_var,
+    'second_uom': second_uom,
+    'third_read': third_read,
+    'third_var': third_var,
+    'third_uom': third_uom
+  } 
+
 
 def get_alert(variable, name):
   start = True

@@ -86,4 +86,4 @@ class SensorLog(Document):
                   mng_alert(doc, ts.variable, disk_pct, start, active_alert)
                 elif disk_pct >= float(ts.lower_value) and start == False:
                   mng_alert(doc, ts.variable, disk_pct, start, active_alert)
-          ## Sensor other type  
+          ## Sensor other type
