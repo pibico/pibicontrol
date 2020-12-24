@@ -19,7 +19,7 @@ app_license = "MIT"
 # app_include_js = "/assets/pibicontrol/js/pibicontrol.js"
 
 # include js, css files in header of web template
-# web_include_css = "/assets/pibicontrol/css/pibicontrol.css"
+# web_include_css = []
 # web_include_js = "/assets/pibicontrol/js/pibicontrol.js"
 
 # include js in page
