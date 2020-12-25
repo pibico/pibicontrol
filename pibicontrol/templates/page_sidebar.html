@@ -16,23 +16,20 @@
   } 
 </style>
 {% endblock %}
+
 {% block content %}
-<div class="sb-nav-fixed">
-  <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-    <a class="navbar-brand" href="http://assistant.pibico.es:8080/">Inicio</a>
-    <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href=""><i class="fa fa-bars"></i></button>
-  </nav>
-  <div id="layoutSidenav">
-    <div id="layoutSidenav_nav">
-      <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-        <div class="sb-sidenav-menu">
-          <div class="nav">
-            <div class="sb-sidenav-menu-heading">Core</div>
-              <a class="nav-link" href="index.html">
-                <div class="sb-nav-link-icon"><i class="fa fa-tachometer-alt"></i></div>
-                Dashboard
-              </a>
-              <div class="sb-sidenav-menu-heading">Interface</div>
+  <div class="sb-nav-fixed">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+      <a class="navbar-brand" href="http://assistant.pibico.es:8080/">Inicio</a>
+      <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href=""><i class="fa fa-bars"></i></button>
+    </nav>
+    <div id="layoutSidenav">
+      <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+          <div class="sb-sidenav-menu">
+            {% if frappe.session.user == 'Administrator' %}
+            <div class="nav">
+              <div class="sb-sidenav-menu-heading">Admin</div>
               <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                 <div class="sb-nav-link-icon"><i class="fa fa-columns"></i></div>
                 Layouts
@@ -40,64 +37,48 @@
               </a>
               <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
                 <nav class="sb-sidenav-menu-nested nav">
-                  <a class="nav-link" href="layout-static.html">Static Navigation</a>
-                  <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a>
+                  <a class="nav-link" href="http://assistant.pibico.es:8080/desk">
+                    <div class="sb-nav-link-icon"><i class="fa fa-server"></i></div>
+                    Desktop
+                  </a>
+                  <a class="nav-link" href="pibigeneral">
+                    <div class="sb-nav-link-icon"><i class="fa fa-desktop"></i></div>
+                    PibiGeneral
+                  </a>
+                  <a class="nav-link" href="?cmd=web_logout">
+                    <div class="sb-nav-link-icon"><i class="fa fa-sign-out"></i></div>
+                    Logout
+                  </a>
                 </nav>
               </div>
-              <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
-                <div class="sb-nav-link-icon"><i class="fa fa-book-open"></i></div>
-                Pages
-                <div class="sb-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
-              </a>
-              <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
-                <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
-                    Authentication
-                    <div class="sb-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
-                  </a>
-                  <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-parent="#sidenavAccordionPages">
-                    <nav class="sb-sidenav-menu-nested nav">
-                      <a class="nav-link" href="login.html">Login</a>
-                      <a class="nav-link" href="register.html">Register</a>
-                      <a class="nav-link" href="password.html">Forgot Password</a>
-                    </nav>
-                  </div>
-                  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
-                    Error
-                    <div class="sb-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
-                  </a>
-                  <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-parent="#sidenavAccordionPages">
-                    <nav class="sb-sidenav-menu-nested nav">
-                      <a class="nav-link" href="401.html">401 Page</a>
-                      <a class="nav-link" href="404.html">404 Page</a>
-                      <a class="nav-link" href="500.html">500 Page</a>
-                    </nav>
-                  </div>
-                </nav>
-              </div>
-              <div class="sb-sidenav-menu-heading">Addons</div>
-                <a class="nav-link" href="charts.html">
-                  <div class="sb-nav-link-icon"><i class="fa fa-chart-area"></i></div>
-                  Charts
-                </a>
-                <a class="nav-link" href="tables.html">
-                  <div class="sb-nav-link-icon"><i class="fa fa-table"></i></div>
-                  Tables
-                </a>
-              </div>
-            </div>
-            <div class="sb-sidenav-footer">
               {% if frappe.session.user != 'Guest' %}
-              <div class="small">Logged in as: </div>{{ frappe.session.user }}
-              {% else %}
-              <div class="small">Please Login</div>
+              <div class="sb-sidenav-menu-heading">Sensor Group</div>
+                <a class="nav-link" href="pibicontrol">
+                    <div class="sb-nav-link-icon"><i class="fa fa-tachometer"></i></div>
+                    PibiControl
+                  </a>
+                  <a class="nav-link" href="pibicasa">
+                    <div class="sb-nav-link-icon"><i class="fa fa-home"></i></div>
+                    PibiCasa
+                  </a>
+                  <a class="nav-link" href="pibifarma">
+                    <div class="sb-nav-link-icon"><i class="fa fa-medkit"></i></div>
+                    PibiFarma
+                  </a>
+                  <a class="nav-link" href="pibicaldera">
+                    <div class="sb-nav-link-icon"><i class="fa fa-tint"></i></div>
+                    PibiCaldera
+                  </a>
+              </div>
               {% endif %}
-            </div>
-          </nav>
-        </div>
+            <div class="small m-2 p-2">Logged in as<br><b>{{ frappe.session.user }}</b></div>
+            {% else %}
+            <div class="small m-2 p-2">User must be Authenticated</div>
+            {% endif %}
+          </div>
+        </nav>
+      </div>
  
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
-    <script src="http://assistant.pibico.es:8080/assets/SBAdmin/js/scripts.js"></script>
-    
- 
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+  <script src="http://assistant.pibico.es:8080/assets/SBAdmin/js/scripts.js"></script> 
 {% endblock %}

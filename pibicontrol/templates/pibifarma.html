@@ -1,23 +1,361 @@
 {# {% extends "templates/web.html" %} #}
 {% include 'templates/page_sidebar.html' %}
 {% block page_content %}
+  <style>
+    @import "http://assistant.pibico.es:8080/assets/SingleAdmin/css/main.css";
+    @import "http://assistant.pibico.es:8080/assets/SingleAdmin/css/font-style.css";
+    .card, .dash-unit, .half-unit {
+      border-radius: 9px;
+    }
+    .card {
+      border: 2px solid #4284b6;
+      background: #4682b481;
+    }
+    .card-header {
+      font-size: 11pt;
+      text-align: center;
+    }
+    /*@media (min-width: 34em) {
+      .card-columns {
+        -webkit-column-count: 1;
+        -moz-column-count: 1;
+        column-count: 1;
+      }
+    }*/
+    @media (min-width: 48em) {
+      .card-columns {
+        -webkit-column-count: 1;
+        -moz-column-count: 1;
+        column-count: 1;
+      }
+    }
+    @media (min-width: 62em) {
+      .card-columns {
+        -webkit-column-count: 2;
+        -moz-column-count: 2;
+        column-count: 2;
+      }
+    }
+    @media (min-width: 75em) {
+      .card-columns {
+        -webkit-column-count: 3;
+        -moz-column-count: 3;
+        column-count: 3;
+      }
+    @media (min-width: 88em) {
+      .card-columns {
+        -webkit-column-count: 4;
+        -moz-column-count: 4;
+        column-count: 4;
+      }   
+    }
+  </style>
+
   <div id="layoutSidenav_content">
     <main>
       <div class="container-fluid">
-        <h1 class="mt-4">PibiFarma</h1>
+        {% if frappe.session.user != 'Guest' %}
+        <h1 class="mt-4 text-white">{{ name }}</h1>
         <div class="row">
-          <div class="card-deck p-6">
+          <div class="col-lg-4 col-md-4  p-2 m-0 mb-1">
             <div class="card">
-              <h5>Reserved for PibiFarma</h5>
-            </div> 
-            <div class="card">
-              <h5>Reserved for PibiFarma</h5>
-            </div> 
-            <div class="card">
-              <h5>Reserved for PibiFarma</h5>
+              <div class="dash-unit">
+                <dtitle>Form</dtitle>
+	      		    <hr>
+                <div class="card-body">
+                  <form class="forms-sample">
+                    <div class="form-group row">
+                      <label for="exampleInputUsername2" class="col-sm-3 col-form-label">User</label>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" id="exampleInputUsername2" placeholder="Username">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="exampleInputPassword2" class="col-sm-3 col-form-label">Password</label>
+                      <div class="col-sm-9">
+                        <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password">
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mr-2 p-1">Submit</button>
+                    <button class="btn btn-dark p-1">Cancel</button>
+                    <div class="form-check form-check-flat form-check-primary">
+                      <label class="form-check-label">
+                        <input type="checkbox" class="form-check-input"> Remember me </label>
+                    </div>
+                  </form>
+                </div>
+                <small class="m-0 p-0 text-white">&copy; PibiCo 2020</small>
+              </div>
             </div>
+          </div>
+          <div class="col-lg-4 col-md-4 p-2 m-0 mb-1">
+            <!-- SWITCHES BLOCK -->     
+		        <div class="card">
+			        <div class="dash-unit">
+	      		    <dtitle>Switches</dtitle>
+	      		    <hr>
+	      		    <div class="info-user">
+					        <span aria-hidden="true" class="li_params fs2"></span>
+                </div>                                              
+				        <div class="switch">
+					        <input type="radio" class="switch-input" name="view" value="on" id="on" checked="">
+					        <label for="on" class="switch-label switch-label-off">On</label>
+					        <input type="radio" class="switch-input" name="view" value="off" id="off">
+					        <label for="off" class="switch-label switch-label-on">Off</label>
+					        <span class="switch-selection"></span>
+				        </div>
+				        <div class="switch switch-blue">
+					        <input type="radio" class="switch-input" name="view2" value="week2" id="week2" checked="">
+					        <label for="week2" class="switch-label switch-label-off">Week</label>
+					        <input type="radio" class="switch-input" name="view2" value="month2" id="month2">
+					        <label for="month2" class="switch-label switch-label-on">Month</label>
+					        <span class="switch-selection"></span>
+				        </div>
+				        <div class="switch switch-yellow">
+					        <input type="radio" class="switch-input" name="view3" value="yes" id="yes" checked="">
+					        <label for="yes" class="switch-label switch-label-off">Yes</label>
+					        <input type="radio" class="switch-input" name="view3" value="no" id="no">
+					        <label for="no" class="switch-label switch-label-on">No</label>
+					        <span class="switch-selection"></span>
+				        </div>
+              </div>
+			      </div>
+          </div>
+          <div class="col-lg-4 col-md-4 p-2 m-0 mb-1">
+            <div class="card">
+              <div class="dash-unit">
+	              <dtitle>Mail Box</dtitle>
+	              <hr>
+                <div class="framemail">
+    			        <div class="window">
+			              <ul class="mail">
+			                <li>
+			                  <i class="unread"></i>
+			                  <img class="avatar" src="http://assistant.pibico.es:8080/assets/SingleAdmin/images/photo01.jpeg" alt="avatar">
+			                  <p class="sender">Adam W.</p>
+			                  <p class="message"><strong>Working</strong> - This is the last...</p>
+			                  <div class="actions">
+			                    <a><img src="http://png-1.findicons.com/files/icons/2232/wireframe_mono/16/undo.png" alt="reply"></a>
+			                    <a><img src="http://png-1.findicons.com/files/icons/2232/wireframe_mono/16/star_fav.png" alt="favourite"></a>
+			                    <a><img src="http://png-4.findicons.com/files/icons/2232/wireframe_mono/16/tag.png" alt="label"></a>
+			                    <a><img src="http://png-4.findicons.com/files/icons/2232/wireframe_mono/16/trash.png" alt="delete"></a>
+			                  </div>
+			                </li>
+			                <li>
+			                  <i class="read"></i>
+			                  <img class="avatar" src="http://assistant.pibico.es:8080/assets/SingleAdmin/images/photo02.jpg" alt="avatar">
+			                  <p class="sender">Dan E.</p>
+			                  <p class="message"><strong>Hey man!</strong> - You have to taste ...</p>
+			                  <div class="actions">
+			                    <a><img src="http://png-1.findicons.com/files/icons/2232/wireframe_mono/16/undo.png" alt="reply"></a>
+			                    <a><img src="http://png-1.findicons.com/files/icons/2232/wireframe_mono/16/star_fav.png" alt="favourite"></a>
+			                    <a><img src="http://png-4.findicons.com/files/icons/2232/wireframe_mono/16/tag.png" alt="label"></a>
+			                    <a><img src="http://png-4.findicons.com/files/icons/2232/wireframe_mono/16/trash.png" alt="delete"></a>
+			                  </div>
+			                </li>
+			                <li>
+			                  <i class="read"></i>
+			                  <img class="avatar" src="http://assistant.pibico.es:8080/assets/SingleAdmin/images/photo03.jpg" alt="avatar">
+			                  <p class="sender">Leonard N.</p>
+			                  <p class="message"><strong>New Mac :D</strong> - So happy with ...</p>
+			                  <div class="actions">
+			                    <a><img src="http://png-1.findicons.com/files/icons/2232/wireframe_mono/16/undo.png" alt="reply"></a>
+			                    <a><img src="http://png-1.findicons.com/files/icons/2232/wireframe_mono/16/star_fav.png" alt="favourite"></a>
+			                    <a><img src="http://png-4.findicons.com/files/icons/2232/wireframe_mono/16/tag.png" alt="label"></a>
+			                    <a><img src="http://png-4.findicons.com/files/icons/2232/wireframe_mono/16/trash.png" alt="delete"></a>
+			                  </div>
+			                </li>
+			                <li>
+			                  <i class="read"></i>
+			                  <img class="avatar" src="http://assistant.pibico.es:8080/assets/SingleAdmin/images/photo04.jpg" alt="avatar">
+			                  <p class="sender">Peter B.</p>
+			                  <p class="message"><strong>Thank you</strong> - Finally I can ...</p>
+			                  <div class="actions">
+			                    <a><img src="http://png-1.findicons.com/files/icons/2232/wireframe_mono/16/undo.png" alt="reply"></a>
+			                    <a><img src="http://png-1.findicons.com/files/icons/2232/wireframe_mono/16/star_fav.png" alt="favourite"></a>
+			                    <a><img src="http://png-4.findicons.com/files/icons/2232/wireframe_mono/16/tag.png" alt="label"></a>
+			                    <a><img src="http://png-4.findicons.com/files/icons/2232/wireframe_mono/16/trash.png" alt="delete"></a>
+			                  </div>
+			                </li>
+                      <li>
+			                  <i class="read"></i>
+			                  <img class="avatar" src="http://assistant.pibico.es:8080/assets/SingleAdmin/images/photo03.jpg" alt="avatar">
+			                  <p class="sender">Philips N.</p>
+			                  <p class="message"><strong>New Station :D</strong> - Christmas with ...</p>
+			                  <div class="actions">
+			                    <a><img src="http://png-1.findicons.com/files/icons/2232/wireframe_mono/16/undo.png" alt="reply"></a>
+			                    <a><img src="http://png-1.findicons.com/files/icons/2232/wireframe_mono/16/star_fav.png" alt="favourite"></a>
+			                    <a><img src="http://png-4.findicons.com/files/icons/2232/wireframe_mono/16/tag.png" alt="label"></a>
+			                    <a><img src="http://png-4.findicons.com/files/icons/2232/wireframe_mono/16/trash.png" alt="delete"></a>
+			                  </div>
+			                </li>                   
+			              </ul>
+    			        </div>
+			          </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-3 p-2 m-0 mb-2">
+            <div class="card">
+              <!-- NEWS BLOCK -->
+      		    <div class="dash-unit">
+      		      <dtitle>Latest News</dtitle>
+      		      <hr>
+  				      <div class="info-user">
+	  				      <span aria-hidden="true" class="li_news fs2"></span>
+		  		      </div>
+			  	      <br>
+      	  		  <div class="text">
+      		  		  <p><b>pibico.es:</b> A beautiful new Dashboard theme has been realised by PibiCo. Please, visit <a href="http://www.pibico.org">www.pibico.org</a> for more details.</p>
+      			  	  <p><grey>Last Update: 5 minutes ago.</grey></p>
+      			    </div>
+              </div><!-- /dash-unit -->
+            </div><!-- /span3 -->
+          </div>
+          <div class="col-lg-3 col-md-3 p-2 m-0 mb-2">
+            <div class="card">
+              <div class="dash-unit">
+      		      <dtitle>Other Information</dtitle>
+      		      <hr>
+			          <div class="section-graph">
+			            <span><img src="http://assistant.pibico.es:8080/assets/SingleAdmin/images/slide02.png" alt="reply"></span>
+			            <br>
+			            <div class="graph-info">
+			              <i class="graph-arrow"></i>
+			              <span class="graph-info-big">634.39</span>
+			              <span class="graph-info-small">+2.18 (3.71%)</span>                    
+			            </div>
+			          </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-2 col-md-2 p-2 m-0 mb-2">
+            <div class="card mb-3" style="height: 134px;">
+              <div class="half-unit">
+      		      <dtitle>More Charts</dtitle>
+      		      <hr>
+			          <div class="section-graph">
+			            <span><img src="http://assistant.pibico.es:8080/assets/SingleAdmin/images/sep-half.png" alt="reply"></span>
+			            <br>
+			            <div class="graph-info">
+			              <i class="graph-arrow"></i>
+			              <span class="graph-info-medium">634.39</span>
+			              <span class="graph-info-small">+2.18 (3.71%)</span>                    
+			            </div>
+			          </div>
+              </div>
+            </div>
+            <div class="card" style="height: 134px;">
+              <div class="half-unit">
+      		      <dtitle>More Charts</dtitle>
+      		      <hr>
+			          <div class="section-graph">
+			            <span><img src="http://assistant.pibico.es:8080/assets/SingleAdmin/images/sep-half.png" alt="reply"></span>
+			            <br>
+			            <div class="graph-info">
+			              <i class="graph-arrow"></i>
+			              <span class="graph-info-medium">634.39</span>
+			              <span class="graph-info-small">+2.18 (3.71%)</span>                    
+			            </div>
+			          </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-4 p-2 m-0 mb-2">
+            <div class="card">
+			        <div class="dash-unit">
+	      		    <dtitle>One Chart</dtitle>
+	      		    <hr>
+	      		    <div class="info-user">
+					        <span aria-hidden="true" class="li_lab fs2"></span>
+                </div>
+                <a><img src="http://assistant.pibico.es:8080/assets/SingleAdmin/images/slide01.png" alt="reply"></a> 
+				      </div>
+            </div>
+          </div>
+          <!-- LAST MONTH REVENUE -->     
+          <div class="col-lg-3 col-md-3 p-2 m-0 mb-2">
+            <div class="card">
+      		    <div class="dash-unit">
+	      		    <dtitle>Last Month Revenue</dtitle>
+	      		    <hr>
+	      		    <div class="cont">
+					        <p><bold>$879</bold> | <ok>Approved</ok></p>
+					        <br>
+					        <p><bold>$377</bold> | Pending</p>
+					        <br>
+					        <p><bold>$156</bold> | <bad>Denied</bad></p>
+					        <br>
+					        <p><img src="images/up-small.png" alt=""> 12% Compared Last Month</p>
+    				    </div>
+			        </div>
+            </div>
+          </div>
+          <div class="col-lg-5 col-md-5 p-2 m-0 mb-2">
+            <div class="card">
+			        <div class="dash-unit">
+	      		    <dtitle>Notifications</dtitle>
+	      		    <hr>
+	      		    <div class="info-user">
+					        <span aria-hidden="true" class="li_bubble fs2"></span>
+				        </div>
+	      		    <div class="cont">
+	      			    <p><button class="btnnew noty" data-noty-options="{&quot;text&quot;:&quot;This is a success notification&quot;,&quot;layout&quot;:&quot;topRight&quot;,&quot;type&quot;:&quot;success&quot;}">Top Right</button></p>
+	      			    <p><button class="btnnew noty" data-noty-options="{&quot;text&quot;:&quot;This is an informaton notification&quot;,&quot;layout&quot;:&quot;topLeft&quot;,&quot;type&quot;:&quot;information&quot;}">Top Left</button></p>
+	      			    <p><button class="btnnew noty" data-noty-options="{&quot;text&quot;:&quot;This is an alert notification with fade effect.&quot;,&quot;layout&quot;:&quot;topCenter&quot;,&quot;type&quot;:&quot;alert&quot;,&quot;animateOpen&quot;: {&quot;opacity&quot;: &quot;show&quot;}}">Top Center (fade)</button></p>
+	      		    </div>
+			        </div>
+		        </div>
+          </div>
+          <div class="col-lg-4 col-md-4 p-2 m-0 mb-2">
+            <div class="card">
+				      <div class="dash-unit">
+	      		    <dtitle>Accordion</dtitle>
+	      		    <hr>
+					      <div class="accordion" id="accordion2">
+		              <div class="accordion-group">
+		                <div class="accordion-heading">
+		                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+		                        Collapsible Group Item #1
+		                  </a>
+		                </div>
+		                <div id="collapseOne" class="accordion-body collapse in">
+		                  <div class="accordion-inner">
+								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla iaculis mattis lorem.   
+							   	    </div>
+		                </div>
+		              </div>
+		              <div class="accordion-group">
+		                <div class="accordion-heading">
+		                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+		                   Collapsible Group Item #2
+		                  </a>
+		                </div>
+		                <div id="collapseTwo" class="accordion-body collapse">
+		                  <div class="accordion-inner">
+								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla iaculis mattis lorem.
+								      </div>
+		                </div>
+		              </div>
+		              <div class="accordion-group">
+		                <div class="accordion-heading">
+		                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
+		                        Collapsible Group Item #3
+		                  </a>
+		                </div>
+		                <div id="collapseThree" class="accordion-body collapse">
+		                  <div class="accordion-inner">
+								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla iaculis mattis lorem.                          </div>
+		                </div>
+		              </div>
+		            </div><!--/accordion -->
+				      </div>
+			      </div>
           </div>      
         </div>
+        {% else %}
+        <h1 class="mt-4 text-white">Please Login First!</h1>
+        {% endif %}
       </div>
     </main>
   </div>
