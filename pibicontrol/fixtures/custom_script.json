@@ -2,6 +2,17 @@
  {
   "docstatus": 0,
   "doctype": "Custom Script",
+  "dt": "Sensor Group",
+  "modified": "2020-12-23 12:56:44.868008",
+  "name": "Sensor Group-Client",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "script": "frappe.ui.form.on('Sensor Group', {\n\tonload(frm) {\n\t  // your code here\n\t  var template = '';\n\t  if (frm.doc.route && frm.doc.published) {\n\t    template = '<h4><a style=\"color: #4682b4; font-size: 10pt;\" href=\"' + frm.doc.route + '\">' + frm.doc.title + '</a></h4>';\n\t    frm.set_df_property('html_route', 'options', frappe.render_template(template));\n        frm.refresh_field('html_route');\n\t  }\n\t},\n\trefresh(frm) {\n\t  //frm.add_custom_button(__(\"Example Button\"), function() {\n      //  frappe.msgprint(\"Code Test\");\n      //}, __(\"iCode\"));\n      var template = '';\n\t  if (frm.doc.route && frm.doc.published && !frm.doc.__islocal) {\n\t    template = '<h4><a style=\"color: #4682b4; font-size: 10pt;\" href=\"' + frm.doc.route + '\">' + frm.doc.title + '</a></h4>';\n\t    frm.set_df_property('html_route', 'options', frappe.render_template(template));\n        frm.refresh_field('html_route');\n\t  }  \n\t}\n})"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Custom Script",
   "dt": "Sensor",
   "modified": "2020-12-18 17:14:58.125376",
   "name": "Sensor-Client",
