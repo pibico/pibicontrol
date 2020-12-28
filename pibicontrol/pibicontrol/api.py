@@ -183,11 +183,16 @@ def ping_devices_via_mqtt():
   )
   if sensors:
     hostnames = []
+    strcmd = "start"
     command = "is_alive"
+    strboot = "boot"
     for device in sensors:
       lastseen = device.lastseen
       now = datetime.datetime.now()
-      time_minutes = (now - lastseen).total_seconds()/60
+      if lastseen:
+        time_minutes = (now - lastseen).total_seconds()/60
+      else:
+        time_minutes = 12
       if time_minutes <= 5:
         ## Check active last_seen alerts to close
         (active_alert, start) = get_alert("last_seen", device.name)
@@ -196,10 +201,16 @@ def ping_devices_via_mqtt():
       elif 10 >= time_minutes > 5:
         ## Order through MQTT to update LastSeen Record
         hostnames.append(device.hostname + "/mqtt")
+        send_mqtt(hostnames, cstr(strcmd))
+      elif 15 >= time_minutes > 10:
+        ## Second Order through MQTT to update LastSeen Record
+        hostnames.append(device.hostname + "/mqtt")
         send_mqtt(hostnames, cstr(command))
-      elif time_minutes > 10:
+      elif time_minutes > 15:
         ## Not receiving data from device
         ## Send alert last_seen 0 from_time
+        hostnames.append(device.hostname + "/mqtt")
+        send_mqtt(hostnames, cstr(strboot))
         (active_alert, start) = get_alert("last_seen", device.name)
         if start == True:
           mng_alert(device, 'last_seen', 0, start, active_alert)

@@ -9,7 +9,7 @@
   "sensor_group",
   "hostname",
   "serial",
-  "user",
+  "client",
   "stock_item",
   "sensor_shortcut",
   "room",
@@ -63,12 +63,6 @@
    "fieldname": "alerts_active",
    "fieldtype": "Check",
    "label": "Alerts active"
-  },
-  {
-   "fieldname": "user",
-   "fieldtype": "Link",
-   "label": "User",
-   "options": "User"
   },
   {
    "fieldname": "sensor_shortcut",
@@ -209,9 +203,15 @@
    "fieldtype": "Datetime",
    "in_list_view": 1,
    "label": "Last Seen"
+  },
+  {
+   "fieldname": "client",
+   "fieldtype": "Link",
+   "label": "Client",
+   "options": "Client"
   }
  ],
- "modified": "2020-12-21 19:36:04.533125",
+ "modified": "2020-12-27 08:45:04.119574",
  "modified_by": "Administrator",
  "module": "Pibicontrol",
  "name": "Sensor",

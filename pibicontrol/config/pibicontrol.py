@@ -27,6 +27,12 @@ def get_data():
       "items": [
         {
           "type": "doctype",
+          "name": "Client",
+          "description": _("Client"),
+          "onboard": 1,
+        },  
+        {
+          "type": "doctype",
           "name": "Sensor",
           "description": _("Sensor"),
           "onboard": 1,
@@ -61,6 +67,12 @@ def get_data():
       "label": _("Alerts Setup"),
       "icon": "fa fa-star",
       "items": [
+        {
+          "type": "doctype",
+          "name": "Weather Settings",
+          "description": _("Weather Settings"),
+          "onboard": 1,
+        },
         {
           "type": "doctype",
           "name": "SMS Settings",

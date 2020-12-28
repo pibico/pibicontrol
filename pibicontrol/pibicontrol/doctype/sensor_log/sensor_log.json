@@ -68,13 +68,13 @@
   {
    "fieldname": "average",
    "fieldtype": "Float",
-   "in_list_view": 1,
    "label": "Average",
    "read_only": 1
   },
   {
    "fieldname": "points",
    "fieldtype": "Int",
+   "in_list_view": 1,
    "label": "Points",
    "read_only": 1
   },
@@ -100,7 +100,7 @@
    "options": "<div id=\"second_chart\"></div>"
   }
  ],
- "modified": "2020-12-22 14:05:20.550670",
+ "modified": "2020-12-25 22:59:30.367537",
  "modified_by": "Administrator",
  "module": "Pibicontrol",
  "name": "Sensor Log",

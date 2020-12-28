@@ -75,6 +75,12 @@ app_license = "MIT"
 # 	"Event": "frappe.desk.doctype.event.event.has_permission",
 # }
 
+jenv = {
+  "methods": [
+    "timestamp_to_date:pibicontrol.jinja_filters.timestamp_to_date"
+  ]
+}
+
 # Document Events
 # ---------------
 # Hook on document methods and events
