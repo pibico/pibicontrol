@@ -260,19 +260,19 @@
 				            <i class="info-user fa fa-tint"></i>
                     Humidity {{ weather.current.humidity }} %
 				            <br>
-					          <i class="info-user fas fa-weight"></i>
+					          <i class="info-user fa fa-circle-o"></i>
                     P<small>sea level</small>  {{ weather.current.pressure }} hPa
 					          <br>
-				            <i class="info-user far fa-sun"></i>
+				            <i class="info-user fa fa-sun-o"></i>
                     Sunrise {{ timestamp_to_date(weather.current.sunrise) }}
                     <br> 				  
-				            <i class="info-user far fa-moon"></i>
+				            <i class="info-user fa fa-moon-o"></i>
                     Sunset {{ timestamp_to_date(weather.current.sunset) }}
                     <br>
 				            <i class="info-user wi wi-wind towards-{{ weather.current.wind_deg }}-deg"></i>
 					          Wind {{ weather.current.wind_speed }} m/s
 					          <br>
-					          <i class="info-user fas fa-cloud-sun"></i>
+					          <i class="info-user fa fa-cloud"></i>
                     Clouds {{ weather.current.clouds }} %
                     <br>
 					          {% if weather.current.rain %}
@@ -334,10 +334,10 @@
 						              {% if weather.daily.1.rain %}<b>Rain</b> <span class="forecast">{{ weather.daily.1.rain }}</span> mm/h | {% endif %}<b>Clouds</b> <span class="forecast">{{ weather.daily.1.clouds }}</span> %
 						            </p>
 			                  <div class="actions">
-						              <a title="wind deg {{weather.daily.1.wind_deg}}&deg;"><i style="top: 5px;" class="info-user wi wi-wind towards-{{ weather.daily.1.wind_deg }}-deg mr-2"></i></a>
-                          <a title="sunrise {{timestamp_to_date(weather.daily.1.sunrise)}}"><i class="info-user far fa-sun mr-1"></i></a>
-			                    <a title="sunset {{timestamp_to_date(weather.daily.1.sunset)}}"><i class="info-user far fa-moon mr-1"></i></a>
-			                    <a title="uvi {{weather.daily.1.uvi}}"><i class="info-user far fa-lightbulb mr-1"></i></a>
+						              <a title="wind deg {{weather.daily.1.wind_deg}}&deg;"><i style="top: 5px;" class="info-user wi wi-wind towards-{{ weather.daily.1.wind_deg }}-deg"></i></a>
+                          <a title="sunrise {{timestamp_to_date(weather.daily.1.sunrise)}}"><i class="info-user fa fa-sun-o"></i></a>
+			                    <a title="sunset {{timestamp_to_date(weather.daily.1.sunset)}}"><i class="info-user fa fa-moon-o"></i></a>
+			                    <a title="uvi {{weather.daily.1.uvi}}"><i class="info-user fa fa-lightbulb-o"></i></a>
 			                  </div>
                       </li>
 					            <li>
@@ -351,10 +351,10 @@
 						              {% if weather.daily.2.rain %}<b>Rain</b> <span class="forecast">{{ weather.daily.2.rain }}</span> mm/h | {% endif %}<b>Clouds</b> <span class="forecast">{{ weather.daily.2.clouds }}</span> %
 						            </p>
 			                  <div class="actions">
-						              <a title="wind deg {{weather.daily.2.wind_deg}}&deg;"><i style="top: 5px;" class="info-user wi wi-wind towards-{{ weather.daily.2.wind_deg }}-deg mr-2"></i></a>
-                          <a title="sunrise {{timestamp_to_date(weather.daily.2.sunrise)}}"><i class="info-user far fa-sun mr-1"></i></a>
-			                    <a title="sunset {{timestamp_to_date(weather.daily.2.sunset)}}"><i class="info-user far fa-moon mr-1"></i></a>
-			                    <a title="uvi {{weather.daily.2.uvi}}"><i class="info-user far fa-lightbulb"></i></a>
+						              <a title="wind deg {{weather.daily.2.wind_deg}}&deg;"><i style="top: 5px;" class="info-user wi wi-wind towards-{{ weather.daily.2.wind_deg }}-deg"></i></a>
+                          <a title="sunrise {{timestamp_to_date(weather.daily.2.sunrise)}}"><i class="info-user fa fa-sun-o"></i></a>
+			                    <a title="sunset {{timestamp_to_date(weather.daily.2.sunset)}}"><i class="info-user fa fa-moon-o"></i></a>
+			                    <a title="uvi {{weather.daily.2.uvi}}"><i class="info-user fa fa-lightbulb-o"></i></a>
 			                  </div>
                       </li>
 					            <li>
@@ -368,10 +368,10 @@
 						              {% if weather.daily.3.rain %}<b>Rain</b> <span class="forecast">{{ weather.daily.3.rain }}</span> mm/h | {% endif %}<b>Clouds</b> <span class="forecast">{{ weather.daily.3.clouds }}</span> %
 						            </p>
 			                  <div class="actions">
-						              <a title="wind deg {{weather.daily.3.wind_deg}}&deg;"><i style="top: 5px;" class="info-user wi wi-wind towards-{{ weather.daily.3.wind_deg }}-deg mr-2"></i></a>
-                          <a title="sunrise {{timestamp_to_date(weather.daily.3.sunrise)}}"><i class="info-user far fa-sun mr-1"></i></a>
-			                    <a title="sunset {{timestamp_to_date(weather.daily.3.sunset)}}"><i class="info-user far fa-moon mr-1"></i></a>
-			                    <a title="uvi {{weather.daily.3.uvi}}"><i class="info-user far fa-lightbulb"></i></a>
+						              <a title="wind deg {{weather.daily.3.wind_deg}}&deg;"><i style="top: 5px;" class="info-user wi wi-wind towards-{{ weather.daily.3.wind_deg }}-deg"></i></a>
+                          <a title="sunrise {{timestamp_to_date(weather.daily.3.sunrise)}}"><i class="info-user fa fa-sun-o"></i></a>
+			                    <a title="sunset {{timestamp_to_date(weather.daily.3.sunset)}}"><i class="info-user fa fa-moon-o"></i></a>
+			                    <a title="uvi {{weather.daily.3.uvi}}"><i class="info-user fa fa-lightbulb-o"></i></a>
 			                  </div>
                       </li>
 					            <li>
@@ -385,10 +385,10 @@
 						                {% if weather.daily.4.rain %}<b>Rain</b> <span class="forecast">{{ weather.daily.4.rain }}</span> mm/h | {% endif %}<b>Clouds</b> <span class="forecast">{{ weather.daily.4.clouds }}</span> %
 						            </p>
 			                  <div class="actions">
-						              <a title="wind deg {{weather.daily.4.wind_deg}}&deg;"><i style="top: 5px;" class="info-user wi wi-wind towards-{{ weather.daily.4.wind_deg }}-deg mr-2"></i></a>
-                          <a title="sunrise {{timestamp_to_date(weather.daily.4.sunrise)}}"><i class="info-user far fa-sun mr-1"></i></a>
-			                    <a title="sunset {{timestamp_to_date(weather.daily.4.sunset)}}"><i class="info-user far fa-moon mr-1"></i></a>
-			                    <a title="uvi {{weather.daily.4.uvi}}"><i class="info-user far fa-lightbulb"></i></a>
+						              <a title="wind deg {{weather.daily.4.wind_deg}}&deg;"><i style="top: 5px;" class="info-user wi wi-wind towards-{{ weather.daily.4.wind_deg }}-deg"></i></a>
+                          <a title="sunrise {{timestamp_to_date(weather.daily.4.sunrise)}}"><i class="info-user fa fa-sun-o"></i></a>
+			                    <a title="sunset {{timestamp_to_date(weather.daily.4.sunset)}}"><i class="info-user fa fa-moon-o"></i></a>
+			                    <a title="uvi {{weather.daily.4.uvi}}"><i class="info-user fa fa-lightbulb-o"></i></a>
 			                  </div>
                       </li>
 					            <li>
@@ -402,10 +402,10 @@
 						              {% if weather.daily.5.rain %}<b>Rain</b> <span class="forecast">{{ weather.daily.5.rain }}</span> mm/h | {% endif %}<b>Clouds</b> <span class="forecast">{{ weather.daily.5.clouds }}</span> %
 						            </p>
 			                  <div class="actions">
-						              <a title="wind deg {{weather.daily.5.wind_deg}}&deg;"><i style="top: 5px;" class="info-user wi wi-wind towards-{{ weather.daily.5.wind_deg }}-deg mr-2"></i></a>
-                          <a title="sunrise {{timestamp_to_date(weather.daily.5.sunrise)}}"><i class="info-user far fa-sun mr-1"></i></a>
-			                    <a title="sunset {{timestamp_to_date(weather.daily.5.sunset)}}"><i class="info-user far fa-moon mr-1"></i></a>
-			                    <a title="uvi {{weather.daily.5.uvi}}"><i class="info-user far fa-lightbulb"></i></a>
+						              <a title="wind deg {{weather.daily.5.wind_deg}}&deg;"><i style="top: 5px;" class="info-user wi wi-wind towards-{{ weather.daily.5.wind_deg }}-deg"></i></a>
+                          <a title="sunrise {{timestamp_to_date(weather.daily.5.sunrise)}}"><i class="info-user fa fa-sun-o"></i></a>
+			                    <a title="sunset {{timestamp_to_date(weather.daily.5.sunset)}}"><i class="info-user fa fa-moon-o"></i></a>
+			                    <a title="uvi {{weather.daily.5.uvi}}"><i class="info-user fa fa-lightbulb-o"></i></a>
 			                  </div>
                       </li>
 			              </ul>

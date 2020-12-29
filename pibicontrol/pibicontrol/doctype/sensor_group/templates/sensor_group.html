@@ -1,16 +1,14 @@
 {% extends "templates/web.html" %}
 <!-- this is the selection page for Sensor Group -->
 {% block page_content %}
-  {% if doc.name == "PibiControl" %}
-    {% include 'templates/pibicontrol.html' %}
-  {% elif doc.name == "PibiFarma" %}  
+  {% if doc.name == "PibiFarma" %}  
     {% include 'templates/pibifarma.html' %}
   {% elif doc.name == "PibiGeneral" %}  
     {% include 'templates/pibigeneral.html' %} 
   {% elif doc.name == "PibiCasa" %}  
     {% include 'templates/pibicasa.html' %}
-  {% elif doc.name == "PibiCaldera" %}  
-    {% include 'templates/pibicaldera.html' %}        
+  {% elif doc.name == "PibiAssistant" %}  
+    {% include 'templates/pibiassistant.html' %}        
   {% endif %}
 {% endblock %}
 

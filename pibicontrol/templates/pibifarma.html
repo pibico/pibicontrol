@@ -1,10 +1,8 @@
-{# {% extends "templates/web.html" %} #}
+{# % extends "templates/web.html" % #}
 {% include 'templates/page_sidebar.html' %}
 {% block page_content %}
   <style>
-    @import "http://assistant.pibico.es:8080/assets/SingleAdmin/css/main.css";
-    @import "http://assistant.pibico.es:8080/assets/SingleAdmin/css/font-style.css";
-    .card, .dash-unit, .half-unit {
+    .card, .dash-unit, .half-unit, .third-unit, .twothird-unit {
       border-radius: 9px;
     }
     .card {
@@ -15,348 +13,298 @@
       font-size: 11pt;
       text-align: center;
     }
-    /*@media (min-width: 34em) {
-      .card-columns {
-        -webkit-column-count: 1;
-        -moz-column-count: 1;
-        column-count: 1;
-      }
-    }*/
-    @media (min-width: 48em) {
-      .card-columns {
-        -webkit-column-count: 1;
-        -moz-column-count: 1;
-        column-count: 1;
-      }
+    .bottom {
+      margin-top: 0px;
     }
-    @media (min-width: 62em) {
-      .card-columns {
-        -webkit-column-count: 2;
-        -moz-column-count: 2;
-        column-count: 2;
-      }
+    .video {
+      position: absolute;
+      top: 28px;
+      left: 0;
+      width: 100%;
+      height: 100%;
     }
-    @media (min-width: 75em) {
-      .card-columns {
-        -webkit-column-count: 3;
-        -moz-column-count: 3;
-        column-count: 3;
-      }
-    @media (min-width: 88em) {
-      .card-columns {
-        -webkit-column-count: 4;
-        -moz-column-count: 4;
-        column-count: 4;
-      }   
+    .chart-container .graph-svg-tip {
+      display: none;
     }
   </style>
-
   <div id="layoutSidenav_content">
     <main>
       <div class="container-fluid">
         {% if frappe.session.user != 'Guest' %}
-        <h1 class="mt-4 text-white">{{ name }}</h1>
+        <h1 class="mt-4 text-white"><i class="info-user fa fa-medkit fs2"></i>{{ name }}</h1>
+        <i class="info-user li_calendar fs1"></i><big class="text-white">{{ timestamp_to_date(weather.current.dt) }}</big>
+        <p class="text-white">{{ sensor_doc | length }}</p>
+        {% set len = sensor_doc | length %}
         <div class="row">
-          <div class="col-lg-4 col-md-4  p-2 m-0 mb-1">
-            <div class="card">
-              <div class="dash-unit">
-                <dtitle>Form</dtitle>
-	      		    <hr>
-                <div class="card-body">
-                  <form class="forms-sample">
-                    <div class="form-group row">
-                      <label for="exampleInputUsername2" class="col-sm-3 col-form-label">User</label>
-                      <div class="col-sm-9">
-                        <input type="text" class="form-control" id="exampleInputUsername2" placeholder="Username">
-                      </div>
-                    </div>
-                    <div class="form-group row">
-                      <label for="exampleInputPassword2" class="col-sm-3 col-form-label">Password</label>
-                      <div class="col-sm-9">
-                        <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password">
-                      </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary mr-2 p-1">Submit</button>
-                    <button class="btn btn-dark p-1">Cancel</button>
-                    <div class="form-check form-check-flat form-check-primary">
-                      <label class="form-check-label">
-                        <input type="checkbox" class="form-check-input"> Remember me </label>
-                    </div>
-                  </form>
-                </div>
-                <small class="m-0 p-0 text-white">&copy; PibiCo 2020</small>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-4 p-2 m-0 mb-1">
-            <!-- SWITCHES BLOCK -->     
-		        <div class="card">
-			        <div class="dash-unit">
-	      		    <dtitle>Switches</dtitle>
-	      		    <hr>
-	      		    <div class="info-user">
-					        <span aria-hidden="true" class="li_params fs2"></span>
-                </div>                                              
-				        <div class="switch">
-					        <input type="radio" class="switch-input" name="view" value="on" id="on" checked="">
-					        <label for="on" class="switch-label switch-label-off">On</label>
-					        <input type="radio" class="switch-input" name="view" value="off" id="off">
-					        <label for="off" class="switch-label switch-label-on">Off</label>
-					        <span class="switch-selection"></span>
-				        </div>
-				        <div class="switch switch-blue">
-					        <input type="radio" class="switch-input" name="view2" value="week2" id="week2" checked="">
-					        <label for="week2" class="switch-label switch-label-off">Week</label>
-					        <input type="radio" class="switch-input" name="view2" value="month2" id="month2">
-					        <label for="month2" class="switch-label switch-label-on">Month</label>
-					        <span class="switch-selection"></span>
-				        </div>
-				        <div class="switch switch-yellow">
-					        <input type="radio" class="switch-input" name="view3" value="yes" id="yes" checked="">
-					        <label for="yes" class="switch-label switch-label-off">Yes</label>
-					        <input type="radio" class="switch-input" name="view3" value="no" id="no">
-					        <label for="no" class="switch-label switch-label-on">No</label>
-					        <span class="switch-selection"></span>
-				        </div>
-              </div>
-			      </div>
-          </div>
-          <div class="col-lg-4 col-md-4 p-2 m-0 mb-1">
-            <div class="card">
-              <div class="dash-unit">
-	              <dtitle>Mail Box</dtitle>
-	              <hr>
+          <!-- First Row -->
+          <div class="col-lg-4 col-md-4 m-0 p-0 mb-2">
+            <div class="card mr-1">
+              <div class="
+                {% if len == 0 or len == 1 %}third-unit{% elif len == 2%}half-unit{% elif len == 3 or len == 4 %}twothird-unit{% elif len > 4 %}dash-unit{% endif %}
+                ">
+                <dtitle>Freezers</dtitle>
+      		      <hr class="pb-1 mb-0">
                 <div class="framemail">
     			        <div class="window">
-			              <ul class="mail">
-			                <li>
-			                  <i class="unread"></i>
-			                  <img class="avatar" src="http://assistant.pibico.es:8080/assets/SingleAdmin/images/photo01.jpeg" alt="avatar">
-			                  <p class="sender">Adam W.</p>
-			                  <p class="message"><strong>Working</strong> - This is the last...</p>
-			                  <div class="actions">
-			                    <a><img src="http://png-1.findicons.com/files/icons/2232/wireframe_mono/16/undo.png" alt="reply"></a>
-			                    <a><img src="http://png-1.findicons.com/files/icons/2232/wireframe_mono/16/star_fav.png" alt="favourite"></a>
-			                    <a><img src="http://png-4.findicons.com/files/icons/2232/wireframe_mono/16/tag.png" alt="label"></a>
-			                    <a><img src="http://png-4.findicons.com/files/icons/2232/wireframe_mono/16/trash.png" alt="delete"></a>
-			                  </div>
-			                </li>
-			                <li>
-			                  <i class="read"></i>
-			                  <img class="avatar" src="http://assistant.pibico.es:8080/assets/SingleAdmin/images/photo02.jpg" alt="avatar">
-			                  <p class="sender">Dan E.</p>
-			                  <p class="message"><strong>Hey man!</strong> - You have to taste ...</p>
-			                  <div class="actions">
-			                    <a><img src="http://png-1.findicons.com/files/icons/2232/wireframe_mono/16/undo.png" alt="reply"></a>
-			                    <a><img src="http://png-1.findicons.com/files/icons/2232/wireframe_mono/16/star_fav.png" alt="favourite"></a>
-			                    <a><img src="http://png-4.findicons.com/files/icons/2232/wireframe_mono/16/tag.png" alt="label"></a>
-			                    <a><img src="http://png-4.findicons.com/files/icons/2232/wireframe_mono/16/trash.png" alt="delete"></a>
-			                  </div>
-			                </li>
-			                <li>
-			                  <i class="read"></i>
-			                  <img class="avatar" src="http://assistant.pibico.es:8080/assets/SingleAdmin/images/photo03.jpg" alt="avatar">
-			                  <p class="sender">Leonard N.</p>
-			                  <p class="message"><strong>New Mac :D</strong> - So happy with ...</p>
-			                  <div class="actions">
-			                    <a><img src="http://png-1.findicons.com/files/icons/2232/wireframe_mono/16/undo.png" alt="reply"></a>
-			                    <a><img src="http://png-1.findicons.com/files/icons/2232/wireframe_mono/16/star_fav.png" alt="favourite"></a>
-			                    <a><img src="http://png-4.findicons.com/files/icons/2232/wireframe_mono/16/tag.png" alt="label"></a>
-			                    <a><img src="http://png-4.findicons.com/files/icons/2232/wireframe_mono/16/trash.png" alt="delete"></a>
-			                  </div>
-			                </li>
-			                <li>
-			                  <i class="read"></i>
-			                  <img class="avatar" src="http://assistant.pibico.es:8080/assets/SingleAdmin/images/photo04.jpg" alt="avatar">
-			                  <p class="sender">Peter B.</p>
-			                  <p class="message"><strong>Thank you</strong> - Finally I can ...</p>
-			                  <div class="actions">
-			                    <a><img src="http://png-1.findicons.com/files/icons/2232/wireframe_mono/16/undo.png" alt="reply"></a>
-			                    <a><img src="http://png-1.findicons.com/files/icons/2232/wireframe_mono/16/star_fav.png" alt="favourite"></a>
-			                    <a><img src="http://png-4.findicons.com/files/icons/2232/wireframe_mono/16/tag.png" alt="label"></a>
-			                    <a><img src="http://png-4.findicons.com/files/icons/2232/wireframe_mono/16/trash.png" alt="delete"></a>
-			                  </div>
-			                </li>
+			              <ul class="pharma">
+                                   
                       <li>
-			                  <i class="read"></i>
-			                  <img class="avatar" src="http://assistant.pibico.es:8080/assets/SingleAdmin/images/photo03.jpg" alt="avatar">
-			                  <p class="sender">Philips N.</p>
-			                  <p class="message"><strong>New Station :D</strong> - Christmas with ...</p>
+			                  <i class="unread"></i>
+						            <i class="info-user far fa-snowflake my-2 p-0 ml-2 " style="position: absolute; top: 0px;"></i>
+						            <p class="sender"><small>Sensor</small></p>
+						            <p class="message mt-1">
+                          <b>Temperature</b> <span class="meas">temp</span> &deg;C
+                          <br>
+						              <b>Humidity</b> <span class="meas">na</span> %
+                          <br>
+                          <span class="forecast">date</span>
+						            </p>
 			                  <div class="actions">
-			                    <a><img src="http://png-1.findicons.com/files/icons/2232/wireframe_mono/16/undo.png" alt="reply"></a>
-			                    <a><img src="http://png-1.findicons.com/files/icons/2232/wireframe_mono/16/star_fav.png" alt="favourite"></a>
-			                    <a><img src="http://png-4.findicons.com/files/icons/2232/wireframe_mono/16/tag.png" alt="label"></a>
-			                    <a><img src="http://png-4.findicons.com/files/icons/2232/wireframe_mono/16/trash.png" alt="delete"></a>
+                          <a title="24h" href="{{ frappe.get_url() }}:8080/desk#List/Report?name=ToDo" target="_blank"><i class="info-user fas fa-calendar-day"></i></a>
+                          <a title="7d" href="{{ frappe.get_url() }}:8080/desk#List/Report?name=ToDo" target="_blank"><i class="info-user fas fa-calendar-week mx-1" ></i></a>
+			                    <a title="1m" href="{{ frappe.get_url() }}:8080/desk#List/Report?name=ToDo" target="_blank"><i class="info-user far fa-calendar"></i></a>
 			                  </div>
-			                </li>                   
-			              </ul>
-    			        </div>
-			          </div>
+                      </li>
+                      
+                    </ul>
+                  </div>
+                </div>      
+              </div>
+            </div>  
+          </div>        
+          <div class="col-lg-4 col-md-4 m-0 p-0 mb-2">
+            <div class="card mr-1">
+              <div class="
+                {% if len == 0 or len == 1 %}third-unit{% elif len == 2%}half-unit{% elif len == 3 or len == 4 %}twothird-unit{% elif len > 4 %}dash-unit{% endif %}
+                ">
+                <dtitle>Pharmacy</dtitle>
+      		      <hr class="pb-1 mb-0">
+                <div class="framemail">
+    			        <div class="window">
+			              <ul class="pharma">
+                                   
+                      <li>
+			                  <i class="unread"></i>
+						            <i class="info-user fas fa-temperature-low my-2 p-0 ml-2 " style="position: absolute; top: 0px;"></i>
+						            <p class="sender"><small>Sensor</small></p>
+						            <p class="message mt-1">
+                          <b>Temperature</b> <span class="meas">temp</span> &deg;C
+                          <br>
+						              <b>Humidity</b> <span class="meas">humid</span> %
+                          <br>
+                          <span class="forecast">date</span>
+						            </p>
+			                  <div class="actions">
+                          <a title="24h" href="{{ frappe.get_url() }}:8080/desk#List/Report?name=ToDo" target="_blank"><i class="info-user fas fa-calendar-day"></i></a>
+                          <a title="7d" href="{{ frappe.get_url() }}:8080/desk#List/Report?name=ToDo" target="_blank"><i class="info-user fas fa-calendar-week mx-1" ></i></a>
+			                    <a title="1m" href="{{ frappe.get_url() }}:8080/desk#List/Report?name=ToDo" target="_blank"><i class="info-user far fa-calendar"></i></a>
+			                  </div>
+                      </li>
+                      
+                    </ul>
+                  </div>
+                </div>      
+              </div>
+            </div>  
+          </div>
+          <div class="col-lg-4 col-md-4 m-0 p-0 mb-2">
+            <div class="card">
+              <div class="
+                {% if len == 0 or len == 1 %}third-unit{% elif len == 2%}half-unit{% elif len == 3 or len == 4 %}twothird-unit{% elif len > 4 %}dash-unit{% endif %}
+                ">
+      		      <dtitle>Daily Notifications</dtitle>
+	      		    <hr>
+                <div class="accordion" id="alert_log">
+                  {% for val in alert_logs %}
+                  {% set idx = val.alert_item | length - 1 %}
+                  <div class="accordion-group">
+                    <div class="accordion-heading">
+                      <a class="accordion-toggle m-2" data-toggle="collapse" data-parent="#alert_log" href="#collapse{{ loop.index }}">
+                         
+                       {% if val.alert_item[idx].to_time == None %}
+                         <bad><span aria-hidden="true" class="li_eye"></span><bad> <small>Active</small>
+                       {% else %}
+                         <ok><span aria-hidden="true" class="li_lock"></span></ok> <small>Closed</small> 
+                       {% endif %}
+                       {{ val.name }}
+                      <a>
+                    </div>
+                    <div id="collapse{{ loop.index }}" class="accordion-body collapse in">
+                      <div class="accordion-inner">
+                      {% if val.alert_item[idx].to_time == None %}
+                         <a href="{{ frappe.get_url() }}:8080/desk#List/Alert Log?name={{val.name}}" target="_blank">Alert</a> <small>{{val.alert_item[idx].variable}} @{{val.alert_item[idx].value}}</small> from <strong>{{ frappe.format(val.alert_item[idx].from_time, {'fieldtype': 'Time'})}}</strong>
+                      {% else %}
+                         <a href="{{ frappe.get_url() }}:8080/desk#List/Alert Log?name={{val.name}}" target="_blank">Alert</a> <small>{{val.alert_item[idx].variable}}</small> at <strong>{{ frappe.format(val.alert_item[idx].to_time, {'fieldtype': 'Time'})}}</strong>
+                      {% endif %}  
+                      </div>   
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>      
               </div>
             </div>
           </div>
-          <div class="col-lg-3 col-md-3 p-2 m-0 mb-2">
-            <div class="card">
-              <!-- NEWS BLOCK -->
-      		    <div class="dash-unit">
-      		      <dtitle>Latest News</dtitle>
-      		      <hr>
-  				      <div class="info-user">
-	  				      <span aria-hidden="true" class="li_news fs2"></span>
-		  		      </div>
-			  	      <br>
-      	  		  <div class="text">
-      		  		  <p><b>pibico.es:</b> A beautiful new Dashboard theme has been realised by PibiCo. Please, visit <a href="http://www.pibico.org">www.pibico.org</a> for more details.</p>
-      			  	  <p><grey>Last Update: 5 minutes ago.</grey></p>
-      			    </div>
-              </div><!-- /dash-unit -->
-            </div><!-- /span3 -->
-          </div>
-          <div class="col-lg-3 col-md-3 p-2 m-0 mb-2">
-            <div class="card">
+          <!-- Second Row -->
+          <div class="col-lg-4 col-md-4 m-0 p-0 mb-2">
+            <div class="card mr-1">
               <div class="dash-unit">
-      		      <dtitle>Other Information</dtitle>
-      		      <hr>
-			          <div class="section-graph">
-			            <span><img src="http://assistant.pibico.es:8080/assets/SingleAdmin/images/slide02.png" alt="reply"></span>
-			            <br>
-			            <div class="graph-info">
-			              <i class="graph-arrow"></i>
-			              <span class="graph-info-big">634.39</span>
-			              <span class="graph-info-small">+2.18 (3.71%)</span>                    
-			            </div>
-			          </div>
+                <dtitle>Fridge Charts</dtitle>
+	      		    <hr class="m-0 p-0 mb-1">
+                <div class="bg-light m-2 mb-0" id="fridge_chart" style="border-radius: 9px; border: 3px solid #4682b481;"></div> 
               </div>
             </div>
           </div>
-          <div class="col-lg-2 col-md-2 p-2 m-0 mb-2">
-            <div class="card mb-3" style="height: 134px;">
-              <div class="half-unit">
-      		      <dtitle>More Charts</dtitle>
-      		      <hr>
-			          <div class="section-graph">
-			            <span><img src="http://assistant.pibico.es:8080/assets/SingleAdmin/images/sep-half.png" alt="reply"></span>
-			            <br>
-			            <div class="graph-info">
-			              <i class="graph-arrow"></i>
-			              <span class="graph-info-medium">634.39</span>
-			              <span class="graph-info-small">+2.18 (3.71%)</span>                    
-			            </div>
-			          </div>
-              </div>
-            </div>
-            <div class="card" style="height: 134px;">
-              <div class="half-unit">
-      		      <dtitle>More Charts</dtitle>
-      		      <hr>
-			          <div class="section-graph">
-			            <span><img src="http://assistant.pibico.es:8080/assets/SingleAdmin/images/sep-half.png" alt="reply"></span>
-			            <br>
-			            <div class="graph-info">
-			              <i class="graph-arrow"></i>
-			              <span class="graph-info-medium">634.39</span>
-			              <span class="graph-info-small">+2.18 (3.71%)</span>                    
-			            </div>
-			          </div>
+          <div class="col-lg-4 col-md-4 m-0 p-0 mb-2">
+            <div class="card mr-1">
+              <div class="dash-unit">
+                <dtitle>Lab Charts</dtitle>
+	      		    <hr class="m-0 p-0 mb-1">
+                <div class="bg-dark m-2 mb-0" id="lab_chart"  style="border-radius: 9px; border: 3px solid #4682b481;"></div>                  
               </div>
             </div>
           </div>
-          <div class="col-lg-4 col-md-4 p-2 m-0 mb-2">
-            <div class="card">
-			        <div class="dash-unit">
-	      		    <dtitle>One Chart</dtitle>
-	      		    <hr>
-	      		    <div class="info-user">
-					        <span aria-hidden="true" class="li_lab fs2"></span>
+          <div class="col-lg-4 col-md-4 p-0 m-0 mb-2">
+            <div class="card mb-2">
+	            <div class="dash-unit">
+	    		      <dtitle>Current Weather</dtitle>
+	      		    <hr class="pb-1 mb-1">
+				        <i class="wi wi-owm-{{weather.current.weather.0.id}} pull-right info-user mr-3" style="font-size: 54px;"></i>
+				        <p class="ml-2">
+                  <i class="info-user li_location"></i> {{ weather.lat }}<sub>lat</sub> {{ weather.lon }}<sub>lon</sub>
+                  <br>
+                  <i class="info-user li_clock"></i> {{ timestamp_to_date(weather.current.dt) }}
+                </p>
+                <div class="weather-text">
+				          <p class="p-0 m-0 mr-2 pull-right">
+				            <b class="text-warning">{{ weather.current.weather.0.description }}</b><br>
+                    feels like {{ weather.current.feels_like }} &deg;C 	
+				          </p>
+				          <p class="p-2 m-0 ml-2">
+				            <i class="info-user fa fa-thermometer"></i>
+				            Temp {{ weather.current.temp }} &deg;C
+					          <br>
+				            <i class="info-user fa fa-tint"></i>
+                    Humidity {{ weather.current.humidity }} %
+				            <br>
+					          <i class="info-user fas fa-weight"></i>
+                    P<small>sea level</small>  {{ weather.current.pressure }} hPa
+					          <br>
+				            <i class="info-user far fa-sun"></i>
+                    Sunrise {{ timestamp_to_date(weather.current.sunrise) }}
+                    <br> 				  
+				            <i class="info-user far fa-moon"></i>
+                    Sunset {{ timestamp_to_date(weather.current.sunset) }}
+                    <br>
+				            <i class="info-user wi wi-wind towards-{{ weather.current.wind_deg }}-deg"></i>
+					          Wind {{ weather.current.wind_speed }} m/s
+					          <br>
+					          <i class="info-user fas fa-cloud-sun"></i>
+                    Clouds {{ weather.current.clouds }} %
+                    <br>
+					          {% if weather.current.rain %}
+					          <i class="info-user fa fa-bath"></i>
+                    Rain {{ weather.current.rain['1h'] }} mm/h
+					          {% endif %}  
+				          </p>
+				          <br>
                 </div>
-                <a><img src="http://assistant.pibico.es:8080/assets/SingleAdmin/images/slide01.png" alt="reply"></a> 
-				      </div>
-            </div>
-          </div>
-          <!-- LAST MONTH REVENUE -->     
-          <div class="col-lg-3 col-md-3 p-2 m-0 mb-2">
-            <div class="card">
-      		    <div class="dash-unit">
-	      		    <dtitle>Last Month Revenue</dtitle>
-	      		    <hr>
-	      		    <div class="cont">
-					        <p><bold>$879</bold> | <ok>Approved</ok></p>
-					        <br>
-					        <p><bold>$377</bold> | Pending</p>
-					        <br>
-					        <p><bold>$156</bold> | <bad>Denied</bad></p>
-					        <br>
-					        <p><img src="images/up-small.png" alt=""> 12% Compared Last Month</p>
-    				    </div>
-			        </div>
-            </div>
-          </div>
-          <div class="col-lg-5 col-md-5 p-2 m-0 mb-2">
-            <div class="card">
-			        <div class="dash-unit">
-	      		    <dtitle>Notifications</dtitle>
-	      		    <hr>
-	      		    <div class="info-user">
-					        <span aria-hidden="true" class="li_bubble fs2"></span>
+                {% if weather.alerts %} 				
+				        <dtitle>Weather Alerts</dtitle>
+				        <hr class="pb-1 mb-1">
+				        <div class="accordion" id="weather_alert">
+                  {% for alert in weather.alerts %}
+                  <div class="accordion-group">
+                    <div class="accordion-heading">
+                      <a class="accordion-toggle m-2" data-toggle="collapse" data-parent="#weather_alert" href="#weather{{ loop.index }}">
+                        <span aria-hidden="true" class="li_eye"></span>
+                        {{ alert.event }}
+                      </a>
+                    </div>
+                    <div id="weather{{ loop.index }}" class="accordion-body collapse in">
+                      <div class="accordion-inner">
+					              <p class="p-0 m-0 ml-2">
+					                <small>By {{ alert.sender_name }}<br>
+                           From {{ timestamp_to_date(alert.start) }} to {{ timestamp_to_date(alert.end) }}<br>
+						               {{ alert.description }}
+						              </small>
+                        </p> 						 
+                      </div>   
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>
+				        {% else %}
+				        <div class="cont">
+				          <h6>No Weather Alert</h6>
 				        </div>
-	      		    <div class="cont">
-	      			    <p><button class="btnnew noty" data-noty-options="{&quot;text&quot;:&quot;This is a success notification&quot;,&quot;layout&quot;:&quot;topRight&quot;,&quot;type&quot;:&quot;success&quot;}">Top Right</button></p>
-	      			    <p><button class="btnnew noty" data-noty-options="{&quot;text&quot;:&quot;This is an informaton notification&quot;,&quot;layout&quot;:&quot;topLeft&quot;,&quot;type&quot;:&quot;information&quot;}">Top Left</button></p>
-	      			    <p><button class="btnnew noty" data-noty-options="{&quot;text&quot;:&quot;This is an alert notification with fade effect.&quot;,&quot;layout&quot;:&quot;topCenter&quot;,&quot;type&quot;:&quot;alert&quot;,&quot;animateOpen&quot;: {&quot;opacity&quot;: &quot;show&quot;}}">Top Center (fade)</button></p>
-	      		    </div>
-			        </div>
-		        </div>
+				        {% endif %}
+			        </div> 
+            </div>
           </div>
-          <div class="col-lg-4 col-md-4 p-2 m-0 mb-2">
-            <div class="card">
-				      <div class="dash-unit">
-	      		    <dtitle>Accordion</dtitle>
-	      		    <hr>
-					      <div class="accordion" id="accordion2">
-		              <div class="accordion-group">
-		                <div class="accordion-heading">
-		                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-		                        Collapsible Group Item #1
-		                  </a>
-		                </div>
-		                <div id="collapseOne" class="accordion-body collapse in">
-		                  <div class="accordion-inner">
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla iaculis mattis lorem.   
-							   	    </div>
-		                </div>
-		              </div>
-		              <div class="accordion-group">
-		                <div class="accordion-heading">
-		                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-		                   Collapsible Group Item #2
-		                  </a>
-		                </div>
-		                <div id="collapseTwo" class="accordion-body collapse">
-		                  <div class="accordion-inner">
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla iaculis mattis lorem.
-								      </div>
-		                </div>
-		              </div>
-		              <div class="accordion-group">
-		                <div class="accordion-heading">
-		                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-		                        Collapsible Group Item #3
-		                  </a>
-		                </div>
-		                <div id="collapseThree" class="accordion-body collapse">
-		                  <div class="accordion-inner">
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla iaculis mattis lorem.                          </div>
-		                </div>
-		              </div>
-		            </div><!--/accordion -->
-				      </div>
-			      </div>
-          </div>      
-        </div>
+        </div> <!-- row -->
         {% else %}
         <h1 class="mt-4 text-white">Please Login First!</h1>
         {% endif %}
-      </div>
+      </div> <!-- container -->
     </main>
   </div>
+  <script>
+    const fridge_chart = new frappe.Chart( "#fridge_chart", { // or DOM element
+	    data: {
+	      labels: ["12am-3am", "3am-6am", "6am-9am", "9am-12pm",
+		      "12pm-3pm", "3pm-6pm", "6pm-9pm", "9pm-12am"],
+	      datasets: [
+		      {
+			      name: "Some Data", chartType: 'bar',
+			      values: [25, 40, 30, 35, 8, 52, 17, -4]
+		      },
+		      {
+			      name: "Another Set", chartType: 'bar',
+			      values: [25, 50, -10, 15, 18, 32, 27, 14]
+		      },
+		      {
+			      name: "Yet Another", chartType: 'line',
+			      values: [15, 20, -3, -15, 58, 12, -17, 37]
+		      }
+	      ],
+  	    yMarkers: [{label: "Marker", value: 70, options: { labelPos: 'left' } }],
+	      yRegions: [{label: "Region", start: -10, end: 50, options: { labelPos: 'right' } }]
+	    },
+	    title: "Fridges Chart",
+	    type: 'axis-mixed', // or 'bar', 'line', 'pie', 'percentage'
+	    height: 300,
+	    colors: ['purple', '#ffa3ef', 'light-blue'],
+	    tooltipOptions: {
+		    formatTooltipX: d => (d + '').toUpperCase(),
+		    formatTooltipY: d => d + ' pts',
+	    }
+    });
+    
+    const data = {
+    labels: ["12am-3am", "3am-6pm", "6am-9am", "9am-12am",
+        "12pm-3pm", "3pm-6pm", "6pm-9pm", "9am-12am"
+    ],
+    datasets: [
+        {
+            name: "Some Data", type: "bar",
+            values: [25, 40, 30, 35, 8, 52, 17, -4]
+        },
+        {
+            name: "Another Set", type: "line",
+            values: [25, 50, -10, 15, 18, 32, 27, 14]
+        }
+    ]
+}
+
+    const lab_chart = new frappe.Chart("#lab_chart", {  // or a DOM element,
+                                            // new Chart() in case of ES6 module with above usage
+    title: "Lab Chart",
+    data: data,
+    type: 'axis-mixed', // or 'bar', 'line', 'scatter', 'pie', 'percentage'
+    height: 300,
+    colors: ['#7cd6fd', '#743ee2']
+})
+    
+    //setTimeout(function () {fridge_chart.refresh()}, 1);
+  </script>
 {% endblock %}

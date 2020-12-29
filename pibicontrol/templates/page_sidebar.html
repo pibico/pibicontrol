@@ -1,14 +1,18 @@
 {% block style %}
 <style>
   /* Sidebar Menu */
+  
   @import "{{ frappe.get_url()}}:8080/assets/SBAdmin/css/styles.css";
   /* Main Window Styles */
   @import "{{ frappe.get_url()}}:8080/assets/SingleAdmin/css/datatables.css";
+  @import "{{ frappe.get_url()}}:8080/assets/SingleAdmin/fontawesome_5.15.1/css/all.min.css";
   @import "{{ frappe.get_url()}}:8080/assets/SingleAdmin/css/weather-icons.min.css";
   @import "{{ frappe.get_url()}}:8080/assets/SingleAdmin/css/weather-icons-wind.min.css";
   
   @import "{{ frappe.get_url()}}:8080/assets/SingleAdmin/css/main.css";
   @import "{{ frappe.get_url()}}:8080/assets/SingleAdmin/css/font-style.css";
+  
+  @import "{{ frappe.get_url()}}:8080/assets/css/frappe_charts.min.css"
   
   html, body {
     margin: auto;
@@ -50,10 +54,6 @@
                     <div class="sb-nav-link-icon"><i class="fa fa-server"></i></div>
                     Desktop
                   </a>
-                  <a class="nav-link" href="pibigeneral" style="font-weight: 450;">
-                    <div class="sb-nav-link-icon"><i class="fa fa-desktop"></i></div>
-                    PibiGeneral
-                  </a>
                   <a class="nav-link" href="?cmd=web_logout" style="font-weight: 450;">
                     <div class="sb-nav-link-icon"><i class="fa fa-sign-out"></i></div>
                     Logout
@@ -61,21 +61,21 @@
                 </nav>
               </div>
               <div class="sb-sidenav-menu-heading">Sensor Group</div>
-                <a class="nav-link" href="pibicontrol" style="font-weight: 450;">
-                    <div class="sb-nav-link-icon"><i class="fa fa-tachometer"></i></div>
-                    PibiControl
-                  </a>
-                  <a class="nav-link" href="pibicasa" style="font-weight: 450;">
-                    <div class="sb-nav-link-icon"><i class="fa fa-home"></i></div>
-                    PibiCasa
+                  <a class="nav-link" href="pibigeneral" style="font-weight: 450;">
+                    <div class="sb-nav-link-icon"><i class="fa fa-cog"></i></div>
+                    Pibi<b>G</b>eneral
                   </a>
                   <a class="nav-link" href="pibifarma" style="font-weight: 450;">
                     <div class="sb-nav-link-icon"><i class="fa fa-medkit"></i></div>
-                    PibiFarma
+                    Pibi<b>F</b>arma
                   </a>
-                  <a class="nav-link" href="pibicaldera" style="font-weight: 450;">
-                    <div class="sb-nav-link-icon"><i class="fa fa-tint"></i></div>
-                    PibiCaldera
+                  <a class="nav-link" href="pibicasa" style="font-weight: 450;">
+                    <div class="sb-nav-link-icon"><i class="fa fa-home"></i></div>
+                    Pibi<b>C</b>asa
+                  </a>
+                  <a class="nav-link" href="pibiassistant" style="font-weight: 450;">
+                    <div class="sb-nav-link-icon"><i class="fa fa-bolt"></i></div>
+                    Pibi<b>A</b>ssistant
                   </a>
               </div>
             <div class="small m-2 p-2">Logged in as<br><b>{{ frappe.session.user }}</b></div>
@@ -87,6 +87,9 @@
       </div>
  
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+  <script src="{{ frappe.get_url()}}:8080/assets/SingleAdmin/fontawesome_5.15.1/js/all.min.js"></script>
   <script src="{{ frappe.get_url()}}:8080/assets/SBAdmin/js/scripts.js"></script>
+  
   <script type="text/javascript" src="{{ frappe.get_url()}}:8080/assets/SingleAdmin/js/datatables.js"></script>
+  <script src="{{ frappe.get_url()}}:8080/assets/js/frappe_charts.min.js"></script>
 {% endblock %}

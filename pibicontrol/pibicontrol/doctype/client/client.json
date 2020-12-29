@@ -40,7 +40,8 @@
   {
    "fieldname": "mobile_no",
    "fieldtype": "Data",
-   "label": "mobile"
+   "label": "mobile",
+   "unique": 1
   },
   {
    "default": "1",
@@ -50,8 +51,8 @@
    "label": "Enabled"
   }
  ],
- "modified": "2020-12-27 11:44:24.287896",
- "modified_by": "Administrator",
+ "modified": "2020-12-29 13:19:46.558254",
+ "modified_by": "pibidesk@gmail.com",
  "module": "Pibicontrol",
  "name": "Client",
  "owner": "Administrator",
