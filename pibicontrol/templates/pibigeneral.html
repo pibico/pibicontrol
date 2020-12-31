@@ -6,8 +6,8 @@
       border-radius: 9px;
     }
     .card {
-      border: 2px solid #4284b6;
-      background: #4682b481;
+      border: 2px solid #85879669;
+      background: #f8f9fc;
     }
     td {
       font-size: 10pt;
@@ -51,12 +51,12 @@
       }   
     }
     table thead tr {
-	    background:#353535;
+	    background:#cdcdcd;
 	    height: 21px; 
     }
     table thead th {
 	    border-right: 1px solid #ccc;
-	    color: #b2c831;
+	    color: #1897ba;
 	    font-size: 12px; 
     }
     table thead th:last-of-type { border-right: none; }
@@ -91,13 +91,48 @@
       font-size: 8pt;
       font-weight: 90;
     }
+    .chart-container .graph-svg-tip {
+      display: none;
+    }  
+    .sensor-chart .chart-container ul {
+      display: flex;
+      font-size: 8pt;
+      /*background: #202020;*/
+      margin-bottom: 0;
+      margin-left: 72px;
+      margin-right: 54px;
+      list-style-type: none;
+      padding: 0;
+      text-align: center;
+      z-index: 10;
+    }
+    .sensor-chart .title  {
+      fill: #c258f1;
+      font-weight: 600;
+    }
+    .sensor-chart .legend-dataset-text, .sensor-chart g text {
+      fill: #212121;
+    }
+    .sensor-chart .title {
+      font-size: 9pt;
+      margin-left: 69px;
+    }
+    .sensor-chart svg {
+      position: absolute;
+      top: 15px;
+    }
   </style>
   <div id="layoutSidenav_content">
     <main>
       <div class="container-fluid">
         {% if frappe.session.user != 'Guest' %}
-        <h1 class="mt-4 text-white"><i class="info-user li_settings fs2"></i>{{ name }}</h1>
-        <i class="info-user li_calendar fs1"></i><big class="text-white">{{ timestamp_to_date(weather.current.dt) }}</big>
+        <h1 class="mt-4 text-primary"><i class="info-user li_settings fs2"></i><b>{{ name }}</b></h1>
+        <i class="info-user li_calendar fs1"></i><big>{{ timestamp_to_date(weather.current.dt) }}</big>
+        <p>
+          <small>
+          
+          </small>
+        </p>  
         <div class="row">
           <!-- First Row -->
           <div class="col-lg-3 col-md-3 p-2 m-0">
@@ -129,7 +164,7 @@
               <div class="twothird-unit">
                 <dtitle>Data</dtitle>
 	              <hr class="mb-2">
-                <table id="sensors" class="display compact cell-border responsive nowrap text-white" width="100%" cellspacing="0" style="font-size: 10pt; z-index: 1; position: relative;">
+                <table id="sensors" class="display compact cell-border responsive nowrap" width="100%" cellspacing="0" style="font-size: 10pt; z-index: 1; position: relative;">
                   <thead>
                     <tr>
                       <th>pos</th>
@@ -152,8 +187,8 @@
                     {% set item_count = log.log_item | length -1 %}
                     {% set strpay = json.loads(log.log_item[item_count].payload) %}
                     <tr>
-                      <td style="color: #b2c831;"><small>{{ log.log_item[item_count].idx }}</small></td>
-                      <td><i class="li_tag fs1"></i>{{ log.sensor }}</td>
+                      <td style="color: #b2c831;"><i class="li_tag fs1"></i><small>{{ log.log_item[item_count].idx }}</small></td>
+                      <td>{{ log.sensor }}</td>
                       <td>{{ strpay['ipnet'] }}</td>
                       <td>{{ '%0.1f'| format(log.log_item[item_count].value | float)  }} <small>{{ log.log_item[item_count].uom }}</small></td>
                       <td>{{ strpay.payload.mem.mem_total }}</td>
@@ -174,7 +209,7 @@
             </div>
           </div>
           <!-- Second Row -->
-          <div class="col-lg-3 col-md-3 p-2 m-0">
+          <div class="col-lg-4 col-md-4 p-2 m-0">
             <div class="card mb-2">
               <div class="third-unit">
       		      <dtitle>CPUs</dtitle>
@@ -188,7 +223,16 @@
               </div>
             </div>
           </div>
-          <div class="col-lg-6 col-md-6 p-2 m-0">
+          <!-- <div class="col-lg-3 col-md-3 p-2 m-0">
+            <div class="card mb-2">
+              <div class="third-unit">
+                <dtitle>CPU Chart</dtitle>
+	      		    <hr>
+      		      <div class="sensor-chart m-2 mb-0" id="cpu_chart"></div>   
+              </div>
+            </div>
+          </div> -->
+          <div class="col-lg-4 col-md-4 p-2 m-0">
             <div class="card mb-2">
               <div class="third-unit">
       		      <dtitle>Daily Notifications</dtitle>
@@ -201,9 +245,9 @@
                       <a class="accordion-toggle m-2" data-toggle="collapse" data-parent="#alert_log" href="#collapse{{ loop.index }}">
                          
                        {% if val.alert_item[idx].to_time == None %}
-                         <bad><span aria-hidden="true" class="li_eye"></span><bad> <small>Active</small>
+                         <span aria-hidden="true" class="li_eye text-danger"></span> <small class="text-danger">Active</small>
                        {% else %}
-                         <ok><span aria-hidden="true" class="li_lock"></span></ok> <small>Closed</small> 
+                         <span aria-hidden="true" class="li_lock text-success"></span> <small class="text-success">Closed</small> 
                        {% endif %}
                        {{ val.name }}
                       <a>
@@ -223,7 +267,7 @@
               </div>
             </div>
           </div>
-          <div class="col-lg-3 col-md-3 p-2 m-0">
+          <div class="col-lg-4 col-md-4 p-2 m-0">
             <div class="card mb-2">
               <div class="third-unit">
       		      <dtitle>Daily Alerts</dtitle>
@@ -411,14 +455,14 @@
 			              </ul>
     			        </div>
 			          </div>
-				        <p class="mb-1 pb-0 mr-1 text-white" style="position: absolute; bottom: 0px; right: 0px;">&copy; PibiCo 2020</p> 
+				        <p class="mb-1 pb-0 mr-1" style="position: absolute; bottom: 0px; right: 0px;">&copy; PibiCo 2020</p> 
 		          </div><!-- /dash-unit -->
 			      </div>
 		      </div>
 		            
         </div>
         {% else %}
-        <h1 class="mt-4 text-white">Please Login First!</h1>
+        <h1 class="mt-4">Please Login First!</h1>
         {% endif %}
       </div>
     </main>
@@ -448,7 +492,8 @@
   $('.dataTables_filter input[type="search"]').css({
     'width':'150px',
     'display':'inline-block',
-    'color':'#fafafa',
+    'color':'#1f1f1',
+    'background': 'white',
     'border':'1px solid #4682b4',
     'height':'auto',
     'font-size': '10pt',
@@ -465,8 +510,36 @@
     if ( colIdx > 0){
       var rowPosition = oTable.fnGetPosition( this ); //row position of record in table
       var sensor = oTable.fnGetData(rowPosition,1);
-      window.open("{{ frappe.get_url() }}:8080/desk#List/Sensor Log?sensor="+sensor,"_self")
-    }  
+      window.open("{{ frappe.get_url() }}:8080/desk#List/Sensor Log?sensor=" + sensor, "_self")
+    }
+      
   });
+  
+    const data = {
+    labels: ["12am-3am", "3am-6pm", "6am-9am", "9am-12am",
+        "12pm-3pm", "3pm-6pm", "6pm-9pm", "9am-12am"
+    ],
+    datasets: [
+        {
+            name: "Some Data", type: "bar",
+            values: [25, 40, 30, 35, 8, 52, 17, -4]
+        },
+        {
+            name: "Another Set", type: "line",
+            values: [25, 50, -10, 15, 18, 32, 27, 14]
+        }
+    ]
+}
+
+const chart = new frappe.Chart("#cpu_chart", {  // or a DOM element,
+                                            // new Chart() in case of ES6 module with above usage
+    title: "",
+    data: data,
+    type: 'axis-mixed', // or 'bar', 'line', 'scatter', 'pie', 'percentage'
+    height: 170,
+    colors: ['#7cd6fd', '#743ee2']
+})
+  
+  
   </script>
 {% endblock %}

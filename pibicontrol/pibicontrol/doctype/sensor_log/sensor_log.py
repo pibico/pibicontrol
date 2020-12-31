@@ -55,10 +55,12 @@ class SensorLog(Document):
               elif float(value) >= float(ts.lower_value) and start == False:
                 mng_alert(doc, ts.variable, float(value), start, active_alert)     
           
-		  ## Specific Readings taken in payload depending on sensor type
+		      ## Specific Readings taken in payload depending on sensor type
           ## Sensor CPU
           if stock.sensor_type == "cpu":
-            ## Secondary CPU Reading    
+            ## Secondary CPU Reading
+            mem_pct = ''
+            disk_pct = ''  
             if ts.variable == "mem_pct":
               (active_alert, start) = get_alert(ts.variable, doc.name)
               mem_pct = float(payload['payload']['mem']['mem_pct'])
@@ -72,7 +74,7 @@ class SensorLog(Document):
                   mng_alert(doc, ts.variable, mem_pct, start, active_alert) 
                 elif mem_pct >= float(ts.lower_value) and start == False:
                   mng_alert(doc, ts.variable, mem_pct, start, active_alert)
-            ## Third CPU Reading    
+            ## Third CPU Reading  
             elif ts.variable == "disk_pct":
               (active_alert, start) = get_alert(ts.variable, doc.name)
               disk_pct = float(payload['payload']['disk']['disk_pct'])
@@ -87,3 +89,22 @@ class SensorLog(Document):
                 elif disk_pct >= float(ts.lower_value) and start == False:
                   mng_alert(doc, ts.variable, disk_pct, start, active_alert)
           ## Sensor other type
+          elif stock.sensor_type == "th":
+            # Secondary humid reading
+            env_humid = ''
+            if ts.variable == "env_humid":
+              (active_alert, start) = get_alert(ts.variable, doc.name)
+              env_humid = float(payload['payload']['reading']['val_humid'])
+              check_threshold(doc, ts, env_humid, start, active_alert)
+
+def check_threshold(doc, ts, var, start, active_alert):
+  if ts.upper_value:
+    if var > float(ts.upper_value) and start == True:
+      mng_alert(doc, ts.variable, var, start, active_alert)
+    elif var <= float(ts.upper_value) and start == False:
+      mng_alert(doc, ts.variable, var, start, active_alert)
+  if ts.lower_value:
+    if var < float(ts.lower_value) and start == True:
+      mng_alert(doc, ts.variable, var, start, active_alert)
+    elif var >= float(ts.lower_value) and start == False:
+      mng_alert(doc, ts.variable, var, start, active_alert)        

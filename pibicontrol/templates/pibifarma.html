@@ -6,8 +6,8 @@
       border-radius: 9px;
     }
     .card {
-      border: 2px solid #4284b6;
-      background: #4682b481;
+      border: 2px solid #85879669;
+      background: #f8f9fc;
     }
     .card-header {
       font-size: 11pt;
@@ -23,95 +23,158 @@
       width: 100%;
       height: 100%;
     }
-    .chart-container .graph-svg-tip {
+    /*.chart-container .graph-svg-tip {
       display: none;
+    }*/
+    .sensor-chart .chart-container ul {
+      display: flex;
+      font-size: 8pt;
+      /*background: #202020;*/
+      margin-bottom: 0;
+      margin-left: 72px;
+      margin-right: 54px;
+      list-style-type: none;
+      padding: 0;
+      text-align: center;
+      z-index: 10;
+    }
+    .sensor-chart .title  {
+      fill: #c258f1;
+      font-weight: 600;
+    }
+    .sensor-chart .legend-dataset-text, .sensor-chart g text {
+      fill: #212121;
+    }
+    .sensor-chart .title {
+      font-size: 9pt;
+      margin-left: 69px;
+    }
+    .sensor-chart svg {
+      position: absolute;
+      top: 90px;
     }
   </style>
   <div id="layoutSidenav_content">
     <main>
       <div class="container-fluid">
         {% if frappe.session.user != 'Guest' %}
-        <h1 class="mt-4 text-white"><i class="info-user fa fa-medkit fs2"></i>{{ name }}</h1>
-        <i class="info-user li_calendar fs1"></i><big class="text-white">{{ timestamp_to_date(weather.current.dt) }}</big>
-        <p class="text-white">{{ sensor_doc | length }}</p>
+        <h1 class="mt-4 text-primary" ><i class="info-user fa fa-medkit fs2"></i><b>{{ name }}</b>
+        {% if customer %}<a title="Cloud" href="{{customer[0].cloud_gateway}}" target="_blank"><i class="info-user fas fa-cloud-download-alt mr-1"></i></a>{% endif %}
+        </h1>
+        <i class="info-user li_calendar fs1"></i><big>{{ timestamp_to_date(weather.current.dt) }}</big>
+        <p>
+          <small>
+         
+          </small>
+        </p>
         {% set len = sensor_doc | length %}
         <div class="row">
           <!-- First Row -->
-          <div class="col-lg-4 col-md-4 m-0 p-0 mb-2">
+          <div class="col-lg-6 col-md-6 m-0 p-0 mb-2">
             <div class="card mr-1">
               <div class="
-                {% if len == 0 or len == 1 %}third-unit{% elif len == 2%}half-unit{% elif len == 3 or len == 4 %}twothird-unit{% elif len > 4 %}dash-unit{% endif %}
+                {% if len <= 1 %}third-unit{% elif len == 2%}half-unit{% elif 2 < len <= 4 %}twothird-unit{% elif len > 4 %}dash-unit{% endif %}
                 ">
                 <dtitle>Freezers</dtitle>
       		      <hr class="pb-1 mb-0">
                 <div class="framemail">
     			        <div class="window">
 			              <ul class="pharma">
-                                   
+                    {% for log in sensor_logs %}
+                    {% if 'temp-' in log.sensor %}
+                      {% set len_fridge = log.log_item | length %}
+                      {% if len_fridge > 0 %}
                       <li>
 			                  <i class="unread"></i>
-						            <i class="info-user far fa-snowflake my-2 p-0 ml-2 " style="position: absolute; top: 0px;"></i>
-						            <p class="sender"><small>Sensor</small></p>
+						            <a href="{{ frappe.get_url() }}:8080/desk#Form/Sensor Log/{{log.name}}"><i class="info-user far fa-snowflake my-2 p-0 ml-2 " style="position: absolute; top: 0px;"></i></a>
+						            <p class="sender"><small><a href="{{ frappe.get_url() }}:8080/desk#Form/Sensor/{{log.sensor}}">{{ log.sensor }}</a></small></p>
 						            <p class="message mt-1">
-                          <b>Temperature</b> <span class="meas">temp</span> &deg;C
+                          <b>Temperature</b> <span class="meas">{{ log.log_item[len_fridge-1].value }}</span> &deg;C
                           <br>
-						              <b>Humidity</b> <span class="meas">na</span> %
+						              <!-- <del><b>Humidity</b> <span class="meas">na</span> %</del> -->
                           <br>
-                          <span class="forecast">date</span>
+                          <span class="forecast">{{ log.log_item[len_fridge-1].datadate.strftime("%a, %d-%m-%Y %H:%M:%S") }}</span>
 						            </p>
 			                  <div class="actions">
-                          <a title="24h" href="{{ frappe.get_url() }}:8080/desk#List/Report?name=ToDo" target="_blank"><i class="info-user fas fa-calendar-day"></i></a>
-                          <a title="7d" href="{{ frappe.get_url() }}:8080/desk#List/Report?name=ToDo" target="_blank"><i class="info-user fas fa-calendar-week mx-1" ></i></a>
+                          <a href="{{ frappe.get_url() }}:8080/desk#Form/Sensor Log/{{log.name}}"><i class="info-user fas fa-chart-line mr-1"></i></a>                     
+                          <a title="24h" href="{{ frappe.get_url() }}:8080/desk#List/Report?name=ToDo" target="_blank"><i class="info-user fas fa-calendar-day mr-1"></i></a>
+                          <a title="7d" href="{{ frappe.get_url() }}:8080/desk#List/Report?name=ToDo" target="_blank"><i class="info-user fas fa-calendar-week mr-1" ></i></a>
 			                    <a title="1m" href="{{ frappe.get_url() }}:8080/desk#List/Report?name=ToDo" target="_blank"><i class="info-user far fa-calendar"></i></a>
 			                  </div>
                       </li>
-                      
+                      {% endif %}
+                    {% endif %}
+                    {% endfor %}
                     </ul>
                   </div>
                 </div>      
               </div>
             </div>  
           </div>        
-          <div class="col-lg-4 col-md-4 m-0 p-0 mb-2">
+          <div class="col-lg-6 col-md-6 m-0 p-0 mb-2">
             <div class="card mr-1">
               <div class="
-                {% if len == 0 or len == 1 %}third-unit{% elif len == 2%}half-unit{% elif len == 3 or len == 4 %}twothird-unit{% elif len > 4 %}dash-unit{% endif %}
+                {% if len <= 1 %}third-unit{% elif len == 2%}half-unit{% elif 2 < len <= 4 %}twothird-unit{% elif len > 4 %}dash-unit{% endif %}
                 ">
                 <dtitle>Pharmacy</dtitle>
       		      <hr class="pb-1 mb-0">
                 <div class="framemail">
     			        <div class="window">
 			              <ul class="pharma">
-                                   
+                    {% for log in sensor_logs %}
+                    {% if 'th-' in log.sensor %}
+                      {% set len_pharma = log.log_item | length %}
+                      {% if len_pharma > 0 %}
                       <li>
 			                  <i class="unread"></i>
-						            <i class="info-user fas fa-temperature-low my-2 p-0 ml-2 " style="position: absolute; top: 0px;"></i>
-						            <p class="sender"><small>Sensor</small></p>
+						            <a href="{{ frappe.get_url() }}:8080/desk#Form/Sensor Log/{{log.name}}"><i class="info-user fas fa-temperature-low my-2 p-0 ml-2 " style="position: absolute; top: 0px;"></i></a>
+						            <p class="sender"><small><a href="{{ frappe.get_url() }}:8080/desk#Form/Sensor/{{log.sensor}}">{{ log.sensor }}</a></small></p>
 						            <p class="message mt-1">
-                          <b>Temperature</b> <span class="meas">temp</span> &deg;C
+                          <b>Temperature</b> <span class="meas">{{ log.log_item[len_pharma-1].value }}</span> &deg;C
                           <br>
-						              <b>Humidity</b> <span class="meas">humid</span> %
+						              <b>Humidity</b> <span class="meas">{{ json.loads(log.log_item[len_pharma-1].payload).payload.reading.val_humid}}</span> %
                           <br>
-                          <span class="forecast">date</span>
+                          <span class="forecast">{{ log.log_item[len_pharma-1].datadate.strftime("%a, %d-%m-%Y %H:%M:%S") }}</span>
 						            </p>
 			                  <div class="actions">
+                          <div class="actions">
+                          <a href="{{ frappe.get_url() }}:8080/desk#Form/Sensor Log/{{log.name}}"><i class="info-user fas fa-chart-line mr-1"></i></a>            
                           <a title="24h" href="{{ frappe.get_url() }}:8080/desk#List/Report?name=ToDo" target="_blank"><i class="info-user fas fa-calendar-day"></i></a>
                           <a title="7d" href="{{ frappe.get_url() }}:8080/desk#List/Report?name=ToDo" target="_blank"><i class="info-user fas fa-calendar-week mx-1" ></i></a>
-			                    <a title="1m" href="{{ frappe.get_url() }}:8080/desk#List/Report?name=ToDo" target="_blank"><i class="info-user far fa-calendar"></i></a>
+                          <a title="1m" href="{{ frappe.get_url() }}:8080/desk#List/Report?name=ToDo" target="_blank"><i class="info-user far fa-calendar"></i></a>
 			                  </div>
                       </li>
-                      
+                      {% endif %}
+                    {% endif %}
+                    {% endfor %}
                     </ul>
                   </div>
                 </div>      
               </div>
             </div>  
           </div>
-          <div class="col-lg-4 col-md-4 m-0 p-0 mb-2">
-            <div class="card">
-              <div class="
-                {% if len == 0 or len == 1 %}third-unit{% elif len == 2%}half-unit{% elif len == 3 or len == 4 %}twothird-unit{% elif len > 4 %}dash-unit{% endif %}
-                ">
+          <!-- Second Row -->
+          <div class="col-lg-6 col-md-6 m-0 p-0 mb-2">
+            <div class="card mr-1 sensor-chart">
+              <div class="twothird-unit">
+                <dtitle>Fridge Chart</dtitle>
+	      		    <hr class="m-0 p-0 mb-1">
+                <div class="m-2 mb-0" id="fridge_chart"></div> 
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 m-0 p-0 mb-2">
+            <div class="card mr-1 sensor-chart">
+              <div class="twothird-unit">
+                <dtitle>Lab Chart</dtitle>
+	      		    <hr class="m-0 p-0 mb-1">                 
+                <div class="m-2 mb-0" id="lab_chart"></div>                  
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-7 col-md-7 m-0 p-0 mb-2">
+            <div class="card mr-1 mb-2">
+              <div class="twothird-unit">
       		      <dtitle>Daily Notifications</dtitle>
 	      		    <hr>
                 <div class="accordion" id="alert_log">
@@ -122,9 +185,9 @@
                       <a class="accordion-toggle m-2" data-toggle="collapse" data-parent="#alert_log" href="#collapse{{ loop.index }}">
                          
                        {% if val.alert_item[idx].to_time == None %}
-                         <bad><span aria-hidden="true" class="li_eye"></span><bad> <small>Active</small>
+                         <span aria-hidden="true" class="li_eye text-danger"></span> <small class="text-danger">Active</small>
                        {% else %}
-                         <ok><span aria-hidden="true" class="li_lock"></span></ok> <small>Closed</small> 
+                         <span aria-hidden="true" class="li_lock text-success"></span> <small class="text-success">Closed</small> 
                        {% endif %}
                        {{ val.name }}
                       <a>
@@ -144,29 +207,10 @@
               </div>
             </div>
           </div>
-          <!-- Second Row -->
-          <div class="col-lg-4 col-md-4 m-0 p-0 mb-2">
-            <div class="card mr-1">
-              <div class="dash-unit">
-                <dtitle>Fridge Charts</dtitle>
-	      		    <hr class="m-0 p-0 mb-1">
-                <div class="bg-light m-2 mb-0" id="fridge_chart" style="border-radius: 9px; border: 3px solid #4682b481;"></div> 
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-4 m-0 p-0 mb-2">
-            <div class="card mr-1">
-              <div class="dash-unit">
-                <dtitle>Lab Charts</dtitle>
-	      		    <hr class="m-0 p-0 mb-1">
-                <div class="bg-dark m-2 mb-0" id="lab_chart"  style="border-radius: 9px; border: 3px solid #4682b481;"></div>                  
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-4 p-0 m-0 mb-2">
+          <div class="col-lg-5 col-md-5 p-0 m-0 mb-2">
             <div class="card mb-2">
-	            <div class="dash-unit">
-	    		      <dtitle>Current Weather</dtitle>
+	            <div class="twothird-unit">
+	    		      <dtitle>Current Weather </dtitle>
 	      		    <hr class="pb-1 mb-1">
 				        <i class="wi wi-owm-{{weather.current.weather.0.id}} pull-right info-user mr-3" style="font-size: 54px;"></i>
 				        <p class="ml-2">
@@ -208,103 +252,109 @@
 				          </p>
 				          <br>
                 </div>
-                {% if weather.alerts %} 				
-				        <dtitle>Weather Alerts</dtitle>
-				        <hr class="pb-1 mb-1">
-				        <div class="accordion" id="weather_alert">
-                  {% for alert in weather.alerts %}
-                  <div class="accordion-group">
-                    <div class="accordion-heading">
-                      <a class="accordion-toggle m-2" data-toggle="collapse" data-parent="#weather_alert" href="#weather{{ loop.index }}">
-                        <span aria-hidden="true" class="li_eye"></span>
-                        {{ alert.event }}
-                      </a>
-                    </div>
-                    <div id="weather{{ loop.index }}" class="accordion-body collapse in">
-                      <div class="accordion-inner">
-					              <p class="p-0 m-0 ml-2">
-					                <small>By {{ alert.sender_name }}<br>
-                           From {{ timestamp_to_date(alert.start) }} to {{ timestamp_to_date(alert.end) }}<br>
-						               {{ alert.description }}
-						              </small>
-                        </p> 						 
-                      </div>   
-                    </div>
-                  </div>
-                  {% endfor %}
-                </div>
-				        {% else %}
-				        <div class="cont">
-				          <h6>No Weather Alert</h6>
-				        </div>
-				        {% endif %}
 			        </div> 
             </div>
           </div>
         </div> <!-- row -->
         {% else %}
-        <h1 class="mt-4 text-white">Please Login First!</h1>
+        <h1 class="mt-4">Please Login First!</h1>
         {% endif %}
       </div> <!-- container -->
     </main>
   </div>
   <script>
-    const fridge_chart = new frappe.Chart( "#fridge_chart", { // or DOM element
-	    data: {
-	      labels: ["12am-3am", "3am-6am", "6am-9am", "9am-12pm",
-		      "12pm-3pm", "3pm-6pm", "6pm-9pm", "9pm-12am"],
-	      datasets: [
-		      {
-			      name: "Some Data", chartType: 'bar',
-			      values: [25, 40, 30, 35, 8, 52, 17, -4]
-		      },
-		      {
-			      name: "Another Set", chartType: 'bar',
-			      values: [25, 50, -10, 15, 18, 32, 27, 14]
-		      },
-		      {
-			      name: "Yet Another", chartType: 'line',
-			      values: [15, 20, -3, -15, 58, 12, -17, 37]
-		      }
-	      ],
-  	    yMarkers: [{label: "Marker", value: 70, options: { labelPos: 'left' } }],
-	      yRegions: [{label: "Region", start: -10, end: 50, options: { labelPos: 'right' } }]
-	    },
-	    title: "Fridges Chart",
-	    type: 'axis-mixed', // or 'bar', 'line', 'pie', 'percentage'
-	    height: 300,
-	    colors: ['purple', '#ffa3ef', 'light-blue'],
-	    tooltipOptions: {
-		    formatTooltipX: d => (d + '').toUpperCase(),
-		    formatTooltipY: d => d + ' pts',
-	    }
-    });
-    
-    const data = {
-    labels: ["12am-3am", "3am-6pm", "6am-9am", "9am-12am",
-        "12pm-3pm", "3pm-6pm", "6pm-9pm", "9am-12am"
-    ],
-    datasets: [
-        {
-            name: "Some Data", type: "bar",
-            values: [25, 40, 30, 35, 8, 52, 17, -4]
-        },
-        {
-            name: "Another Set", type: "line",
-            values: [25, 50, -10, 15, 18, 32, 27, 14]
-        }
-    ]
-}
-
-    const lab_chart = new frappe.Chart("#lab_chart", {  // or a DOM element,
-                                            // new Chart() in case of ES6 module with above usage
-    title: "Lab Chart",
-    data: data,
-    type: 'axis-mixed', // or 'bar', 'line', 'scatter', 'pie', 'percentage'
-    height: 300,
-    colors: ['#7cd6fd', '#743ee2']
-})
-    
+    const fridge_chart = new frappe.Chart( '#fridge_chart', { // or DOM element
+	    {% for chart in datasets %}
+        {% if 'temp-' in chart.sensor %}
+          {% set len = chart.dataset | length %}
+          data: {
+	          labels: {{ chart.label }},
+	          datasets: [
+              {
+                name: '{{ chart.dataset[0].main_read }}',
+                type: 'line',
+                values: {{ chart.dataset[0]['values'] }},  
+              }
+            ],
+            yMarkers: [
+              {
+                label: 'Average T',
+                value: {{ chart.average }},
+                options: { labelPos: 'left' } // default: 'right'
+              }
+            ],
+            yRegions: [
+              {
+                label: "Min-Max T Area",
+                start: {{ chart.min }},
+                end: {{ chart.max }},
+                options: { labelPos: 'right' }
+              }
+            ],
+	        },
+          title: '{{ chart.sensor }}',
+	        type: 'axis-mixed', // or 'bar', 'line', 'pie', 'percentage'
+	        height: 240,
+	        colors: ['blue'],
+        
+	        tooltipOptions: {
+		        formatTooltipX: d => (d + '').toUpperCase(),
+		        formatTooltipY: d => d,
+	        },
+          is_series: 1,
+        {% endif %}
+      {% endfor %}
+      });
+  
+    const lab_chart = new frappe.Chart( '#lab_chart', { // or DOM element
+  	  {% for chart in datasets %}
+        {% if 'th-' in chart.sensor %}
+          {% set len = chart.dataset | length %}
+          data: {
+	          labels: {{ chart.label }},
+	          datasets: [
+              {
+                name: '{{ chart.dataset[0].main_read }}',
+                chartType: 'line',
+                values: {{ chart.dataset[0]['values'] }},  
+              },
+              {
+                name: '{{ chart.dataset[1].second_read }}',
+                chartType: 'line',
+                values: {{ chart.dataset[1]['values'] }},  
+              },
+            ],
+            yMarkers: [
+              {
+                label: 'Average T',
+                value: {{ chart.average }},
+                options: { labelPos: 'left' } // default: 'right'
+              }
+            ],
+            yRegions: [
+              {
+                label: "Min-Max T Area",
+                start: {{ chart.min }},
+                end: {{ chart.max }},
+                options: { labelPos: 'right' }
+              }
+            ],
+	        },
+          title: '{{ chart.sensor }}',
+	        type: 'axis-mixed', // or 'bar', 'line', 'pie', 'percentage'
+	        height: 240,
+	        colors: ['blue','red'],
+        
+	        tooltipOptions: {
+		        formatTooltipX: d => (d + '').toUpperCase(),
+		        formatTooltipY: d => d,
+	        },
+          is_series: 1,
+        {% endif %}
+      {% endfor %}
+      });
+ 
     //setTimeout(function () {fridge_chart.refresh()}, 1);
+    
   </script>
 {% endblock %}

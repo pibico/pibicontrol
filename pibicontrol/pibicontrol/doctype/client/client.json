@@ -5,11 +5,16 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "enabled",
-  "first_name",
-  "last_name",
   "user",
+  "first_name",
   "mobile_no",
+  "cloud_user",
+  "col_break_0",
+  "last_name",
+  "cloud_gateway",
+  "cloud_secret",
+  "col_break_1",
+  "enabled",
   "location"
  ],
  "fields": [
@@ -49,10 +54,33 @@
    "fieldtype": "Check",
    "in_list_view": 1,
    "label": "Enabled"
+  },
+  {
+   "fieldname": "cloud_user",
+   "fieldtype": "Data",
+   "label": "Cloud User"
+  },
+  {
+   "fieldname": "col_break_0",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "cloud_gateway",
+   "fieldtype": "Data",
+   "label": "Cloud Gateway"
+  },
+  {
+   "fieldname": "cloud_secret",
+   "fieldtype": "Password",
+   "label": "Cloud Secret"
+  },
+  {
+   "fieldname": "col_break_1",
+   "fieldtype": "Column Break"
   }
  ],
- "modified": "2020-12-29 13:19:46.558254",
- "modified_by": "pibidesk@gmail.com",
+ "modified": "2020-12-31 19:44:29.195328",
+ "modified_by": "Administrator",
  "module": "Pibicontrol",
  "name": "Client",
  "owner": "Administrator",

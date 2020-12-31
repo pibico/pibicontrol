@@ -30,6 +30,10 @@ def get_chart_dataset (doc):
   main_read = []
   second_read = []
   third_read = []
+  second_var = ''
+  second_uom = ''
+  third_var = ''
+  third_uom = ''
   data = frappe.get_doc("Sensor Log", doc)
   #print("data = {}".format(frappe.as_json(data)))
   if data.log_item:
@@ -41,13 +45,19 @@ def get_chart_dataset (doc):
         second_uom = "%"
         third_var = "disk_pct"
         third_uom = "%"       
+      elif "th-" in data.sensor:
+        second_var = "env_humid"
+        second_uom = "%"
       for item in data.log_item:
         main_read.append(item.value)
         label.append(item.datadate.strftime(CHART_FORMAT))
         if "cpu-" in data.sensor:
           payload = json.loads(item.payload)
           second_read.append(payload['payload']['mem']['mem_pct']) 
-          third_read.append(payload['payload']['disk']['disk_pct'])          
+          third_read.append(payload['payload']['disk']['disk_pct'])
+        elif "th-" in data.sensor:
+          payload = json.loads(item.payload)
+          second_read.append(payload['payload']['reading']['val_humid'])            
     
   return {
     'label': label,
@@ -60,8 +70,7 @@ def get_chart_dataset (doc):
     'third_read': third_read,
     'third_var': third_var,
     'third_uom': third_uom
-  } 
-
+  }
 
 def get_alert(variable, name):
   start = True
@@ -186,6 +195,7 @@ def ping_devices_via_mqtt():
     strcmd = "start"
     command = "is_alive"
     strboot = "boot"
+    cmd = "take_meas"
     for device in sensors:
       lastseen = device.lastseen
       now = datetime.datetime.now()
@@ -193,9 +203,11 @@ def ping_devices_via_mqtt():
         time_minutes = (now - lastseen).total_seconds()/60
       else:
         time_minutes = 12
+        
       if time_minutes <= 5:
         ## Check active last_seen alerts to close
         (active_alert, start) = get_alert("last_seen", device.name)
+        
         if start == False:
           mng_alert(device, 'last_seen', 1, start, active_alert)
       elif 10 >= time_minutes > 5:

@@ -32,8 +32,8 @@
 
 {% block content %}
   <div class="sb-nav-fixed">
-    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-      <a class="navbar-brand" href="{{ frappe.get_url()}}:8080/">Inicio</a>
+    <nav class="sb-topnav navbar navbar-expand bg-light">
+      <a class="navbar-brand text-primary" href="{{ frappe.get_url()}}:8080/"><b>Inicio</b></a>
       <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href=""><i class="fa fa-bars"></i></button>
     </nav>
     <div id="layoutSidenav">
@@ -55,7 +55,7 @@
                     Desktop
                   </a>
                   <a class="nav-link" href="?cmd=web_logout" style="font-weight: 450;">
-                    <div class="sb-nav-link-icon"><i class="fa fa-sign-out"></i></div>
+                    <div class="sb-nav-link-icon"><i class="fas fa-sign-out-alt"></i></div>
                     Logout
                   </a>
                 </nav>

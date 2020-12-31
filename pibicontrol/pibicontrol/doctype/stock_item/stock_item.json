@@ -1,4 +1,5 @@
 {
+ "allow_rename": 1,
  "autoname": "field:model",
  "creation": "2020-12-15 13:43:32.707965",
  "doctype": "DocType",
@@ -60,7 +61,7 @@
    "options": "Sensor Type"
   }
  ],
- "modified": "2020-12-15 19:18:36.654903",
+ "modified": "2020-12-31 14:27:15.570270",
  "modified_by": "Administrator",
  "module": "Pibicontrol",
  "name": "Stock Item",

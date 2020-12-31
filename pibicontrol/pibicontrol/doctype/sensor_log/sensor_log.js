@@ -23,8 +23,10 @@ frappe.ui.form.on('Sensor Log', {
         data3 = r.message.third_read;
         var3 = r.message.third_var;
         uom3 = r.message.third_uom;
+        //console.log(r.message)
     	}
     });
+    
     // Main Data
     const main_data = {
       labels: label,
