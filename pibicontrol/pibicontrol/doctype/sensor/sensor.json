@@ -23,6 +23,10 @@
   "location",
   "pictures",
   "gallery",
+  "sec_break_3",
+  "trigger_pin",
+  "col_break_4",
+  "info_pin",
   "sec_break_1",
   "sms_alert",
   "sms_recipients",
@@ -210,9 +214,30 @@
    "fieldtype": "Link",
    "label": "Client",
    "options": "Client"
+  },
+  {
+   "collapsible": 1,
+   "description": "GPIO Pins according BCM Numbering",
+   "fieldname": "sec_break_3",
+   "fieldtype": "Section Break",
+   "label": "GPIO Connections"
+  },
+  {
+   "fieldname": "col_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "info_pin",
+   "fieldtype": "Int",
+   "label": "Info Pin"
+  },
+  {
+   "fieldname": "trigger_pin",
+   "fieldtype": "Int",
+   "label": "Trigger Pin"
   }
  ],
- "modified": "2020-12-31 19:28:42.877942",
+ "modified": "2021-01-02 18:35:00.410135",
  "modified_by": "Administrator",
  "module": "Pibicontrol",
  "name": "Sensor",

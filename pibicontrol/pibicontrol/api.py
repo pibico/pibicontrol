@@ -4,13 +4,17 @@
 
 from __future__ import unicode_literals
 import frappe
-import datetime, json
+import datetime, json, subprocess
 from frappe import _, msgprint
 
 from frappe.utils import cstr
 from frappe.core.doctype.sms_settings.sms_settings import send_sms
 from pibicontrol.pibicontrol.doctype.telegram_settings.telegram_settings import send_telegram
 from pibicontrol.pibicontrol.doctype.mqtt_settings.mqtt_settings import send_mqtt
+
+import paho.mqtt.client as mqtt
+import os, ssl, urllib, time, json
+from frappe.utils.password import get_decrypted_password
 
 DATE_FORMAT = "%Y-%m-%d"
 TIME_FORMAT = "%H:%M:%S.%f"
@@ -23,6 +27,18 @@ def get_image(slide):
   data = frappe.db.sql("""
 		SELECT * FROM `tabWebsite Slideshow Item` WHERE  parent=%s and docstatus<2""", slide, True)
   return data
+
+@frappe.whitelist()
+def switch(value, action):
+  sensor = frappe.get_doc("Sensor", value)
+  trigger = sensor.trigger_pin
+  info = sensor.info_pin
+  pos = value.find("-")
+  topic = []
+  topic.append(sensor.hostname + "/mqtt")
+  type = value[:pos]
+  msg = type + "_" + action + "(" + str(trigger) + "," + str(info) + ")"
+  send_mqtt(topic, cstr(msg))
 
 @frappe.whitelist()
 def get_chart_dataset (doc):
@@ -51,12 +67,11 @@ def get_chart_dataset (doc):
       for item in data.log_item:
         main_read.append(item.value)
         label.append(item.datadate.strftime(CHART_FORMAT))
+        payload = json.loads(item.payload)
         if "cpu-" in data.sensor:
-          payload = json.loads(item.payload)
           second_read.append(payload['payload']['mem']['mem_pct']) 
           third_read.append(payload['payload']['disk']['disk_pct'])
         elif "th-" in data.sensor:
-          payload = json.loads(item.payload)
           second_read.append(payload['payload']['reading']['val_humid'])            
     
   return {
@@ -100,11 +115,15 @@ def mng_alert(sensor, variable, value, start, alert_log):
     if start:
       if variable == "last_seen":
         msg = sensor.name + " offline. Please check!"
+      elif variable == "status":
+          msg = sensor.name + ". Sensor has been switched on. Please check!"
       else:
         msg = sensor.name + " detected abnormal value " + str(value) + " in " + variable + ". Please check!"
     else:
       if variable == "last_seen":
         msg = sensor.name + " again online. Rest easy!"
+      elif variable == "status":
+        msg = sensor.name + ". Sensor has been switched off. Rest easy!"
       else:
         msg = sensor.name + " recovered normal value " + str(value) + " in " + variable + ". Rest easy!"
     ## Check Active Channels and prepare a thread to alert
@@ -125,7 +144,10 @@ def mng_alert(sensor, variable, value, start, alert_log):
       by_telegram = 1
       telegram_list = sensor.telegram_recipients.split(",")
     if sensor.mqtt_alert and sensor.mqtt_recipients != '':
-      alert_mqtt = "MQTT from " + msg
+      if sensor.mqtt_command:
+        alert_mqtt = sensor.mqtt_command
+      else:  
+        alert_mqtt = "MQTT from " + msg
       by_mqtt = 1
       mqtt_list = sensor.mqtt_recipients.split(",")
     if sensor.email_alert and sensor.email_recipients != '':
@@ -133,7 +155,7 @@ def mng_alert(sensor, variable, value, start, alert_log):
         subject = "Alert from " + sensor.name
       else:
         subject = "Finished Alert from " + sensor.name
-      alert_email = msg
+      alert_email = "From " + msg
       by_email = 1
       email_list = sensor.email_recipients.split(",")
     ## Write Data for new Alert
@@ -191,14 +213,17 @@ def ping_devices_via_mqtt():
     filters = [['docstatus', '<', 2], ['disabled', '=', 0]]
   )
   if sensors:
-    hostnames = []
-    strcmd = "start"
     command = "is_alive"
     strboot = "boot"
-    cmd = "take_meas"
     for device in sensors:
+      hostname = []
+      hostname.append(device.hostname + "/mqtt")
       lastseen = device.lastseen
       now = datetime.datetime.now()
+      pos = device.sensor_shortcut.find("-")
+      strcmd = "start_" + device.sensor_shortcut[:pos]
+      cmd = "take_" + device.sensor_shortcut[:pos]
+      
       if lastseen:
         time_minutes = (now - lastseen).total_seconds()/60
       else:
@@ -207,22 +232,20 @@ def ping_devices_via_mqtt():
       if time_minutes <= 5:
         ## Check active last_seen alerts to close
         (active_alert, start) = get_alert("last_seen", device.name)
-        
         if start == False:
           mng_alert(device, 'last_seen', 1, start, active_alert)
-      elif 10 >= time_minutes > 5:
-        ## Order through MQTT to update LastSeen Record
-        hostnames.append(device.hostname + "/mqtt")
-        send_mqtt(hostnames, cstr(strcmd))
-      elif 15 >= time_minutes > 10:
-        ## Second Order through MQTT to update LastSeen Record
-        hostnames.append(device.hostname + "/mqtt")
-        send_mqtt(hostnames, cstr(command))
+      elif 15 >= time_minutes > 5:
+        ## Order through MQTT to restart supervisor daemons
+        if "cpu-" in device.sensor_shortcut:
+          send_mqtt(hostname, cstr(command))
+        else:
+          send_mqtt(hostname, cstr(cmd))
       elif time_minutes > 15:
         ## Not receiving data from device
         ## Send alert last_seen 0 from_time
-        hostnames.append(device.hostname + "/mqtt")
-        send_mqtt(hostnames, cstr(strboot))
+        send_mqtt(hostname, cstr(strcmd))
         (active_alert, start) = get_alert("last_seen", device.name)
         if start == True:
           mng_alert(device, 'last_seen', 0, start, active_alert)
+      elif time_minutes > 30:
+        send_mqtt(hostname, cstr(strboot))

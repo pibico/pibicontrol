@@ -7,12 +7,10 @@
  "field_order": [
   "user",
   "first_name",
-  "mobile_no",
-  "cloud_user",
-  "col_break_0",
   "last_name",
+  "col_break_0",
+  "mobile_no",
   "cloud_gateway",
-  "cloud_secret",
   "col_break_1",
   "enabled",
   "location"
@@ -56,11 +54,6 @@
    "label": "Enabled"
   },
   {
-   "fieldname": "cloud_user",
-   "fieldtype": "Data",
-   "label": "Cloud User"
-  },
-  {
    "fieldname": "col_break_0",
    "fieldtype": "Column Break"
   },
@@ -70,16 +63,11 @@
    "label": "Cloud Gateway"
   },
   {
-   "fieldname": "cloud_secret",
-   "fieldtype": "Password",
-   "label": "Cloud Secret"
-  },
-  {
    "fieldname": "col_break_1",
    "fieldtype": "Column Break"
   }
  ],
- "modified": "2020-12-31 19:44:29.195328",
+ "modified": "2021-01-01 10:56:57.657547",
  "modified_by": "Administrator",
  "module": "Pibicontrol",
  "name": "Client",

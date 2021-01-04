@@ -4,6 +4,7 @@
 
 from __future__ import unicode_literals
 import frappe
+from frappe import _
 from frappe.website.website_generator import WebsiteGenerator
 
 import datetime, json, requests
@@ -15,7 +16,9 @@ DATETIME_FORMAT = DATE_FORMAT + " " + TIME_FORMAT
 
 class SensorGroup(WebsiteGenerator):
   def get_context(self, context):
-    if frappe.session.user == 'Administrator':
+    if frappe.session.user=='Guest':
+      frappe.throw(_("You need to be logged in to access this page"), frappe.PermissionError)
+    elif frappe.session.user == 'Administrator':
       customer = None
       ## Get all CPU
       context.sensor_doc = frappe.db.sql("""

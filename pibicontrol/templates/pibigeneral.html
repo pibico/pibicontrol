@@ -2,53 +2,8 @@
 {% include 'templates/page_sidebar.html' %}
 {% block page_content %}
   <style>
-    .card, .dash-unit, .half-unit, .third-unit, .twothird-unit {
-      border-radius: 9px;
-    }
-    .card {
-      border: 2px solid #85879669;
-      background: #f8f9fc;
-    }
-    td {
+  td {
       font-size: 10pt;
-    }
-    .card-header {
-      font-size: 11pt;
-      text-align: center;
-    }
-    /*@media (min-width: 34em) {
-      .card-columns {
-        -webkit-column-count: 1;
-        -moz-column-count: 1;
-        column-count: 1;
-      }
-    }*/
-    @media (min-width: 48em) {
-      .card-columns {
-        -webkit-column-count: 1;
-        -moz-column-count: 1;
-        column-count: 1;
-      }
-    }
-    @media (min-width: 62em) {
-      .card-columns {
-        -webkit-column-count: 2;
-        -moz-column-count: 2;
-        column-count: 2;
-      }
-    }
-    @media (min-width: 75em) {
-      .card-columns {
-        -webkit-column-count: 3;
-        -moz-column-count: 3;
-        column-count: 3;
-      }
-    @media (min-width: 88em) {
-      .card-columns {
-        -webkit-column-count: 4;
-        -moz-column-count: 4;
-        column-count: 4;
-      }   
     }
     table thead tr {
 	    background:#cdcdcd;
@@ -91,9 +46,27 @@
       font-size: 8pt;
       font-weight: 90;
     }
-    .chart-container .graph-svg-tip {
+    .card, .dash-unit, .half-unit, .third-unit, .twothird-unit {
+      border-radius: 9px;
+    }
+    .card {
+      border: 2px solid #85879669;
+      background: #f8f9fc;
+    }
+    .card-header {
+      font-size: 11pt;
+      text-align: center;
+    }
+   .video {
+      position: absolute;
+      top: 28px;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    /*.chart-container .graph-svg-tip {
       display: none;
-    }  
+    }*/
     .sensor-chart .chart-container ul {
       display: flex;
       font-size: 8pt;
@@ -119,9 +92,8 @@
     }
     .sensor-chart svg {
       position: absolute;
-      top: 15px;
-    }
-  </style>
+      top: 90px;
+    }  </style>
   <div id="layoutSidenav_content">
     <main>
       <div class="container-fluid">
@@ -134,80 +106,6 @@
           </small>
         </p>  
         <div class="row">
-          <!-- First Row -->
-          <div class="col-lg-3 col-md-3 p-2 m-0">
-            <div class="card mb-2">
-              <div class="third-unit">
-      		      <dtitle>Clients</dtitle>
-      		      <hr>
-			          <div class="cont info-user p-0 m-0">                                 
-                  <a href="{{ frappe.get_url() }}:8080/desk#List/Client" target="_blank"><span aria-hidden="true" class="li_user fs1"></span></a>                            
-                  <p><bold style="font-size: 36px;">{{ sensor_doc | map(attribute='client') | unique | list | length }}</bold> <ok>clients</ok></p>                
-			          </div>
-                <p class="mb-1 pb-0 mr-1" style="position: absolute; bottom: 0px; right: 0px;">Clients Accessible</p>                
-              </div>
-            </div>
-            <div class="card mb-1">
-              <div class="third-unit">
-      		      <dtitle>Data Logs</dtitle>
-      		      <hr>
-			          <div class="cont info-user p-0 m-0">
-                  <a href="{{ frappe.get_url() }}:8080/desk#List/Sensor Log/" target="_blank"><span aria-hidden="true" class="li_data fs1"></span></a>             
-                  <p><bold>{{ sensor_logs | sum('points') }}</bold> <ok>meas</ok></p>                
-			          </div>
-                <p class="mb-1 pb-0 mr-1" style="position: absolute; bottom: 0px; right: 0px;">Logs from 00:00</p>                
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-9 col-md-9 p-2 m-0">
-            <div class="card mb-2">
-              <div class="twothird-unit">
-                <dtitle>Data</dtitle>
-	              <hr class="mb-2">
-                <table id="sensors" class="display compact cell-border responsive nowrap" width="100%" cellspacing="0" style="font-size: 10pt; z-index: 1; position: relative;">
-                  <thead>
-                    <tr>
-                      <th>pos</th>
-                      <th>sensor</th>
-                      <th>lan</th>
-                      <th>cpu</th>
-                      <th>mem</th>
-                      <th>mem%</th>
-                      <th>disk</th>
-                      <th>disk%</th>
-                      <th>uptime</th>
-                      <th>lastseen</th>
-                      <th>wan</th>
-                      <th>boots</th>
-                      <th>client</th>
-                    </tr>
-                  </thead>
-                  <tbody>  
-                  {% for log in sensor_logs %}
-                    {% set item_count = log.log_item | length -1 %}
-                    {% set strpay = json.loads(log.log_item[item_count].payload) %}
-                    <tr>
-                      <td style="color: #b2c831;"><i class="li_tag fs1"></i><small>{{ log.log_item[item_count].idx }}</small></td>
-                      <td>{{ log.sensor }}</td>
-                      <td>{{ strpay['ipnet'] }}</td>
-                      <td>{{ '%0.1f'| format(log.log_item[item_count].value | float)  }} <small>{{ log.log_item[item_count].uom }}</small></td>
-                      <td>{{ strpay.payload.mem.mem_total }}</td>
-                      <td>{{ strpay.payload.mem.mem_pct }} <small>%</small></td>
-                      <td>{{ strpay.payload.disk.disk_total }}</td>
-                      <td>{{ strpay.payload.disk.disk_pct }} <small>%</small></td>
-                      <td>{{ strpay.payload.uptime }}</td>
-                      <td>{{ strpay.payload.datadate }}</td>
-                      <td>{{ strpay.payload.ip_public }}</td>
-                      <td>{{ strpay.payload.n_reboots }}</td>
-                      <td>{{ strpay.payload.client }}</td>  
-                    </tr>
-                  {% endfor %}
-                  </tbody>
-                </table>
-                <!--<p class="mb-1 pb-0 mr-1" style="position: absolute; bottom: 0px; right: 0px;">&copy; PibiCo 2020</p>-->  
-              </div>
-            </div>
-          </div>
           <!-- Second Row -->
           <div class="col-lg-4 col-md-4 p-2 m-0">
             <div class="card mb-2">
@@ -223,15 +121,6 @@
               </div>
             </div>
           </div>
-          <!-- <div class="col-lg-3 col-md-3 p-2 m-0">
-            <div class="card mb-2">
-              <div class="third-unit">
-                <dtitle>CPU Chart</dtitle>
-	      		    <hr>
-      		      <div class="sensor-chart m-2 mb-0" id="cpu_chart"></div>   
-              </div>
-            </div>
-          </div> -->
           <div class="col-lg-4 col-md-4 p-2 m-0">
             <div class="card mb-2">
               <div class="third-unit">
@@ -280,7 +169,116 @@
               </div>
             </div>
           </div>
-          <!-- Third Row -->  
+          <!-- First Row -->
+          <div class="col-lg-3 col-md-3 p-2 m-0">
+            <div class="card mb-2">
+              <div class="third-unit">
+      		      <dtitle>Clients</dtitle>
+      		      <hr>
+			          <div class="cont info-user p-0 m-0">                                 
+                  <a href="{{ frappe.get_url() }}:8080/desk#List/Client" target="_blank"><span aria-hidden="true" class="li_user fs1"></span></a>                            
+                  <p><bold style="font-size: 36px;">{{ sensor_doc | map(attribute='client') | unique | list | length }}</bold> <ok>clients</ok></p>                
+			          </div>
+                <p class="mb-1 pb-0 mr-1" style="position: absolute; bottom: 0px; right: 0px;">Clients Accessible</p>                
+              </div>
+            </div>
+            <div class="card mb-1">
+              <div class="third-unit">
+      		      <dtitle>Data Logs</dtitle>
+      		      <hr>
+			          <div class="cont info-user p-0 m-0">
+                  <a href="{{ frappe.get_url() }}:8080/desk#List/Sensor Log/" target="_blank"><span aria-hidden="true" class="li_data fs1"></span></a>             
+                  <p><bold>{{ sensor_logs | sum('points') }}</bold> <ok>meas</ok></p>                
+			          </div>
+                <p class="mb-1 pb-0 mr-1" style="position: absolute; bottom: 0px; right: 0px;">Logs from 00:00</p>                
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-9 col-md-9 p-2 m-0">
+            <div class="card mb-2">
+              <div class="twothird-unit">
+                <dtitle>Data</dtitle>
+	              <hr class="mb-2">
+                <table id="sensors" class="display compact cell-border responsive nowrap" width="100%" cellspacing="0" style="font-size: 10pt; z-index: 1; position: relative;">
+                  <thead>
+                    <tr>
+                      <th>pos</th>
+                      <th>chart</th>
+                      <th>sensor</th>
+                      <th>lan</th>
+                      <th>cpu</th>
+                      <th>mem</th>
+                      <th>mem%</th>
+                      <th>disk</th>
+                      <th>disk%</th>
+                      <th>uptime</th>
+                      <th>lastmeas</th>
+                      <th>wan</th>
+                      <th>boots</th>
+                      <th>client</th>
+                    </tr>
+                  </thead>
+                  <tbody>  
+                  {% for log in sensor_logs %}
+                    {% set item_count = log.log_item | length -1 %}
+                    {% set strpay = json.loads(log.log_item[item_count].payload) %}
+                    <tr>
+                      <td style="color: #b2c831;">{{ log.log_item[item_count].idx }}</small></td>
+                      {% for chart in datasets %}
+                        {% if log.sensor == chart.sensor %}                     
+                          <td class="text-center">
+                            <a href="#" class="btn btn-info btn-xs m-0 p-0" style="border-radius: 3px;" width="45px" type="button" onclick="get_chart({{ chart }});return(false);">
+                              <i class="fas fa-chart-bar fa-inverse mx-1"></i>
+                            </a>
+                          </td>
+                        {% endif %}
+                      {% endfor %}
+                      <td>{{ log.sensor }}</td>
+                      <td>{{ strpay['ipnet'] }}</td>
+                      <td>{{ '%0.1f'| format(log.log_item[item_count].value | float)  }} <small>{{ log.log_item[item_count].uom }}</small></td>
+                      <td>{{ strpay.payload.mem.mem_total }}</td>
+                      <td>{{ strpay.payload.mem.mem_pct }} <small>%</small></td>
+                      <td>{{ strpay.payload.disk.disk_total }}</td>
+                      <td>{{ strpay.payload.disk.disk_pct }} <small>%</small></td>
+                      <td>{{ strpay.payload.uptime }}</td>
+                      <td>{{ strpay.payload.datadate }}</td>
+                      <td>{{ strpay.payload.ip_public }}</td>
+                      <td>{{ strpay.payload.n_reboots }}</td>
+                      <td>{{ strpay.payload.client }}</td>  
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+                <!--<p class="mb-1 pb-0 mr-1" style="position: absolute; bottom: 0px; right: 0px;">&copy; PibiCo 2020</p>-->  
+              </div>
+            </div>
+          </div>
+          <!-- Third Row -->
+          <div class="col-lg-6 col-md-6 p-2 m-0">
+            <div class="card mb-2">
+              <div class="twothird-unit">
+                <dtitle>CPU Chart</dtitle>
+	      		    <hr>
+      		      <div class="sensor-chart m-2 mb-0" id="cpu_chart"></div>   
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 p-2 m-0">
+            <div class="card mb-2">
+              <div class="twothird-unit">
+                <dtitle>PibiCo Info</dtitle>
+	      		    <hr>
+      		      <div class="m-2 mb-0">
+                  <a href="https://www.youtube.com/watch?v=bEFjRJGxheA">
+                    <iframe style="min-height: calc(100vh/5); border-radius: 9px;" src="https://www.youtube.com/embed/bEFjRJGxheA" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" width="100%" frameborder="0"></iframe>
+                   </a>
+                   
+                </div>
+                <p class="mb-1 pb-0 mr-1" style="position: absolute; bottom: 0px; right: 0px;">&copy; PibiCo 2020</p>   
+              </div>
+            </div>
+          </div>
+          
   	      <div class="col-lg-5 col-md-5 p-2 m-0 mb-1">
             <div class="card mb-2">
 	            <div class="dash-unit">
@@ -369,7 +367,7 @@
 			              <ul class="mail">
                       <li>
 			                  <i class="unread"></i>
-						            <i class="info-user my-2 p-0 ml-2 wi wi-owm-{{ weather.daily.1.weather.0.id }}" style="position: absolute; top: 0px;"></i>
+						            <i class="info-user my-2 p-0 ml-2 wi wi-owm-{{ weather.daily.1.weather.0.id }} text-warning" style="position: absolute; top: 0px;"></i>
 						            <p class="sender"><small>{{ timestamp_to_date(weather.daily.1.dt) }} <span class="text-warning">( {{ weather.daily.1.weather.0.main }} )</span></small></p>
 						            <p class="message">
 						              <b>Temp</b> <span class="forecast">{{ weather.daily.1.temp.day }}</span> &deg;C feels <span class="forecast">{{ weather.daily.1.feels_like.day }}</span> &deg;C <b>M/m</b> <small><span class="forecast">{{ weather.daily.1.temp.max }}</span> / <span class="forecast">{{ weather.daily.1.temp.min }} &deg;C</span></small><br>
@@ -386,7 +384,7 @@
                       </li>
 					            <li>
 			                  <i class="read"></i>
-						            <i class="info-user my-2 p-0 ml-2 wi wi-owm-{{ weather.daily.2.weather.0.id }}" style="position: absolute; top: 0px;"></i>
+						            <i class="info-user my-2 p-0 ml-2 wi wi-owm-{{ weather.daily.2.weather.0.id }} text-warning" style="position: absolute; top: 0px;"></i>
 						            <p class="sender"><small>{{ timestamp_to_date(weather.daily.2.dt) }} <span class="text-warning">( {{ weather.daily.2.weather.0.main }} )</span></small></p>
 						            <p class="message">
 						              <b>Temp</b> <span class="forecast">{{ weather.daily.2.temp.day }}</span> &deg;C feels <span class="forecast">{{ weather.daily.2.feels_like.day }}</span> &deg;C <b>M/m</b> <small><span class="forecast">{{ weather.daily.2.temp.max }}</span> / <span class="forecast">{{ weather.daily.2.temp.min }} &deg;C</span></small><br>
@@ -403,7 +401,7 @@
                       </li>
 					            <li>
 			                  <i class="unread"></i>
-						            <i class="info-user my-2 p-0 ml-2 wi wi-owm-{{ weather.daily.3.weather.0.id }}" style="position: absolute; top: 0px;"></i>
+						            <i class="info-user my-2 p-0 ml-2 wi wi-owm-{{ weather.daily.3.weather.0.id }} text-warning" style="position: absolute; top: 0px;"></i>
 						            <p class="sender"><small>{{ timestamp_to_date(weather.daily.3.dt) }} <span class="text-warning">( {{ weather.daily.3.weather.0.main }} )</span></small></p>
 						            <p class="message">
 						              <b>Temp</b> <span class="forecast">{{ weather.daily.3.temp.day }}</span> &deg;C feels <span class="forecast">{{ weather.daily.3.feels_like.day }}</span> &deg;C <b>M/m</b> <small><span class="forecast">{{ weather.daily.3.temp.max }}</span> / <span class="forecast">{{ weather.daily.3.temp.min }} &deg;C</span></small><br>
@@ -420,7 +418,7 @@
                       </li>
 					            <li>
 			                  <i class="read"></i>
-						            <i class="info-user my-2 p-0 ml-2 wi wi-owm-{{ weather.daily.4.weather.0.id }}" style="position: absolute; top: 0px;"></i>
+						            <i class="info-user my-2 p-0 ml-2 wi wi-owm-{{ weather.daily.4.weather.0.id }} text-warning" style="position: absolute; top: 0px;"></i>
 						            <p class="sender"><small>{{ timestamp_to_date(weather.daily.4.dt) }} <span class="text-warning">( {{ weather.daily.4.weather.0.main }} )</span></small></p>
 						            <p class="message">
 						              <b>Temp</b> <span class="forecast">{{ weather.daily.4.temp.day }}</span> &deg;C feels <span class="forecast">{{ weather.daily.4.feels_like.day }}</span> &deg;C <b>M/m</b> <small><span class="forecast">{{ weather.daily.4.temp.max }}</span> / <span class="forecast">{{ weather.daily.4.temp.min }} &deg;C</span></small><br>
@@ -437,7 +435,7 @@
                       </li>
 					            <li>
 			                  <i class="unread"></i>
-						            <i class="info-user my-2 p-0 ml-2 wi wi-owm-{{ weather.daily.5.weather.0.id }}" style="position: absolute; top: 0px;"></i>
+						            <i class="info-user my-2 p-0 ml-2 wi wi-owm-{{ weather.daily.5.weather.0.id }} text-warning" style="position: absolute; top: 0px;"></i>
 						            <p class="sender"><small>{{ timestamp_to_date(weather.daily.5.dt) }} <span class="text-warning">( {{ weather.daily.5.weather.0.main }} )</span></small></p>
 						            <p class="message">
 						              <b>Temp</b> <span class="forecast">{{ weather.daily.5.temp.day }}</span> &deg;C feels <span class="forecast">{{ weather.daily.5.feels_like.day }}</span> &deg;C <b>M/m</b> <small><span class="forecast">{{ weather.daily.5.temp.max }}</span> / <span class="forecast">{{ weather.daily.5.temp.min }} &deg;C</span></small><br>
@@ -461,13 +459,87 @@
 		      </div>
 		            
         </div>
-        {% else %}
-        <h1 class="mt-4">Please Login First!</h1>
         {% endif %}
       </div>
     </main>
   </div>
   <script>
+  function get_chart(value) {
+    var jsonData = [value]
+    for(var i in jsonData){
+      var key = i;
+      var val = jsonData[i];
+      for(var j in val){
+        var sub_key = j;
+        if (j === "sensor") {
+          var sensor = val[j];
+        } else if (j === "label") {
+          var labels = val[j];
+        } else if (j === "dataset") {
+          var datasets = val[j];
+        } else if (j === "average") {
+          var saverage = val[j];
+        } else if (j === "min") {
+          var smin = val[j];
+        } else if (j === "max") {
+          var smax = val[j];
+        }
+      }
+    };
+    if (sensor.indexOf('cpu-') > -1) {
+      const data = {
+	      labels: labels,
+	      datasets: [
+          {
+            name: datasets[0]['main_read'],
+            chartType: 'line',
+            values: datasets[0]['values'],  
+          },
+          {
+            name: datasets[1]['second_read'],
+            chartType: 'line',
+            values: datasets[1]['values'],  
+          },
+          {
+            name: datasets[2]['third_read'],
+            chartType: 'line',
+            values: datasets[2]['values'],  
+          },
+        ],
+        yMarkers: [
+          {
+            label: 'Average T',
+            value: saverage,
+            options: { labelPos: 'left' } // default: 'right'
+          }
+        ],
+        yRegions: [
+          {
+            label: "Min-Max T Area",
+            start: smin,
+            end: smax,
+            options: { labelPos: 'right' }
+          }
+        ],
+	    };
+      const cpu_chart = new frappe.Chart( '#cpu_chart', {
+        data: data,   
+        title: sensor,
+	      type: 'axis-mixed', // or 'bar', 'line', 'pie', 'percentage'
+	      height: 270,
+	      colors: ['blue', 'red', 'green'],
+	      tooltipOptions: {
+		      formatTooltipX: d => (d + '').toUpperCase(),
+		      formatTooltipY: d => d,
+	      },
+        is_series: 1,
+        lineOptions: {
+          hideDots: 1, // default: 0
+        },
+      });  
+    };    
+  };
+  
   //Function for defining the dataTable
   var oTable = $('#sensors').dataTable({
     select: {
@@ -506,40 +578,11 @@
     // check cell column of selected cell //
     var rowIdx = oTable.api().cell( this ).index().row;
     var colIdx = oTable.api().cell( this ).index().column; // .api(). needed while using .dataTable. and not .DataTable. API //
-             
-    if ( colIdx > 0){
+    if ( colIdx > 1) {
       var rowPosition = oTable.fnGetPosition( this ); //row position of record in table
-      var sensor = oTable.fnGetData(rowPosition,1);
+      var sensor = oTable.fnGetData(rowPosition,2);
       window.open("{{ frappe.get_url() }}:8080/desk#List/Sensor Log?sensor=" + sensor, "_self")
     }
-      
   });
-  
-    const data = {
-    labels: ["12am-3am", "3am-6pm", "6am-9am", "9am-12am",
-        "12pm-3pm", "3pm-6pm", "6pm-9pm", "9am-12am"
-    ],
-    datasets: [
-        {
-            name: "Some Data", type: "bar",
-            values: [25, 40, 30, 35, 8, 52, 17, -4]
-        },
-        {
-            name: "Another Set", type: "line",
-            values: [25, 50, -10, 15, 18, 32, 27, 14]
-        }
-    ]
-}
-
-const chart = new frappe.Chart("#cpu_chart", {  // or a DOM element,
-                                            // new Chart() in case of ES6 module with above usage
-    title: "",
-    data: data,
-    type: 'axis-mixed', // or 'bar', 'line', 'scatter', 'pie', 'percentage'
-    height: 170,
-    colors: ['#7cd6fd', '#743ee2']
-})
-  
-  
   </script>
 {% endblock %}

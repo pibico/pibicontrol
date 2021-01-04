@@ -76,4 +76,4 @@ def send_via_gateway(arg):
 			pass
 
 		if arg.get('success_msg'):
-			frappe.msgprint(_("MQTT sent to following topics: {0}").format("\n" + "\n".join(arg.get('receiver_list'))))
+			frappe.msgprint(_(cstr(msg) + " sent through MQTT to topics: {0}").format("\n" + "\n".join(arg.get('receiver_list'))))

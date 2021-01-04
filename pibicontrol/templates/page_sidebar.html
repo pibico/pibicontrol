@@ -52,11 +52,11 @@
                 <nav class="sb-sidenav-menu-nested nav">
                   <a class="nav-link" href="{{ frappe.get_url()}}:8080/desk" style="font-weight: 450;">
                     <div class="sb-nav-link-icon"><i class="fa fa-server"></i></div>
-                    Desktop
+                    DeskTop
                   </a>
-                  <a class="nav-link" href="?cmd=web_logout" style="font-weight: 450;">
-                    <div class="sb-nav-link-icon"><i class="fas fa-sign-out-alt"></i></div>
-                    Logout
+                  <a class="nav-link" href="{{ frappe.get_url()}}:8080/desk#modules/Website" style="font-weight: 450;">
+                    <div class="sb-nav-link-icon"><i class="fa fa-globe"></i></div>
+                    WebSite
                   </a>
                 </nav>
               </div>
@@ -73,12 +73,12 @@
                     <div class="sb-nav-link-icon"><i class="fa fa-home"></i></div>
                     Pibi<b>C</b>asa
                   </a>
-                  <a class="nav-link" href="pibiassistant" style="font-weight: 450;">
-                    <div class="sb-nav-link-icon"><i class="fa fa-bolt"></i></div>
-                    Pibi<b>A</b>ssistant
-                  </a>
+                  <a class="nav-link" href="?cmd=web_logout" style="font-weight: 450;">
+                    <div class="sb-nav-link-icon"><i class="fas fa-sign-out-alt"></i></div>
+                    Log<b>O</b>ut
+              </a>
               </div>
-            <div class="small m-2 p-2">Logged in as<br><b>{{ frappe.session.user }}</b></div>
+              <div class="small m-2 p-2">Logged in as<br><b>{{ frappe.session.user }}</b></div>
             {% else %}
             <div class="small m-2 p-2">User must be Authenticated</div>
             {% endif %}

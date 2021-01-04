@@ -1,353 +1,565 @@
 {# {% extends "templates/web.html" %} #}
-
+{% include 'templates/page_sidebar.html' %}
 {% block page_content %}
-  {% include 'templates/page_sidebar.html' %}
   <style>
-    @import "http://assistant.pibico.es:8080/assets/SingleAdmin/css/main.css";
-    @import "http://assistant.pibico.es:8080/assets/SingleAdmin/css/font-style.css";
-    .card, .dash-unit, .half-unit  {
-      border-radius: 9px;
+  td {
+      font-size: 10pt;
+    }
+    table thead tr {
+	    background:#cdcdcd;
+	    height: 21px; 
+    }
+    table thead th {
+	    border-right: 1px solid #ccc;
+	    color: #1897ba;
+	    font-size: 12px; 
+    }
+    table thead th:last-of-type { border-right: none; }
+    table tbody {
+	    border-top: 1px solid #bbb;
+	    border-bottom: 1px solid #bbb;
+    }
+    table td { padding: 0; border-right: 1px solid #ccc;}
+    table tbody tr:hover { background-color: #ddd; }
+    #sensors_info.dataTables_info {
+      padding-top: 0;
+    }
+    .btn {
+      padding: 2px;
+      margin-left: 2px;
+      min-width: 30px;
+      border-radius: 50%;
+      -webkit-border-radius: 50%;
+      -moz-border-radius: 50%;
+    }
+    .page-link, .page-item {
+      padding: 1px 1px;
+      margin: 1px;
+    }
+    .bottom {
+      margin-top: 0px;
+    }
+    .sorting_1 {
+      color: #4682b4;
+    }
+    p .third-unit {
+      font-size: 8pt;
+      font-weight: 90;
+    }
+    .card-columns {
+      @include media-breakpoint-only(lg) {
+        column-count: 3;
+      }
+      @include media-breakpoint-only(xl) {
+        column-count: 4;
+      }
     }
     .card {
-      border: 2px solid #4284b6;
-      background: #4284b681;
+      padding: 6px;
+      border: 1px solid #4284b6;
+      margin-bottom: 1px;
+    }
+    .card, .dash-unit, .third-unit, .half-unit, .twothird-unit, .quarter-unit {
+      border-radius: 9px;
     }
     .card-header {
       font-size: 11pt;
+      background: #4682b412;
+      padding: 0px;
       text-align: center;
+      margin-bottom: 3px;
     }
-    /*@media (min-width: 34em) {
-      .card-columns {
-        -webkit-column-count: 1;
-        -moz-column-count: 1;
-        column-count: 1;
-      }
+   .video {
+      position: absolute;
+      top: 28px;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    /*.chart-container .graph-svg-tip {
+      display: none;
     }*/
-    @media (min-width: 48em) {
-      .card-columns {
-        -webkit-column-count: 1;
-        -moz-column-count: 1;
-        column-count: 1;
-      }
+    .sensor-chart .chart-container ul {
+      display: flex;
+      font-size: 8pt;
+      /*background: #202020;*/
+      margin-bottom: 0;
+      margin-left: 72px;
+      margin-right: 54px;
+      list-style-type: none;
+      padding: 0;
+      text-align: center;
+      z-index: 10;
     }
-    @media (min-width: 62em) {
-      .card-columns {
-        -webkit-column-count: 2;
-        -moz-column-count: 2;
-        column-count: 2;
-      }
+    .sensor-chart .title  {
+      fill: #c258f1;
+      font-weight: 600;
     }
-    @media (min-width: 75em) {
-      .card-columns {
-        -webkit-column-count: 3;
-        -moz-column-count: 3;
-        column-count: 3;
-      }
-    @media (min-width: 88em) {
-      .card-columns {
-        -webkit-column-count: 4;
-        -moz-column-count: 4;
-        column-count: 4;
-      }   
+    .sensor-chart .legend-dataset-text, .sensor-chart g text {
+      fill: #212121;
     }
-  </style>
-  
+    .sensor-chart .title {
+      font-size: 9pt;
+      margin-left: 69px;
+    }
+    .sensor-chart svg {
+      position: absolute;
+      top: 90px;
+    }  </style>
   <div id="layoutSidenav_content">
     <main>
       <div class="container-fluid">
         {% if frappe.session.user != 'Guest' %}
-        <h1 class="mt-4 text-light">{{ name }}</h1>
+        <h1 class="mt-4 text-primary"><i class="info-user li_settings fs2"></i><b>{{ name }}</b></h1>
+        <i class="info-user li_calendar fs1"></i><big>{{ timestamp_to_date(weather.current.dt) }}</big>
+        <p>
+          <small>
+          
+          </small>
+        </p>
         <div class="row">
-          <div class="col-lg-3 col-md-3 p-2 m-0 mb-1">
-            <!-- USER BLOCK -->
+          <div class="col-xl-2 col-md-4 col-sm-12 col-xs-12 m-0 p-0 px-2 mb-2">
             <div class="card">
-      		    <div class="dash-unit">
-	      		    <dtitle>Profile</dtitle>
-	      		    <hr>
-				        <div class="thumbnail">
-					        <img src="http://assistant.pibico.es:8080/assets/SingleAdmin/images/FJAD.png" alt="Paco" class="img-circle">
-				        </div><!-- /thumbnail -->
-				        <h1>{{ frappe.session.user }}</h1>
-				        <h3>Gijon, ES</h3>
-                <br>
-					      <div class="info-user">
-						      <span aria-hidden="true" class="li_user fs1"></span>
-						      <span aria-hidden="true" class="li_settings fs1"></span>
-						      <span aria-hidden="true" class="li_mail fs1"></span>
-						      <span aria-hidden="true" class="li_key fs1"></span>
-					      </div>                        
-				      </div>
+              {% for log in sensor_logs %}
+              {% set motors = [] %}
+              {% if "motor-" in log.sensor %}
+                {% if motors.append(motors | length + 1) %}{% endif %}                      
+              {% endif %}
+              {% set counter = motors | length %}
+              <div class="{% if counter <= 1 %}quarter-unit{% elif 1 < counter <= 4 %}third-unit{% else %}half-unit{% endif %}">
+              {% endfor %}
+                <dtitle>Motor</dtitle>
+	      		    <hr class="mb-2">
+                {% for log in sensor_logs %}
+                  {% set motors = [] %}
+                  {% if "motor-" in log.sensor %}
+                    {% if motors.append(motors | length + 1) %}{% endif %}
+                    {% set idx = log.log_item | length -1 %}  
+                    {% set status = log.log_item[idx]['value'] | int %}                            
+                    <div class="d-flex">
+                      <div class="pl-2"><a href="{{frappe.get_url()}}:8080/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }}</small></a></div>
+                      <div class="switch my-0 py-0 mb-1 ml-auto">
+                        <input type="radio" class="switch-input" name="motor{{loop.index}}" value="on" id="motor{{loop.index}}_on" onclick="javascript:switchOn('{{log.sensor}}','{{sensor_doc.relay_pin}}','{{sensor_doc.info_pin}}');" {%if status %}checked=""{% endif %}>
+					              <label for="motor{{loop.index}}_on" class="switch-label switch-label-off">on</label>
+					              <input type="radio" class="switch-input" name="motor{{loop.index}}" value="off" id="motor{{loop.index}}_off" onclick="javascript:switchOff('{{log.sensor}}','{{sensor_doc.relay_pin}}','{{sensor_doc.info_pin}}');" {%if not status %}checked=""{% endif %}>
+					              <label for="motor{{loop.index}}_off" class="switch-label switch-label-on pr-1">off</label>
+					              <span class="switch-selection"></span>
+				              </div>
+                    </div>
+                  {% endif %}
+                  {% if motors | length == 0 %}
+                    <div class="d-flex">
+                      <div class="m-auto">Space for Motors</div>
+                    </div>
+                  {% endif %} 
+                {% endfor %}
+              </div>                    
             </div>
           </div>
-          <div class="col-lg-3 col-md-3 p-2 m-0 mb-1">  
-            <!-- SWITCHES BLOCK -->     
-		        <div class="card">
-			        <div class="dash-unit">
-	      		    <dtitle>Switches</dtitle>
-	      		    <hr>
-	      		    <div class="info-user">
-					        <span aria-hidden="true" class="li_params fs2"></span>
-                </div>                                              
-				        <div class="switch">
-					        <input type="radio" class="switch-input" name="view" value="on" id="on" checked="">
-					        <label for="on" class="switch-label switch-label-off">On</label>
-					        <input type="radio" class="switch-input" name="view" value="off" id="off">
-					        <label for="off" class="switch-label switch-label-on">Off</label>
-					        <span class="switch-selection"></span>
-				        </div>
-				        <div class="switch switch-blue">
-					        <input type="radio" class="switch-input" name="view2" value="week2" id="week2" checked="">
-					        <label for="week2" class="switch-label switch-label-off">Week</label>
-					        <input type="radio" class="switch-input" name="view2" value="month2" id="month2">
-					        <label for="month2" class="switch-label switch-label-on">Month</label>
-					        <span class="switch-selection"></span>
-				        </div>
-				        <div class="switch switch-yellow">
-					        <input type="radio" class="switch-input" name="view3" value="yes" id="yes" checked="">
-					        <label for="yes" class="switch-label switch-label-off">Yes</label>
-					        <input type="radio" class="switch-input" name="view3" value="no" id="no">
-					        <label for="no" class="switch-label switch-label-on">No</label>
-					        <span class="switch-selection"></span>
-				        </div>
-              </div>
-            </div>    
-			    </div>
-          <div class="col-lg-3 col-md-3 p-2 m-0 mb-1">          
+          <div class="col-xl-2 col-md-4 col-sm-12 col-xs-12 m-0 p-0 px-2 mb-2">
             <div class="card">
-			        <div class="dash-unit">
-	      		    <dtitle>One Chart</dtitle>
-	      		    <hr>
-	      		    <div class="info-user">
-					        <span aria-hidden="true" class="li_lab fs2"></span>
-                </div>
-                <a><img src="http://assistant.pibico.es:8080/assets/SingleAdmin/images/slide01.png" alt="reply"></a> 
-				      </div>
+              {% for log in sensor_logs %}
+              {% set lights = [] %}
+              {% if "light-" in log.sensor %}
+                {% if lights.append(lights | length + 1) %}{% endif %}                      
+              {% endif %}
+              {% set counter = lights | length %}
+              <div class="{% if counter <= 1 %}quarter-unit{% elif 1 < counter <= 4 %}third-unit{% else %}half-unit{% endif %}">
+              {% endfor %}
+                <dtitle>Light</dtitle>
+	      		    <hr class="mb-2">
+                {% for log in sensor_logs %}
+                  {% set lights = [] %}
+                  {% if "light-" in log.sensor %}
+                    {% if lights.append(lights | length + 1) %}{% endif %}
+                    {% set idx = log.log_item | length -1 %}  
+                    {% set status = log.log_item[idx]['value'] | int %}                            
+                    <div class="d-flex">
+                      <div class="pl-2"><a href="{{frappe.get_url()}}:8080/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }}</small></a></div>
+                      <div class="switch my-0 py-0 mb-1 ml-auto">
+                        <input type="radio" class="switch-input" name="light{{loop.index}}" value="on" id="light{{loop.index}}_on" onclick="javascript:switchOn('{{log.sensor}}','{{sensor_doc[0].relay_pin}}','{{sensor_doc[0].info_pin}}');" {%if status %}checked=""{% endif %}>
+					              <label for="light{{loop.index}}_on" class="switch-label switch-label-off">on</label>
+					              <input type="radio" class="switch-input" name="light{{loop.index}}" value="off" id="light{{loop.index}}_off" onclick="javascript:switchOff('{{log.sensor}}','{{sensor_doc[0].relay_pin}}','{{sensor_doc[0].info_pin}}');" {%if not status %}checked=""{% endif %}>
+					              <label for="light{{loop.index}}_off" class="switch-label switch-label-on pr-1">off</label>
+					              <span class="switch-selection"></span>
+				              </div>
+                    </div>
+                  {% endif %}
+                  {% if lights | length == 0 %}
+                    <div class="d-flex">
+                      <div class="m-auto">Space for Lights</div>
+                    </div>
+                  {% endif %} 
+                {% endfor %}                   
+              </div>                    
             </div>
           </div>
-          <div class="col-lg-3 col-md-3 p-2 m-0 mb-1">  
-		        <div class="card">
-              <div class="dash-unit">
-      		      <dtitle>Latest News</dtitle>
-      		      <hr>
-  				      <div class="info-user">
-	  				      <span aria-hidden="true" class="li_news fs2"></span>
-		  		      </div>
-			  	      <br>
-      	  		  <div class="text">
-      		  		  <p><b>pibico.es:</b> A beautiful new Dashboard theme has been realised by PibiCo. Please, visit <a href="http://www.pibico.org">www.pibico.org</a> for more details.</p>
-      			  	  <p><grey>Last Update: 5 minutes ago.</grey></p>
-      			    </div>
-              </div><!-- /dash-unit -->
-            </div><!-- /span3 -->
-          </div>
-        
-          <div class="col-lg-6 col-md-6 p-2 m-0 mb-1">
+          <div class="col-xl-2 col-md-4 col-sm-12 col-xs-12 m-0 p-0 px-2 mb-2">
             <div class="card">
-              <div class="dash-unit">
-	              <dtitle>Mail Box</dtitle>
-	              <hr>
-                <div class="framemail">
-    		          <div class="window">
-			              <ul class="mail">
-			                <li>
-			                  <i class="unread"></i>
-			                  <img class="avatar" src="http://assistant.pibico.es:8080/assets/SingleAdmin/images/photo01.jpeg" alt="avatar">
-			                  <p class="sender">Adam W.</p>
-			                  <p class="message"><strong>Working</strong> - This is the last...</p>
-			                  <div class="actions">
-			                    <a><img src="http://png-1.findicons.com/files/icons/2232/wireframe_mono/16/undo.png" alt="reply"></a>
-			                    <a><img src="http://png-1.findicons.com/files/icons/2232/wireframe_mono/16/star_fav.png" alt="favourite"></a>
-			                    <a><img src="http://png-4.findicons.com/files/icons/2232/wireframe_mono/16/tag.png" alt="label"></a>
-			                    <a><img src="http://png-4.findicons.com/files/icons/2232/wireframe_mono/16/trash.png" alt="delete"></a>
-			                  </div>
-			                </li>
-			                <li>
-			                  <i class="read"></i>
-			                  <img class="avatar" src="http://assistant.pibico.es:8080/assets/SingleAdmin/images/photo02.jpg" alt="avatar">
-			                  <p class="sender">Dan E.</p>
-			                  <p class="message"><strong>Hey man!</strong> - You have to taste ...</p>
-			                  <div class="actions">
-			                    <a><img src="http://png-1.findicons.com/files/icons/2232/wireframe_mono/16/undo.png" alt="reply"></a>
-			                    <a><img src="http://png-1.findicons.com/files/icons/2232/wireframe_mono/16/star_fav.png" alt="favourite"></a>
-			                    <a><img src="http://png-4.findicons.com/files/icons/2232/wireframe_mono/16/tag.png" alt="label"></a>
-			                    <a><img src="http://png-4.findicons.com/files/icons/2232/wireframe_mono/16/trash.png" alt="delete"></a>
-			                  </div>
-			                </li>
-			                <li>
-			                  <i class="read"></i>
-			                  <img class="avatar" src="http://assistant.pibico.es:8080/assets/SingleAdmin/images/photo03.jpg" alt="avatar">
-			                  <p class="sender">Leonard N.</p>
-			                  <p class="message"><strong>New Mac :D</strong> - So happy with ...</p>
-			                  <div class="actions">
-			                    <a><img src="http://png-1.findicons.com/files/icons/2232/wireframe_mono/16/undo.png" alt="reply"></a>
-			                    <a><img src="http://png-1.findicons.com/files/icons/2232/wireframe_mono/16/star_fav.png" alt="favourite"></a>
-			                    <a><img src="http://png-4.findicons.com/files/icons/2232/wireframe_mono/16/tag.png" alt="label"></a>
-			                    <a><img src="http://png-4.findicons.com/files/icons/2232/wireframe_mono/16/trash.png" alt="delete"></a>
-			                  </div>
-			                </li>
-			                <li>
-			                  <i class="read"></i>
-			                  <img class="avatar" src="http://assistant.pibico.es:8080/assets/SingleAdmin/images/photo04.jpg" alt="avatar">
-			                  <p class="sender">Peter B.</p>
-			                  <p class="message"><strong>Thank you</strong> - Finally I can ...</p>
-			                  <div class="actions">
-			                    <a><img src="http://png-1.findicons.com/files/icons/2232/wireframe_mono/16/undo.png" alt="reply"></a>
-			                    <a><img src="http://png-1.findicons.com/files/icons/2232/wireframe_mono/16/star_fav.png" alt="favourite"></a>
-			                    <a><img src="http://png-4.findicons.com/files/icons/2232/wireframe_mono/16/tag.png" alt="label"></a>
-			                    <a><img src="http://png-4.findicons.com/files/icons/2232/wireframe_mono/16/trash.png" alt="delete"></a>
-			                  </div>
-			                </li>
-                      <li>
-			                  <i class="read"></i>
-			                  <img class="avatar" src="http://assistant.pibico.es:8080/assets/SingleAdmin/images/photo03.jpg" alt="avatar">
-			                  <p class="sender">Philips N.</p>
-			                  <p class="message"><strong>New Station :D</strong> - Christmas with ...</p>
-			                  <div class="actions">
-			                    <a><img src="http://png-1.findicons.com/files/icons/2232/wireframe_mono/16/undo.png" alt="reply"></a>
-			                    <a><img src="http://png-1.findicons.com/files/icons/2232/wireframe_mono/16/star_fav.png" alt="favourite"></a>
-			                    <a><img src="http://png-4.findicons.com/files/icons/2232/wireframe_mono/16/tag.png" alt="label"></a>
-			                    <a><img src="http://png-4.findicons.com/files/icons/2232/wireframe_mono/16/trash.png" alt="delete"></a>
-			                  </div>
-			                </li>                   
-			              </ul>
-    		          </div>
-			          </div>
-              </div>
+              {% for log in sensor_logs %}
+              {% set lights = [] %}
+              {% if "light-" in log.sensor %}
+                {% if lights.append(lights | length + 1) %}{% endif %}                      
+              {% endif %}
+              {% set counter = lights | length %}
+              <div class="{% if counter <= 1 %}quarter-unit{% elif 1 < counter <= 4 %}third-unit{% else %}half-unit{% endif %}">
+              {% endfor %}
+                <dtitle>Blind</dtitle>
+	      		    <hr class="mb-2">
+                {% for log in sensor_logs %}
+                  {% set blinds = [] %}
+                  {% if "blind-" in log.sensor %}
+                    {% if blinds.append(blinds | length + 1) %}{% endif %}  
+                    {% set idx = log.log_item | length -1 %}  
+                    {% set status = log.log_item[idx]['value'] | int %}                          
+                    <div class="d-flex">
+                      <div class="pl-2"><a href="{{frappe.get_url()}}:8080/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }}</small></a></div>
+                      <div class="switch my-0 py-0 mb-1 ml-auto">
+                        <input type="radio" class="switch-input" name="blind{{loop.index}}" value="on" id="blind{{loop.index}}_on" onclick="javascript:switchOn('{{log.sensor}}','{{sensor_doc[0].relay_pin}}','{{sensor_doc[0].info_pin}}');" {%if status %}checked=""{% endif %}>
+					              <label for="blind{{loop.index}}_on" class="switch-label switch-label-off">on</label>
+					              <input type="radio" class="switch-input" name="blind{{loop.index}}" value="off" id="blind{{loop.index}}_off" onclick="javascript:switchOff('{{log.sensor}}','{{sensor_doc[0].relay_pin}}','{{sensor_doc[0].info_pin}}');" {%if not status %}checked=""{% endif %}>
+					              <label for="blind{{loop.index}}_off" class="switch-label switch-label-on pr-1">off</label>
+					              <span class="switch-selection"></span>
+				              </div>
+                    </div>
+                  {% endif %}
+                  {% if blinds | length == 0 %}
+                    <div class="d-flex">
+                      <div class="m-auto">Space for Blinds</div>
+                    </div>
+                  {% endif %} 
+                {% endfor %}   
+              </div>                    
             </div>
           </div>
-          <div class="col-lg-4 col-md-4 p-2 m-0 mb-1">
+          <div class="col-xl-2 col-md-4 col-sm-12 col-xs-12 m-0 p-0 px-2 mb-2">
             <div class="card">
-              <div class="dash-unit">
-      	        <dtitle>Other Information</dtitle>
-      	        <hr>
-			          <div class="section-graph">
-			            <span><img src="http://assistant.pibico.es:8080/assets/SingleAdmin/images/slide02.png" alt="reply"></span>
-			            <br>
-			            <div class="graph-info">
-			              <i class="graph-arrow"></i>
-			              <span class="graph-info-medium">634.39</span>
-			              <span class="graph-info-small">+2.18 (3.71%)</span>                    
-			            </div>
-			          </div>
-              </div>
+              {% for log in sensor_logs %}
+              {% set pumps = [] %}
+              {% if "pump-" in log.sensor %}
+                {% if pumps.append(pumps | length + 1) %}{% endif %}                      
+              {% endif %}
+              {% set counter = pumps | length %}
+              <div class="{% if counter <= 1 %}quarter-unit{% elif 1 < counter <= 4 %}third-unit{% else %}half-unit{% endif %}">
+              {% endfor %}
+                <dtitle>Pump</dtitle>
+	      		    <hr class="mb-2">
+                {% for log in sensor_logs %}
+                  {% set pumps = [] %}
+                  {% if "pump-" in log.sensor %}
+                    {% if pumps.append(pumps | length + 1) %}{% endif %}
+                    {% set idx = log.log_item | length -1 %}
+                    {% set status = log.log_item[idx]['value'] | int %}                             
+                    <div class="d-flex">
+                      <div class="pl-2"><a href="{{frappe.get_url()}}:8080/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }}</small></a></div>
+                      <div class="switch my-0 py-0 mb-1 ml-auto">
+                        <input type="radio" class="switch-input" name="pump{{loop.index}}" value="on" id="pump{{loop.index}}_on" onclick="javascript:switchOn('{{log.sensor}}','{{sensor_doc[0].relay_pin}}','{{sensor_doc[0].info_pin}}');" {%if status %}checked=""{% endif %}>
+					              <label for="pump{{loop.index}}_on" class="switch-label switch-label-off">on</label>
+					              <input type="radio" class="switch-input" name="pump{{loop.index}}" value="off" id="pump{{loop.index}}_off" onclick="javascript:switchOff('{{log.sensor}}','{{sensor_doc[0].relay_pin}}','{{sensor_doc[0].info_pin}}');" {%if not status %}checked=""{% endif %}>
+					              <label for="pump{{loop.index}}_off" class="switch-label switch-label-on pr-1">off</label>
+					              <span class="switch-selection"></span>
+				              </div>
+                    </div>
+                  {% endif %}
+                  {% if pumps | length == 0 %}
+                    <div class="d-flex">
+                      <div class="m-auto">Space for Pumps</div>
+                    </div>
+                  {% endif %} 
+                {% endfor %}                      
+              </div>                    
             </div>
           </div>
-          <div class="col-lg-2 col-md-2 p-2 m-0 mb-1">
-            <div class="card mb-3" style="height: 134px;">
-              <div class="half-unit">
-      	        <dtitle>More Charts</dtitle>
-      	        <hr>
-			          <div class="section-graph">
-			            <span><img src="http://assistant.pibico.es:8080/assets/SingleAdmin/images/sep-half.png" alt="reply"></span>
-			            <br>
-			            <div class="graph-info">
-			              <i class="graph-arrow"></i>
-			              <span class="graph-info-medium">634.39</span>
-			              <span class="graph-info-small">+2.18 (3.71%)</span>                    
-			            </div>
-			          </div>
-              </div>
-            </div>
-            <div class="card" style="height: 134px;">
-              <div class="half-unit">
-      		      <dtitle>More Charts</dtitle>
-      		      <hr>
-			          <div class="section-graph">
-			            <span><img src="http://assistant.pibico.es:8080/assets/SingleAdmin/images/sep-half.png" alt="reply"></span>
-			            <br>
-			            <div class="graph-info">
-			              <i class="graph-arrow"></i>
-			              <span class="graph-info-medium">634.39</span>
-			              <span class="graph-info-small">+2.18 (3.71%)</span>                    
-			            </div>
-			          </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-3 p-2 m-0 mb-2">
+          <div class="col-xl-2 col-md-4 col-sm-12 col-xs-12 m-0 p-0 px-2 mb-2">
             <div class="card">
-      	      <div class="dash-unit">
-	      	      <dtitle>Last Month Revenue</dtitle>
-	              <hr>
-	      	      <div class="cont">
-					        <p><bold>$879</bold> | <ok>Approved</ok></p>
-					        <br>
-					        <p><bold>$377</bold> | Pending</p>
-					        <br>
-					        <p><bold>$156</bold> | <bad>Denied</bad></p>
-					        <br>
-					        <p><img src="images/up-small.png" alt=""> 12% Compared Last Month</p>
-    			      </div>
-			        </div>
+              {% for log in sensor_logs %}
+              {% set valves = [] %}
+              {% if "valve-" in log.sensor %}
+                {% if valves.append(valves | length + 1) %}{% endif %}                      
+              {% endif %}
+              {% set counter = valves | length %}
+              <div class="{% if counter <= 1 %}quarter-unit{% elif 1 < counter <= 4 %}third-unit{% else %}half-unit{% endif %}">
+              {% endfor %}
+                <dtitle>Valve</dtitle>
+	      		    <hr class="mb-2">
+                {% for log in sensor_logs %}
+                  {% set valves = [] %}
+                  {% if "valve-" in log.sensor %}
+                    {% if valves.append(valves | length + 1) %}{% endif %}   
+                    {% set idx = log.log_item | length -1 %}
+                    {% set status = log.log_item[idx]['value'] | int %}                   
+                    <div class="d-flex">
+                      <div class="pl-2"><a href="{{frappe.get_url()}}:8080/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }} ({{status}})</small></a></div>
+                      <div class="switch my-0 py-0 mb-1 ml-auto">
+                        <input type="radio" class="switch-input" name="valve{{loop.index}}" value="on" id="valve{{loop.index}}_on" onclick="javascript:switchOn('{{log.sensor}}','{{sensor_doc[0].relay_pin}}','{{sensor_doc[0].info_pin}}');" {%if status %}checked=""{% endif %}>
+					              <label for="valve{{loop.index}}_on" class="switch-label switch-label-off">on</label>
+					              <input type="radio" class="switch-input" name="valve{{loop.index}}" value="off" id="valve{{loop.index}}_off" onclick="javascript:switchOff('{{log.sensor}}','{{sensor_doc[0].relay_pin}}','{{sensor_doc[0].info_pin}}');" {%if not status %}checked=""{% endif %}>
+					              <label for="valve{{loop.index}}_off" class="switch-label switch-label-on pr-1">off</label>
+					              <span class="switch-selection"></span>
+				              </div>
+                    </div>
+                  {% endif %}
+                  {% if valves | length == 0 %}
+                    <div class="d-flex">
+                      <div class="m-auto">Space for Valves</div>
+                    </div>
+                  {% endif %} 
+                {% endfor %}   
+              </div>                    
             </div>
           </div>
-          <div class="col-lg-5 col-md-5 p-2 m-0 mb-2">
+          <div class="col-xl-2 col-md-4 col-sm-12 col-xs-12 m-0 p-0 px-2 mb-2">
             <div class="card">
-			        <div class="dash-unit">
-	              <dtitle>Notifications</dtitle>
-	      	      <hr>
-	      	      <div class="info-user">
-					        <span aria-hidden="true" class="li_bubble fs2"></span>
-				        </div>
-	      	      <div class="cont">
-	      		      <p><button class="btnnew noty" data-noty-options="{&quot;text&quot;:&quot;This is a success notification&quot;,&quot;layout&quot;:&quot;topRight&quot;,&quot;type&quot;:&quot;success&quot;}">Top Right</button></p>
-	      		      <p><button class="btnnew noty" data-noty-options="{&quot;text&quot;:&quot;This is an informaton notification&quot;,&quot;layout&quot;:&quot;topLeft&quot;,&quot;type&quot;:&quot;information&quot;}">Top Left</button></p>
-	      		      <p><button class="btnnew noty" data-noty-options="{&quot;text&quot;:&quot;This is an alert notification with fade effect.&quot;,&quot;layout&quot;:&quot;topCenter&quot;,&quot;type&quot;:&quot;alert&quot;,&quot;animateOpen&quot;: {&quot;opacity&quot;: &quot;show&quot;}}">Top Center (fade)</button></p>
-	      	      </div>
-			        </div>
-		        </div>
-          </div>
-          <div class="col-lg-4 col-md-4 p-2 m-0 mb-2">
-            <div class="card">
-				      <div class="dash-unit">
-	              <dtitle>Accordion</dtitle>
-	      	      <hr>
-					      <div class="accordion" id="accordion2">
-		              <div class="accordion-group">
-		                <div class="accordion-heading">
-		                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-		                        Collapsible Group Item #1
-		                  </a>
-		                </div>
-		                <div id="collapseOne" class="accordion-body collapse in">
-		                  <div class="accordion-inner">
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla iaculis mattis lorem.   
-					     	      </div>
-		                </div>
-		              </div>
-		              <div class="accordion-group">
-		                <div class="accordion-heading">
-		                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-		                   Collapsible Group Item #2
-		                  </a>
-		                </div>
-		                <div id="collapseTwo" class="accordion-body collapse">
-		                  <div class="accordion-inner">
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla iaculis mattis lorem.
-						          </div>
-		                </div>
-		              </div>
-		              <div class="accordion-group">
-		                <div class="accordion-heading">
-		                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-		                        Collapsible Group Item #3
-		                  </a>
-		                </div>
-		                <div id="collapseThree" class="accordion-body collapse">
-		                  <div class="accordion-inner">
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla iaculis mattis lorem.                          </div>
-		                </div>
-		              </div>
-		            </div><!--/accordion -->
-				      </div>
+              {% for log in sensor_logs %}
+              {% set switchs = [] %}
+              {% if "switch-" in log.sensor %}
+                {% if switchs.append(switchs | length + 1) %}{% endif %}                      
+              {% endif %}
+              {% set counter = switches | length %}
+              <div class="{% if counter <= 1 %}quarter-unit{% elif 1 < counter <= 4 %}third-unit{% else %}half-unit{% endif %}">
+              {% endfor %}
+                <dtitle>Switch</dtitle>
+	      		    <hr class="mb-2">
+                {% for log in sensor_logs %}
+                  {% set switchs = [] %}
+                  {% if "switch-" in log.sensor %}
+                    {% if switchs.append(switchs | length + 1) %}{% endif %}
+                    {% set idx = log.log_item | length -1 %}  
+                    {% set status = log.log_item[idx]['value'] | int %}                        
+                    <div class="d-flex">
+                      <div class="pl-2"><a href="{{frappe.get_url()}}:8080/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }}</small></a></div>
+                      <div class="switch my-0 py-0 mb-1 ml-auto">
+                        <input type="radio" class="switch-input" name="switch{{loop.index}}" value="on" id="switch{{loop.index}}_on" onclick="javascript:switchOn('{{log.sensor}}','{{sensor_doc[0].relay_pin}}','{{sensor_doc[0].info_pin}}');" {%if status %}checked=""{% endif %}>
+					              <label for="switch{{loop.index}}_on" class="switch-label switch-label-off">on</label>
+					              <input type="radio" class="switch-input" name="switch{{loop.index}}" value="off" id="switch{{loop.index}}_off" onclick="javascript:switchOff('{{log.sensor}}','{{sensor_doc[0].relay_pin}}','{{sensor_doc[0].info_pin}}');" {%if not status %}checked=""{% endif %}>
+					              <label for="switch{{loop.index}}_off" class="switch-label switch-label-on pr-1">off</label>
+					              <span class="switch-selection"></span>
+				              </div>
+                    </div>
+                  {% endif %}
+                  {% if switchs | length == 0 %}
+                    <div class="d-flex">
+                      <div class="m-auto">Space for Switchs</div>
+                    </div>
+                  {% endif %} 
+                {% endfor %}   
+              </div>                    
             </div>
-          </div>     
+          </div>
+        </div>  
+        <div class="card-columns">
+          <div class="card m-0 p-0 px-1 mb-2">
+            <div class="twothird-unit">
+              <blockquote class="blockquote mb-0 card-body">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+                <footer class="blockquote-footer">
+                  <small class="text-muted">
+                    Someone famous in <cite title="Source Title">Source Title</cite>
+                  </small>
+                </footer>
+              </blockquote>
+            </div>
+          </div>
+          <div class="card m-0 p-0 px-1 mb-2">
+            <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+            <div class="third-unit">
+              <h5 class="card-title">Card title</h5>
+              <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
+              <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+            </div>
+          </div>
+          <div class="card m-0 p-0 px-1 mb-2">
+            <div class="twothird-unit bg-primary text-white text-center">
+              <blockquote class="blockquote mb-0">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat.</p>
+                <footer class="blockquote-footer">
+                  <small>
+                  Someone famous in <cite title="Source Title">Source Title</cite>
+                  </small>
+                </footer>
+              </blockquote>
+            </div>  
+          </div>
+          <div class="card text-center m-0 p-0 px-1 mb-2">
+            <div class="half-unit">
+              <h5 class="card-title">Card title</h5>
+              <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
+              <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+            </div>
+          </div>
+          <div class="card m-0 p-0 px-1 mb-2 text-right">
+            <div class="half-unit">
+              <blockquote class="blockquote mb-0">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+                <footer class="blockquote-footer">
+                  <small class="text-muted">
+                    Someone famous in <cite title="Source Title">Source Title</cite>
+                  </small>
+                </footer>
+              </blockquote>
+            </div>  
+          </div>
+          <div class="card m-0 p-0 px-1 mb-2">
+            <div class="twothird-unit">
+              <h5 class="card-title">Card title</h5>
+              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
+              <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+            </div>
+          </div>
         </div>
-        {% else %}
-        <h1 class="mt-4 text-white">Please Login First!</h1>
         {% endif %}
       </div>
     </main>
-  </div>     
+  </div>
+  <script>
+  
+  function switchOn(value, trigger, info) {
+    frappe.call({
+      method: "pibicontrol.pibicontrol.api.switch",
+      args: {
+        'value': value,
+        'action': 'on'
+      },
+      async: false,
+    	callback: function(r) {
+        console.log(r.message)
+    	}
+    });
+  };
+  
+  function switchOff(value, trigger, info) {
+    frappe.call({
+      method: "pibicontrol.pibicontrol.api.switch",
+      args: {
+        'value': value,
+        'action': 'off'
+      },
+      async: false,
+    	callback: function(r) {
+        console.log(r.message)
+    	}
+    });
+  };
+  
+  function get_chart(value) {
+    var jsonData = [value]
+    for(var i in jsonData){
+      var key = i;
+      var val = jsonData[i];
+      for(var j in val){
+        var sub_key = j;
+        if (j === "sensor") {
+          var sensor = val[j];
+        } else if (j === "label") {
+          var labels = val[j];
+        } else if (j === "dataset") {
+          var datasets = val[j];
+        } else if (j === "average") {
+          var saverage = val[j];
+        } else if (j === "min") {
+          var smin = val[j];
+        } else if (j === "max") {
+          var smax = val[j];
+        }
+      }
+    };
+    if (sensor.indexOf('cpu-') > -1) {
+      const data = {
+	      labels: labels,
+	      datasets: [
+          {
+            name: datasets[0]['main_read'],
+            chartType: 'line',
+            values: datasets[0]['values'],  
+          },
+          {
+            name: datasets[1]['second_read'],
+            chartType: 'line',
+            values: datasets[1]['values'],  
+          },
+          {
+            name: datasets[2]['third_read'],
+            chartType: 'line',
+            values: datasets[2]['values'],  
+          },
+        ],
+        yMarkers: [
+          {
+            label: 'Average T',
+            value: saverage,
+            options: { labelPos: 'left' } // default: 'right'
+          }
+        ],
+        yRegions: [
+          {
+            label: "Min-Max T Area",
+            start: smin,
+            end: smax,
+            options: { labelPos: 'right' }
+          }
+        ],
+	    };
+      const cpu_chart = new frappe.Chart( '#cpu_chart', {
+        data: data,   
+        title: sensor,
+	      type: 'axis-mixed', // or 'bar', 'line', 'pie', 'percentage'
+	      height: 270,
+	      colors: ['blue', 'red', 'green'],
+	      tooltipOptions: {
+		      formatTooltipX: d => (d + '').toUpperCase(),
+		      formatTooltipY: d => d,
+	      },
+        is_series: 1,
+        lineOptions: {
+          hideDots: 1, // default: 0
+        },
+      });  
+    };    
+  };
+  
+  //Function for defining the dataTable
+  var oTable = $('#sensors').dataTable({
+    select: {
+      style: 'os',
+      items: 'row'
+    },
+    jQueryUI: true,
+    responsive: true,
+    dom: '<"top"if>rt<"bottom"p><"clear">',
+    //dom: '<"bottom"f>rtip<"clear">',
+    //dom: 'B<"bottom"f>rtip<"clear">',
+    pageLength: 5,
+    buttons: [
+      //'copyHtml5',
+      {extend: 'excelHtml5', text: 'xls', className: 'btn btn-primary btn-xs'},
+      {extend: 'csvHtml5', text: 'csv', className: 'btn btn-info btn-xs'},
+      { extend: 'pdfHtml5', text: 'pdf', orientation: 'landscape', className: 'btn btn-warning btn-xs'},    
+      { extend: 'print', text: '<i class="fa fa-print"></i>', className: 'btn btn-danger btn-xs' }
+    ]
+  });
+  //Function for Filter button config 
+  $('.dataTables_filter input[type="search"]').css({
+    'width':'150px',
+    'display':'inline-block',
+    'color':'#1f1f1',
+    'background': 'white',
+    'border':'1px solid #4682b4',
+    'height':'auto',
+    'font-size': '10pt',
+    'padding': '1px 1px',
+    'margin-right': '6px',
+  });
+  //Function on click Table Cell
+  $('#sensors tbody').on('click', 'td', function (e) {
+    e.preventDefault();
+    // check cell column of selected cell //
+    var rowIdx = oTable.api().cell( this ).index().row;
+    var colIdx = oTable.api().cell( this ).index().column; // .api(). needed while using .dataTable. and not .DataTable. API //
+    if ( colIdx > 1) {
+      var rowPosition = oTable.fnGetPosition( this ); //row position of record in table
+      var sensor = oTable.fnGetData(rowPosition,2);
+      window.open("{{ frappe.get_url() }}:8080/desk#List/Sensor Log?sensor=" + sensor, "_self")
+    }
+  });
+  </script>
 {% endblock %}
-

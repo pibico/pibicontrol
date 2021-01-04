@@ -68,7 +68,7 @@
   {
    "fieldname": "average",
    "fieldtype": "Float",
-   "label": "Average",
+   "label": "Average or Starts",
    "read_only": 1
   },
   {
@@ -100,7 +100,7 @@
    "options": "<div id=\"second_chart\"></div>"
   }
  ],
- "modified": "2020-12-25 22:59:30.367537",
+ "modified": "2021-01-03 14:08:18.860860",
  "modified_by": "Administrator",
  "module": "Pibicontrol",
  "name": "Sensor Log",

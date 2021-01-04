@@ -28,11 +28,18 @@ class SensorLog(Document):
       stock = frappe.get_doc("Stock Item", doc.stock_item)
       ## Complete the read only attributes based on taken measures
       self.points = len(self.log_item)
-      for data in self.log_item:
-        values.append(data.value)
-      self.min = min(values)
-      self.max = max(values)
-      self.average = sum(values)/len(values)
+      if stock.sensor_type == "pump":
+        self.min = 0
+        self.max = 1
+        for data in self.log_item:
+          values.append(float(data.value))
+        self.average = sum(values)
+      else:  
+        for data in self.log_item:
+          values.append(float(data.value))
+        self.min = min(values)
+        self.max = max(values)
+        self.average = sum(values)/len(values)
       ## Select the last recorded value, variable and payload coming from outside
       value = self.log_item[len(self.log_item)-1].value
       mainread = self.log_item[len(self.log_item)-1].main_reading
@@ -44,16 +51,7 @@ class SensorLog(Document):
           ## Primary Common Reading to all sensors
           if ts.variable == mainread:
             (active_alert, start) = get_alert(ts.variable, doc.name)         
-            if ts.upper_value:
-              if float(value) > float(ts.upper_value) and start == True:
-                mng_alert(doc, ts.variable, float(value), start, active_alert)
-              elif float(value) <= float(ts.upper_value) and start == False:
-                mng_alert(doc, ts.variable, float(value), start, active_alert)   
-            if ts.lower_value:
-              if float(value) < float(ts.lower_value) and start == True:
-                mng_alert(doc, ts.variable, float(value), start, active_alert)
-              elif float(value) >= float(ts.lower_value) and start == False:
-                mng_alert(doc, ts.variable, float(value), start, active_alert)     
+            check_threshold(doc, ts, value, start, active_alert)
           
 		      ## Specific Readings taken in payload depending on sensor type
           ## Sensor CPU
@@ -64,30 +62,12 @@ class SensorLog(Document):
             if ts.variable == "mem_pct":
               (active_alert, start) = get_alert(ts.variable, doc.name)
               mem_pct = float(payload['payload']['mem']['mem_pct'])
-              if ts.upper_value:
-                if mem_pct > float(ts.upper_value) and start == True:
-                  mng_alert(doc, ts.variable, mem_pct, start, active_alert) 
-                elif mem_pct <= float(ts.upper_value) and start == False:
-                  mng_alert(doc, ts.variable, mem_pct, start, active_alert) 
-              if ts.lower_value:
-                if mem_pct < float(ts.lower_value) and start == True:
-                  mng_alert(doc, ts.variable, mem_pct, start, active_alert) 
-                elif mem_pct >= float(ts.lower_value) and start == False:
-                  mng_alert(doc, ts.variable, mem_pct, start, active_alert)
+              check_threshold(doc, ts, mem_pct, start, active_alert)
             ## Third CPU Reading  
             elif ts.variable == "disk_pct":
               (active_alert, start) = get_alert(ts.variable, doc.name)
               disk_pct = float(payload['payload']['disk']['disk_pct'])
-              if ts.upper_value:
-                if disk_pct > float(ts.upper_value) and start == True:
-                  mng_alert(doc, ts.variable, disk_pct, start, active_alert)
-                elif disk_pct <= float(ts.upper_value) and start == False:
-                  mng_alert(doc, ts.variable, disk_pct, start, active_alert)
-              if ts.lower_value:
-                if  disk_pct < float(ts.lower_value) and start == True:
-                  mng_alert(doc, ts.variable, disk_pct, start, active_alert)
-                elif disk_pct >= float(ts.lower_value) and start == False:
-                  mng_alert(doc, ts.variable, disk_pct, start, active_alert)
+              check_threshold(doc, ts, disk_pct, start, active_alert)
           ## Sensor other type
           elif stock.sensor_type == "th":
             # Secondary humid reading
@@ -98,13 +78,9 @@ class SensorLog(Document):
               check_threshold(doc, ts, env_humid, start, active_alert)
 
 def check_threshold(doc, ts, var, start, active_alert):
-  if ts.upper_value:
-    if var > float(ts.upper_value) and start == True:
-      mng_alert(doc, ts.variable, var, start, active_alert)
-    elif var <= float(ts.upper_value) and start == False:
-      mng_alert(doc, ts.variable, var, start, active_alert)
-  if ts.lower_value:
-    if var < float(ts.lower_value) and start == True:
-      mng_alert(doc, ts.variable, var, start, active_alert)
-    elif var >= float(ts.lower_value) and start == False:
-      mng_alert(doc, ts.variable, var, start, active_alert)        
+  if float(var) >= float(ts.upper_value) and start == True:
+    mng_alert(doc, ts.variable, var, start, active_alert)
+  elif float(ts.lower_value) <= float(var) < float(ts.upper_value) and start == False:
+    mng_alert(doc, ts.variable, var, start, active_alert)
+  elif float(var) < float(ts.lower_value) and start == True:
+    mng_alert(doc, ts.variable, var, start, active_alert)
