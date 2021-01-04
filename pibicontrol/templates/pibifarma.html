@@ -182,9 +182,9 @@
                       <a class="accordion-toggle m-2" data-toggle="collapse" data-parent="#alert_log" href="#collapse{{ loop.index }}">
                          
                        {% if val.alert_item[idx].to_time == None %}
-                         <span aria-hidden="true" class="li_eye text-danger"></span> <small class="text-danger">Active</small>
+                         <span aria-hidden="true" class="li_eye text-danger"></span> <small class="text-danger"></small>
                        {% else %}
-                         <span aria-hidden="true" class="li_lock text-success"></span> <small class="text-success">Closed</small> 
+                         <span aria-hidden="true" class="li_lock text-success"></span> <small class="text-success"></small> 
                        {% endif %}
                        {{ val.name }}
                       <a>

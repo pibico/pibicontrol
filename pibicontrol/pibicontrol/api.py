@@ -41,6 +41,12 @@ def switch(value, action):
   send_mqtt(topic, cstr(msg))
 
 @frappe.whitelist()
+def mqtt_command(host, action):
+  topic = []
+  topic.append(host + "/mqtt")
+  send_mqtt(topic, cstr(action))
+  
+@frappe.whitelist()
 def get_chart_dataset (doc):
   label = []
   main_read = []

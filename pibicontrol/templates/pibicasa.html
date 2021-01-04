@@ -118,16 +118,16 @@
           </small>
         </p>
         <div class="row">
-          <div class="col-xl-2 col-md-4 col-sm-12 col-xs-12 m-0 p-0 px-2 mb-2">
+        {% for log in sensor_logs %}
+          {% set motors = [] %}
+          {% if "motor-" in log.sensor %}
+            {% if motors.append(motors | length + 1) %}{% endif %}                      
+          {% endif %}
+          {% set counter = motors | length %}
+          {% if motors | length > 0 %}
+          <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12 m-0 p-0 px-2 mb-2">
             <div class="card">
-              {% for log in sensor_logs %}
-              {% set motors = [] %}
-              {% if "motor-" in log.sensor %}
-                {% if motors.append(motors | length + 1) %}{% endif %}                      
-              {% endif %}
-              {% set counter = motors | length %}
               <div class="{% if counter <= 1 %}quarter-unit{% elif 1 < counter <= 4 %}third-unit{% else %}half-unit{% endif %}">
-              {% endfor %}
                 <dtitle>Motor</dtitle>
 	      		    <hr class="mb-2">
                 {% for log in sensor_logs %}
@@ -147,25 +147,21 @@
 				              </div>
                     </div>
                   {% endif %}
-                  {% if motors | length == 0 %}
-                    <div class="d-flex">
-                      <div class="m-auto">Space for Motors</div>
-                    </div>
-                  {% endif %} 
-                {% endfor %}
+                {% endfor %}  
               </div>                    
             </div>
           </div>
-          <div class="col-xl-2 col-md-4 col-sm-12 col-xs-12 m-0 p-0 px-2 mb-2">
+          {% endif %} 
+        
+          {% set lights = [] %}
+          {% if "light-" in log.sensor %}
+            {% if lights.append(lights | length + 1) %}{% endif %}                      
+          {% endif %}
+          {% set counter = lights | length %}
+          {% if lights | length > 0 %}
+          <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12 m-0 p-0 px-2 mb-2">
             <div class="card">
-              {% for log in sensor_logs %}
-              {% set lights = [] %}
-              {% if "light-" in log.sensor %}
-                {% if lights.append(lights | length + 1) %}{% endif %}                      
-              {% endif %}
-              {% set counter = lights | length %}
-              <div class="{% if counter <= 1 %}quarter-unit{% elif 1 < counter <= 4 %}third-unit{% else %}half-unit{% endif %}">
-              {% endfor %}
+             <div class="{% if counter <= 1 %}quarter-unit{% elif 1 < counter <= 4 %}third-unit{% else %}half-unit{% endif %}">
                 <dtitle>Light</dtitle>
 	      		    <hr class="mb-2">
                 {% for log in sensor_logs %}
@@ -185,25 +181,21 @@
 				              </div>
                     </div>
                   {% endif %}
-                  {% if lights | length == 0 %}
-                    <div class="d-flex">
-                      <div class="m-auto">Space for Lights</div>
-                    </div>
-                  {% endif %} 
                 {% endfor %}                   
               </div>                    
             </div>
           </div>
-          <div class="col-xl-2 col-md-4 col-sm-12 col-xs-12 m-0 p-0 px-2 mb-2">
+          {% endif %} 
+        
+          {% set lights = [] %}
+          {% if "light-" in log.sensor %}
+            {% if lights.append(lights | length + 1) %}{% endif %}                      
+          {% endif %}
+          {% set counter = lights | length %}
+          {% if blinds | length > 0 %}
+          <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12 m-0 p-0 px-2 mb-2">
             <div class="card">
-              {% for log in sensor_logs %}
-              {% set lights = [] %}
-              {% if "light-" in log.sensor %}
-                {% if lights.append(lights | length + 1) %}{% endif %}                      
-              {% endif %}
-              {% set counter = lights | length %}
               <div class="{% if counter <= 1 %}quarter-unit{% elif 1 < counter <= 4 %}third-unit{% else %}half-unit{% endif %}">
-              {% endfor %}
                 <dtitle>Blind</dtitle>
 	      		    <hr class="mb-2">
                 {% for log in sensor_logs %}
@@ -223,25 +215,21 @@
 				              </div>
                     </div>
                   {% endif %}
-                  {% if blinds | length == 0 %}
-                    <div class="d-flex">
-                      <div class="m-auto">Space for Blinds</div>
-                    </div>
-                  {% endif %} 
                 {% endfor %}   
               </div>                    
             </div>
           </div>
-          <div class="col-xl-2 col-md-4 col-sm-12 col-xs-12 m-0 p-0 px-2 mb-2">
+          {% endif %} 
+        
+          {% set pumps = [] %}
+          {% if "pump-" in log.sensor %}
+            {% if pumps.append(pumps | length + 1) %}{% endif %}                      
+          {% endif %}
+          {% set counter = pumps | length %}
+          {% if pumps | length > 0 %}
+          <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12 m-0 p-0 px-2 mb-2">
             <div class="card">
-              {% for log in sensor_logs %}
-              {% set pumps = [] %}
-              {% if "pump-" in log.sensor %}
-                {% if pumps.append(pumps | length + 1) %}{% endif %}                      
-              {% endif %}
-              {% set counter = pumps | length %}
               <div class="{% if counter <= 1 %}quarter-unit{% elif 1 < counter <= 4 %}third-unit{% else %}half-unit{% endif %}">
-              {% endfor %}
                 <dtitle>Pump</dtitle>
 	      		    <hr class="mb-2">
                 {% for log in sensor_logs %}
@@ -261,25 +249,21 @@
 				              </div>
                     </div>
                   {% endif %}
-                  {% if pumps | length == 0 %}
-                    <div class="d-flex">
-                      <div class="m-auto">Space for Pumps</div>
-                    </div>
-                  {% endif %} 
                 {% endfor %}                      
               </div>                    
             </div>
           </div>
-          <div class="col-xl-2 col-md-4 col-sm-12 col-xs-12 m-0 p-0 px-2 mb-2">
+          {% endif %}
+        
+          {% set valves = [] %}
+          {% if "valve-" in log.sensor %}
+            {% if valves.append(valves | length + 1) %}{% endif %}                      
+          {% endif %}
+          {% set counter = valves | length %}
+          {% if valves | length > 0 %}
+          <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12 m-0 p-0 px-2 mb-2">
             <div class="card">
-              {% for log in sensor_logs %}
-              {% set valves = [] %}
-              {% if "valve-" in log.sensor %}
-                {% if valves.append(valves | length + 1) %}{% endif %}                      
-              {% endif %}
-              {% set counter = valves | length %}
               <div class="{% if counter <= 1 %}quarter-unit{% elif 1 < counter <= 4 %}third-unit{% else %}half-unit{% endif %}">
-              {% endfor %}
                 <dtitle>Valve</dtitle>
 	      		    <hr class="mb-2">
                 {% for log in sensor_logs %}
@@ -299,25 +283,21 @@
 				              </div>
                     </div>
                   {% endif %}
-                  {% if valves | length == 0 %}
-                    <div class="d-flex">
-                      <div class="m-auto">Space for Valves</div>
-                    </div>
-                  {% endif %} 
                 {% endfor %}   
               </div>                    
             </div>
           </div>
-          <div class="col-xl-2 col-md-4 col-sm-12 col-xs-12 m-0 p-0 px-2 mb-2">
+          {% endif %} 
+        
+          {% set switchs = [] %}
+          {% if "switch-" in log.sensor %}
+            {% if switchs.append(switchs | length + 1) %}{% endif %}                      
+          {% endif %}
+          {% set counter = switches | length %}
+          {% if switchs | length > 0 %}
+          <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12 m-0 p-0 px-2 mb-2">
             <div class="card">
-              {% for log in sensor_logs %}
-              {% set switchs = [] %}
-              {% if "switch-" in log.sensor %}
-                {% if switchs.append(switchs | length + 1) %}{% endif %}                      
-              {% endif %}
-              {% set counter = switches | length %}
               <div class="{% if counter <= 1 %}quarter-unit{% elif 1 < counter <= 4 %}third-unit{% else %}half-unit{% endif %}">
-              {% endfor %}
                 <dtitle>Switch</dtitle>
 	      		    <hr class="mb-2">
                 {% for log in sensor_logs %}
@@ -337,75 +317,376 @@
 				              </div>
                     </div>
                   {% endif %}
-                  {% if switchs | length == 0 %}
-                    <div class="d-flex">
-                      <div class="m-auto">Space for Switchs</div>
-                    </div>
-                  {% endif %} 
                 {% endfor %}   
               </div>                    
             </div>
           </div>
+          {% endif %} 
+        
+          {% set hvacs = [] %}
+          {% if "hvac-" in log.sensor %}
+            {% if hvacs.append(hvacs | length + 1) %}{% endif %}                      
+          {% endif %}
+          {% set counter = hvacs | length %}
+          {% if hvacs | length > 0 %}
+          <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12 m-0 p-0 px-2 mb-2">
+            <div class="card">
+              <div class="{% if counter <= 1 %}quarter-unit{% elif 1 < counter <= 4 %}third-unit{% else %}half-unit{% endif %}">
+                <dtitle>HVAC</dtitle>
+	      		    <hr class="mb-2">
+                {% for log in sensor_logs %}
+                  {% set hvacs = [] %}
+                  {% if "hvac-" in log.sensor %}
+                    {% if hvacs.append(hvacs | length + 1) %}{% endif %}
+                    {% set idx = log.log_item | length -1 %}  
+                    {% set status = log.log_item[idx]['value'] | int %}                        
+                    <div class="d-flex">
+                      <div class="pl-2"><a href="{{frappe.get_url()}}:8080/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }}</small></a></div>
+                      <div class="hvac my-0 py-0 mb-1 ml-auto">
+                        <input type="radio" class="switch-input" name="hvac{{loop.index}}" value="on" id="hvac{{loop.index}}_on" onclick="javascript:switchOn('{{log.sensor}}','{{sensor_doc[0].relay_pin}}','{{sensor_doc[0].info_pin}}');" {%if status %}checked=""{% endif %}>
+					              <label for="hvac{{loop.index}}_on" class="switch-label switch-label-off">on</label>
+					              <input type="radio" class="switch-input" name="hvac{{loop.index}}" value="off" id="hvac{{loop.index}}_off" onclick="javascript:switchOff('{{log.sensor}}','{{sensor_doc[0].relay_pin}}','{{sensor_doc[0].info_pin}}');" {%if not status %}checked=""{% endif %}>
+					              <label for="hvac{{loop.index}}_off" class="switch-label switch-label-on pr-1">off</label>
+					              <span class="switch-selection"></span>
+				              </div>
+                    </div>
+                  {% endif %}
+                {% endfor %}   
+              </div>                    
+            </div>
+          </div>
+          {% endif %} 
+        
+          {% set canopys = [] %}
+          {% if "canopy-" in log.sensor %}
+            {% if canopys.append(canopys | length + 1) %}{% endif %}                      
+          {% endif %}
+          {% set counter = canopys | length %}
+          {% if canopys | length > 0 %}
+          <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12 m-0 p-0 px-2 mb-2">
+            <div class="card">
+              <div class="{% if counter <= 1 %}quarter-unit{% elif 1 < counter <= 4 %}third-unit{% else %}half-unit{% endif %}">
+                <dtitle>canopy</dtitle>
+	      		    <hr class="mb-2">
+                {% for log in sensor_logs %}
+                  {% set canopys = [] %}
+                  {% if "canopy-" in log.sensor %}
+                    {% if canopys.append(canopys | length + 1) %}{% endif %}
+                    {% set idx = log.log_item | length -1 %}  
+                    {% set status = log.log_item[idx]['value'] | int %}                        
+                    <div class="d-flex">
+                      <div class="pl-2"><a href="{{frappe.get_url()}}:8080/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }}</small></a></div>
+                      <div class="canopy my-0 py-0 mb-1 ml-auto">
+                        <input type="radio" class="switch-input" name="canopy{{loop.index}}" value="on" id="canopy{{loop.index}}_on" onclick="javascript:switchOn('{{log.sensor}}','{{sensor_doc[0].relay_pin}}','{{sensor_doc[0].info_pin}}');" {%if status %}checked=""{% endif %}>
+					              <label for="canopy{{loop.index}}_on" class="switch-label switch-label-off">on</label>
+					              <input type="radio" class="switch-input" name="canopy{{loop.index}}" value="off" id="canopy{{loop.index}}_off" onclick="javascript:switchOff('{{log.sensor}}','{{sensor_doc[0].relay_pin}}','{{sensor_doc[0].info_pin}}');" {%if not status %}checked=""{% endif %}>
+					              <label for="canopy{{loop.index}}_off" class="switch-label switch-label-on pr-1">off</label>
+					              <span class="switch-selection"></span>
+				              </div>
+                    </div>
+                  {% endif %}
+                {% endfor %}   
+              </div>                    
+            </div>
+          </div>
+          {% endif %} 
+        
+          {% set doors = [] %}
+          {% if "door-" in log.sensor %}
+            {% if doors.append(doors | length + 1) %}{% endif %}                      
+          {% endif %}
+          {% set counter = doors | length %}
+          {% if doors | length > 0 %}
+          <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12 m-0 p-0 px-2 mb-2">
+            <div class="card">
+              <div class="{% if counter <= 1 %}quarter-unit{% elif 1 < counter <= 4 %}third-unit{% else %}half-unit{% endif %}">
+                <dtitle>door</dtitle>
+	      		    <hr class="mb-2">
+                {% for log in sensor_logs %}
+                  {% set doors = [] %}
+                  {% if "door-" in log.sensor %}
+                    {% if doors.append(doors | length + 1) %}{% endif %}
+                    {% set idx = log.log_item | length -1 %}  
+                    {% set status = log.log_item[idx]['value'] | int %}                        
+                    <div class="d-flex">
+                      <div class="pl-2"><a href="{{frappe.get_url()}}:8080/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }}</small></a></div>
+                      <div class="door my-0 py-0 mb-1 ml-auto">
+                        <input type="radio" class="switch-input" name="door{{loop.index}}" value="on" id="door{{loop.index}}_on" onclick="javascript:switchOn('{{log.sensor}}','{{sensor_doc[0].relay_pin}}','{{sensor_doc[0].info_pin}}');" {%if status %}checked=""{% endif %}>
+					              <label for="door{{loop.index}}_on" class="switch-label switch-label-off">on</label>
+					              <input type="radio" class="switch-input" name="door{{loop.index}}" value="off" id="door{{loop.index}}_off" onclick="javascript:switchOff('{{log.sensor}}','{{sensor_doc[0].relay_pin}}','{{sensor_doc[0].info_pin}}');" {%if not status %}checked=""{% endif %}>
+					              <label for="door{{loop.index}}_off" class="switch-label switch-label-on pr-1">off</label>
+					              <span class="switch-selection"></span>
+				              </div>
+                    </div>
+                  {% endif %}
+                {% endfor %}   
+              </div>                    
+            </div>
+          </div>
+          {% endif %} 
+        
+          {% set windows = [] %}
+          {% if "window-" in log.sensor %}
+            {% if windows.append(windows | length + 1) %}{% endif %}                      
+          {% endif %}
+          {% set counter = windows | length %}
+          {% if windows | length > 0 %}
+          <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12 m-0 p-0 px-2 mb-2">
+            <div class="card">
+              <div class="{% if counter <= 1 %}quarter-unit{% elif 1 < counter <= 4 %}third-unit{% else %}half-unit{% endif %}">
+                <dtitle>window</dtitle>
+	      		    <hr class="mb-2">
+                {% for log in sensor_logs %}
+                  {% set windows = [] %}
+                  {% if "window-" in log.sensor %}
+                    {% if windows.append(windows | length + 1) %}{% endif %}
+                    {% set idx = log.log_item | length -1 %}  
+                    {% set status = log.log_item[idx]['value'] | int %}                        
+                    <div class="d-flex">
+                      <div class="pl-2"><a href="{{frappe.get_url()}}:8080/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }}</small></a></div>
+                      <div class="window my-0 py-0 mb-1 ml-auto">
+                        <input type="radio" class="switch-input" name="window{{loop.index}}" value="on" id="window{{loop.index}}_on" onclick="javascript:switchOn('{{log.sensor}}','{{sensor_doc[0].relay_pin}}','{{sensor_doc[0].info_pin}}');" {%if status %}checked=""{% endif %}>
+					              <label for="window{{loop.index}}_on" class="switch-label switch-label-off">on</label>
+					              <input type="radio" class="switch-input" name="window{{loop.index}}" value="off" id="window{{loop.index}}_off" onclick="javascript:switchOff('{{log.sensor}}','{{sensor_doc[0].relay_pin}}','{{sensor_doc[0].info_pin}}');" {%if not status %}checked=""{% endif %}>
+					              <label for="window{{loop.index}}_off" class="switch-label switch-label-on pr-1">off</label>
+					              <span class="switch-selection"></span>
+				              </div>
+                    </div>
+                  {% endif %}
+                {% endfor %}   
+              </div>                    
+            </div>
+          </div>
+          {% endif %} 
+        
+          {% set cameras = [] %}
+          {% if "camera-" in log.sensor %}
+            {% if cameras.append(cameras | length + 1) %}{% endif %}                      
+          {% endif %}
+          {% set counter = cameras | length %}
+          {% if cameras | length > 0 %}
+          <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12 m-0 p-0 px-2 mb-2">
+            <div class="card">
+              <div class="{% if counter <= 1 %}quarter-unit{% elif 1 < counter <= 4 %}third-unit{% else %}half-unit{% endif %}">
+                <dtitle>camera</dtitle>
+	      		    <hr class="mb-2">
+                {% for log in sensor_logs %}
+                  {% set cameras = [] %}
+                  {% if "camera-" in log.sensor %}
+                    {% if cameras.append(cameras | length + 1) %}{% endif %}
+                    {% set idx = log.log_item | length -1 %}  
+                    {% set status = log.log_item[idx]['value'] | int %}                        
+                    <div class="d-flex">
+                      <div class="pl-2"><a href="{{frappe.get_url()}}:8080/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }}</small></a></div>
+                      <div class="camera my-0 py-0 mb-1 ml-auto">
+                        <input type="radio" class="switch-input" name="camera{{loop.index}}" value="on" id="camera{{loop.index}}_on" onclick="javascript:switchOn('{{log.sensor}}','{{sensor_doc[0].relay_pin}}','{{sensor_doc[0].info_pin}}');" {%if status %}checked=""{% endif %}>
+					              <label for="camera{{loop.index}}_on" class="switch-label switch-label-off">on</label>
+					              <input type="radio" class="switch-input" name="camera{{loop.index}}" value="off" id="camera{{loop.index}}_off" onclick="javascript:switchOff('{{log.sensor}}','{{sensor_doc[0].relay_pin}}','{{sensor_doc[0].info_pin}}');" {%if not status %}checked=""{% endif %}>
+					              <label for="camera{{loop.index}}_off" class="switch-label switch-label-on pr-1">off</label>
+					              <span class="switch-selection"></span>
+				              </div>
+                    </div>
+                  {% endif %}
+                {% endfor %}   
+              </div>                    
+            </div>
+          </div>
+          {% endif %} 
+        
+          {% set alarms = [] %}
+          {% if "alarm-" in log.sensor %}
+            {% if alarms.append(alarms | length + 1) %}{% endif %}                      
+          {% endif %}
+          {% set counter = alarms | length %}
+          {% if alarms | length > 0 %}
+          <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12 m-0 p-0 px-2 mb-2">
+            <div class="card">
+              <div class="{% if counter <= 1 %}quarter-unit{% elif 1 < counter <= 4 %}third-unit{% else %}half-unit{% endif %}">
+                <dtitle>alarm</dtitle>
+	      		    <hr class="mb-2">
+                {% for log in sensor_logs %}
+                  {% set alarms = [] %}
+                  {% if "alarm-" in log.sensor %}
+                    {% if alarms.append(alarms | length + 1) %}{% endif %}
+                    {% set idx = log.log_item | length -1 %}  
+                    {% set status = log.log_item[idx]['value'] | int %}                        
+                    <div class="d-flex">
+                      <div class="pl-2"><a href="{{frappe.get_url()}}:8080/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }}</small></a></div>
+                      <div class="alarm my-0 py-0 mb-1 ml-auto">
+                        <input type="radio" class="switch-input" name="alarm{{loop.index}}" value="on" id="alarm{{loop.index}}_on" onclick="javascript:switchOn('{{log.sensor}}','{{sensor_doc[0].relay_pin}}','{{sensor_doc[0].info_pin}}');" {%if status %}checked=""{% endif %}>
+					              <label for="alarm{{loop.index}}_on" class="switch-label switch-label-off">on</label>
+					              <input type="radio" class="switch-input" name="alarm{{loop.index}}" value="off" id="alarm{{loop.index}}_off" onclick="javascript:switchOff('{{log.sensor}}','{{sensor_doc[0].relay_pin}}','{{sensor_doc[0].info_pin}}');" {%if not status %}checked=""{% endif %}>
+					              <label for="alarm{{loop.index}}_off" class="switch-label switch-label-on pr-1">off</label>
+					              <span class="switch-selection"></span>
+				              </div>
+                    </div>
+                  {% endif %}
+                {% endfor %}   
+              </div>                    
+            </div>
+          </div>
+          {% endif %} 
+        {% endfor %}  
         </div>  
         <div class="card-columns">
+          <!-- Daily Notifications -->
           <div class="card m-0 p-0 px-1 mb-2">
-            <div class="twothird-unit">
-              <blockquote class="blockquote mb-0 card-body">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                <footer class="blockquote-footer">
-                  <small class="text-muted">
-                    Someone famous in <cite title="Source Title">Source Title</cite>
-                  </small>
-                </footer>
-              </blockquote>
-            </div>
-          </div>
-          <div class="card m-0 p-0 px-1 mb-2">
-            <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
             <div class="third-unit">
-              <h5 class="card-title">Card title</h5>
-              <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-              <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+      		    <dtitle>Daily Notifications</dtitle>
+	      		  <hr>
+              <div class="accordion" id="alert_log">
+                {% for val in alert_logs %}
+                {% set idx = val.alert_item | length - 1 %}
+                <div class="accordion-group">
+                  <div class="accordion-heading">
+                    <a class="accordion-toggle m-2" data-toggle="collapse" data-parent="#alert_log" href="#collapse{{ loop.index }}">
+                         
+                     {% if val.alert_item[idx].to_time == None %}
+                       <span aria-hidden="true" class="li_eye text-danger"></span> <small class="text-danger"></small>
+                     {% else %}
+                         <span aria-hidden="true" class="li_lock text-success"></span> <small class="text-success"></small> 
+                     {% endif %}
+                     {{ val.name }}
+                    <a>
+                  </div>
+                  <div id="collapse{{ loop.index }}" class="accordion-body collapse in">
+                    <div class="accordion-inner">
+                    {% if val.alert_item[idx].to_time == None %}
+                       <a href="{{ frappe.get_url() }}:8080/desk#List/Alert Log?name={{val.name}}" target="_blank">Alert</a> <small>{{val.alert_item[idx].variable}} @{{val.alert_item[idx].value}}</small> from <strong>{{ frappe.format(val.alert_item[idx].from_time, {'fieldtype': 'Time'})}}</strong>
+                    {% else %}
+                       <a href="{{ frappe.get_url() }}:8080/desk#List/Alert Log?name={{val.name}}" target="_blank">Alert</a> <small>{{val.alert_item[idx].variable}}</small> at <strong>{{ frappe.format(val.alert_item[idx].to_time, {'fieldtype': 'Time'})}}</strong>
+                    {% endif %}  
+                    </div>   
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
             </div>
           </div>
-          <div class="card m-0 p-0 px-1 mb-2">
-            <div class="twothird-unit bg-primary text-white text-center">
-              <blockquote class="blockquote mb-0">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat.</p>
-                <footer class="blockquote-footer">
-                  <small>
-                  Someone famous in <cite title="Source Title">Source Title</cite>
-                  </small>
-                </footer>
-              </blockquote>
-            </div>  
-          </div>
-          <div class="card text-center m-0 p-0 px-1 mb-2">
-            <div class="half-unit">
-              <h5 class="card-title">Card title</h5>
-              <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-              <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-            </div>
-          </div>
-          <div class="card m-0 p-0 px-1 mb-2 text-right">
-            <div class="half-unit">
-              <blockquote class="blockquote mb-0">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                <footer class="blockquote-footer">
-                  <small class="text-muted">
-                    Someone famous in <cite title="Source Title">Source Title</cite>
-                  </small>
-                </footer>
-              </blockquote>
-            </div>  
-          </div>
-          <div class="card m-0 p-0 px-1 mb-2">
+          <!-- Group of sensors -->
+          <div class="card mb-2">
             <div class="twothird-unit">
-              <h5 class="card-title">Card title</h5>
-              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-              <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+              <dtitle>Data</dtitle>
+	            <hr class="mb-2">
+              <table id="sensors" class="display compact cell-border responsive nowrap" width="100%" cellspacing="0" style="font-size: 10pt; z-index: 1; position: relative;">
+                <thead>
+                  <tr>
+                    <th>pos</th>
+                    <th>chart</th>
+                    <th>sensor</th>
+                    <th>read</th>
+                    <th>lastmeas</th>
+                  </tr>
+                </thead>
+                <tbody>  
+                {% for log in sensor_logs %}
+                  {% set item_count = log.log_item | length -1 %}
+                  {% set strpay = json.loads(log.log_item[item_count].payload) %}
+                  <tr>
+                    <td style="color: #b2c831;">{{ log.log_item[item_count].idx }}</small></td>
+                    {% for chart in datasets %}
+                      {% if log.sensor == chart.sensor %}                     
+                        <td class="text-center">
+                          <a href="#" class="btn btn-info btn-xs m-0 p-0" style="border-radius: 3px;" width="45px" type="button" onclick="get_chart({{ chart }});return(false);">
+                            <i class="fas fa-chart-bar fa-inverse mx-1"></i>
+                          </a>
+                        </td>
+                      {% endif %}
+                    {% endfor %}
+                    <td>{{ log.sensor }}</td>
+                    <td>{{ '%0.1f'| format(log.log_item[item_count].value | float)  }} <small>{{ log.log_item[item_count].uom }}</small></td>
+                    <td>{{ strpay.payload.datadate }}</td>  
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>  
             </div>
           </div>
+          <!-- Table of sensors -->
+          <div class="card m-0 p-0 px-1 mb-2">
+            <div class="dash-unit">
+              <dtitle>Chart</dtitle>
+	      	    <hr>
+      		    <div class="sensor-chart m-2 mb-0" id="sensor_chart"></div>   
+            </div>
+          </div>
+          <!-- Current Weather -->
+          <div class="card m-0 p-0 px-1 mb-2">
+            <div class="dash-unit">
+	    		    <dtitle>Current Weather</dtitle>
+	      		  <hr class="pb-1 mb-1">
+				      <i class="wi wi-owm-{{weather.current.weather.0.id}} pull-right info-user mr-3" style="font-size: 54px;"></i>
+				      <p class="ml-2">
+                <i class="info-user li_location"></i> {{ weather.lat }}<sub>lat</sub> {{ weather.lon }}<sub>lon</sub>
+                <br>
+                <i class="info-user li_clock"></i> {{ timestamp_to_date(weather.current.dt) }}
+              </p>
+              <div class="weather-text">
+				        <p class="p-0 m-0 mr-2 pull-right">
+				          <b class="text-warning">{{ weather.current.weather.0.description }}</b><br>
+                    feels like {{ weather.current.feels_like }} &deg;C 	
+				        </p>
+				        <p class="p-2 m-0 ml-2">
+				          <i class="info-user fa fa-thermometer"></i>
+				          Temp {{ weather.current.temp }} &deg;C
+					        <br>
+				          <i class="info-user fa fa-tint"></i>
+                  Humidity {{ weather.current.humidity }} %
+				          <br>
+					        <i class="info-user fas fa-weight"></i>
+                  P<small>sea level</small>  {{ weather.current.pressure }} hPa
+					        <br>
+				          <i class="info-user far fa-sun"></i>
+                  Sunrise {{ timestamp_to_date(weather.current.sunrise) }}
+                  <br> 				  
+				          <i class="info-user far fa-moon"></i>
+                  Sunset {{ timestamp_to_date(weather.current.sunset) }}
+                  <br>
+				          <i class="info-user wi wi-wind towards-{{ weather.current.wind_deg }}-deg"></i>
+					        Wind {{ weather.current.wind_speed }} m/s
+					        <br>
+					        <i class="info-user fas fa-cloud-sun"></i>
+                  Clouds {{ weather.current.clouds }} %
+                  <br>
+					        {% if weather.current.rain %}
+					        <i class="info-user fa fa-bath"></i>
+                  Rain {{ weather.current.rain['1h'] }} mm/h
+					        {% endif %}  
+				        </p>
+				        <br>
+              </div>
+              {% if weather.alerts %} 				
+				      <dtitle>Weather Alerts</dtitle>
+				      <hr class="pb-1 mb-1">
+				      <div class="accordion" id="weather_alert">
+                {% for alert in weather.alerts %}
+                <div class="accordion-group">
+                  <div class="accordion-heading">
+                    <a class="accordion-toggle m-2" data-toggle="collapse" data-parent="#weather_alert" href="#weather{{ loop.index }}">
+                      <span aria-hidden="true" class="li_eye"></span>
+                      {{ alert.event }}
+                    </a>
+                  </div>
+                  <div id="weather{{ loop.index }}" class="accordion-body collapse in">
+                    <div class="accordion-inner">
+					            <p class="p-0 m-0 ml-2">
+					              <small>By {{ alert.sender_name }}<br>
+                         From {{ timestamp_to_date(alert.start) }} to {{ timestamp_to_date(alert.end) }}<br>
+						               {{ alert.description }}
+						            </small>
+                      </p> 						 
+                    </div>   
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+				      {% else %}
+				      <div class="cont">
+				        <h6>No Weather Alert</h6>
+				      </div>
+				      {% endif %}
+			      </div> 
+          </div> 
         </div>
         {% endif %}
       </div>
@@ -463,48 +744,37 @@
         }
       }
     };
-    if (sensor.indexOf('cpu-') > -1) {
       const data = {
 	      labels: labels,
 	      datasets: [
           {
             name: datasets[0]['main_read'],
-            chartType: 'line',
+            type: 'bar',
             values: datasets[0]['values'],  
-          },
-          {
-            name: datasets[1]['second_read'],
-            chartType: 'line',
-            values: datasets[1]['values'],  
-          },
-          {
-            name: datasets[2]['third_read'],
-            chartType: 'line',
-            values: datasets[2]['values'],  
-          },
+          }
         ],
         yMarkers: [
           {
-            label: 'Average T',
+            label: 'Average',
             value: saverage,
             options: { labelPos: 'left' } // default: 'right'
           }
         ],
         yRegions: [
           {
-            label: "Min-Max T Area",
+            label: "Min-Max Area",
             start: smin,
             end: smax,
             options: { labelPos: 'right' }
           }
         ],
 	    };
-      const cpu_chart = new frappe.Chart( '#cpu_chart', {
+      const sensor_chart = new frappe.Chart( '#sensor_chart', {
         data: data,   
         title: sensor,
-	      type: 'axis-mixed', // or 'bar', 'line', 'pie', 'percentage'
-	      height: 270,
-	      colors: ['blue', 'red', 'green'],
+	      type: 'bar', // or 'bar', 'line', 'pie', 'percentage'
+	      height: 360,
+	      colors: ['blue'],
 	      tooltipOptions: {
 		      formatTooltipX: d => (d + '').toUpperCase(),
 		      formatTooltipY: d => d,
@@ -514,7 +784,7 @@
           hideDots: 1, // default: 0
         },
       });  
-    };    
+        
   };
   
   //Function for defining the dataTable

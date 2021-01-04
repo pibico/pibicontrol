@@ -17,6 +17,7 @@
   "dashboard_view",
   "notes",
   "col_break_1",
+  "info_group",
   "lastseen",
   "disabled",
   "alerts_active",
@@ -72,6 +73,9 @@
   {
    "fieldname": "sensor_shortcut",
    "fieldtype": "Data",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Sensor Shortcut",
    "unique": 1
   },
@@ -114,6 +118,9 @@
   {
    "fieldname": "sensor_group",
    "fieldtype": "Link",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Sensor Group",
    "options": "Sensor Group"
   },
@@ -235,9 +242,14 @@
    "fieldname": "trigger_pin",
    "fieldtype": "Int",
    "label": "Trigger Pin"
+  },
+  {
+   "fieldname": "info_group",
+   "fieldtype": "Data",
+   "label": "Info Group"
   }
  ],
- "modified": "2021-01-02 18:35:00.410135",
+ "modified": "2021-01-04 15:38:35.797584",
  "modified_by": "Administrator",
  "module": "Pibicontrol",
  "name": "Sensor",
