@@ -581,7 +581,7 @@
     if ( colIdx > 1) {
       var rowPosition = oTable.fnGetPosition( this ); //row position of record in table
       var sensor = oTable.fnGetData(rowPosition,2);
-      window.open("{{ frappe.get_url() }}:8080/desk#List/Sensor Log?sensor=" + sensor, "_self")
+      window.open("{{ frappe.get_url() }}:8080/desk#Form/Sensor/" + sensor, "_self")
     }
   });
   </script>
