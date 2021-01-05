@@ -76,6 +76,13 @@ class SensorLog(Document):
               (active_alert, start) = get_alert(ts.variable, doc.name)
               env_humid = float(payload['payload']['reading']['val_humid'])
               check_threshold(doc, ts, env_humid, start, active_alert)
+          elif stock.sensor_type == "ut":
+            # Secondary humid reading
+            env_vol = ''
+            if ts.variable == "env_vol":
+              (active_alert, start) = get_alert(ts.variable, doc.name)
+              env_vol = float(payload['payload']['reading']['val_vol'])
+              check_threshold(doc, ts, env_vol, start, active_alert)
 
 def check_threshold(doc, ts, var, start, active_alert):
   if float(var) >= float(ts.upper_value) and start == True:

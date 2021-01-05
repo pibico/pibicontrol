@@ -70,6 +70,9 @@ def get_chart_dataset (doc):
       elif "th-" in data.sensor:
         second_var = "env_humid"
         second_uom = "%"
+      elif "ut-" in data.sensor:
+        second_var = "env_vol"
+        second_uom = "l"
       for item in data.log_item:
         main_read.append(item.value)
         label.append(item.datadate.strftime(CHART_FORMAT))
@@ -78,7 +81,9 @@ def get_chart_dataset (doc):
           second_read.append(payload['payload']['mem']['mem_pct']) 
           third_read.append(payload['payload']['disk']['disk_pct'])
         elif "th-" in data.sensor:
-          second_read.append(payload['payload']['reading']['val_humid'])            
+          second_read.append(payload['payload']['reading']['val_humid'])  
+        elif "ut-" in data.sensor:
+          second_read.append(payload['payload']['reading']['val_vol'])               
     
   return {
     'label': label,
