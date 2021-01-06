@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) 2020, PibiCo and contributors
 # For license information, please see license.txt
-
 from __future__ import unicode_literals
 import frappe
 import datetime, json, subprocess
@@ -15,6 +14,7 @@ from pibicontrol.pibicontrol.doctype.mqtt_settings.mqtt_settings import send_mqt
 import paho.mqtt.client as mqtt
 import os, ssl, urllib, time, json
 from frappe.utils.password import get_decrypted_password
+from frappe.utils import get_files_path
 
 DATE_FORMAT = "%Y-%m-%d"
 TIME_FORMAT = "%H:%M:%S.%f"
@@ -260,3 +260,202 @@ def ping_devices_via_mqtt():
           mng_alert(device, 'last_seen', 0, start, active_alert)
       elif time_minutes > 30:
         send_mqtt(hostname, cstr(strboot))
+
+def create_xls_report():
+  ## Import needed libraries
+  ## If not install pathlib sudo apt-get install python-pathlib or sudo pip3 install pathlib
+  from pathlib import Path
+  ## If not install openpyxl sudo pip3 install openpyxl
+  import openpyxl
+  from openpyxl.styles import Font
+  from openpyxl.styles.colors import Color
+  import shutil
+  ## If not installed sudo pip3 install tzlocal
+  from tzlocal import get_localzone
+  from time import gmtime, strftime
+  import urllib3
+  ## if not install sudo pip3 install pyocclient
+  import owncloud
+  
+  ## Calculate actual system date
+  otoday = datetime.datetime.today()
+  oyear = otoday.strftime("%Y")
+  omonth = otoday.strftime("%m")
+  oday = int(otoday.strftime("%d"))
+  ohour = int(otoday.strftime("%H"))
+  ominutes = int(otoday.strftime("%M"))
+  
+  ## Get yesterday's date
+  DAY = datetime.timedelta(1)
+  local_tz = get_localzone()   # get local timezone
+  now = datetime.datetime.now(local_tz) # get timezone-aware datetime object
+  day_ago = local_tz.normalize(now - DAY) # exactly 24 hours ago, time may differ
+  naive = now.replace(tzinfo=None) - DAY # same time
+  yesterday = local_tz.localize(naive, is_dst=None) # but elapsed hours may differ
+  yyear = yesterday.strftime("%Y")
+  ymonth = yesterday.strftime("%m")
+  yday = int(yesterday.strftime("%d"))
+  ## Set yesterday and actual day
+  daybefore = yyear + '-' + ymonth + '-' + yesterday.strftime("%d")
+  current = oyear + '-' + omonth + '-' + otoday.strftime("%d")
+  #Monthly report template
+  dir_src = ("/home/erpnext/erpnext-prd/sites/" + frappe.get_site_path().replace("./","") + "/private/files/")
+  report_template = frappe.get_doc(
+    doctype = 'File',
+    file_name = 'Pharmacy_Report_v0.xlsx')
+  template_file = report_template.file_name
+  src_file = dir_src + template_file
+  ## Get all sensors from group PibiFarma, not cpus and grouped by client
+  pharma_sensors = frappe.db.sql("""
+    SELECT * 
+    FROM `tabSensor` 
+    WHERE sensor_group=%s AND docstatus<2 AND NOT sensor_shortcut LIKE %s AND NOT disabled
+  """,("PibiFarma","cpu-%"), True)
+  ## Get unique values for clients
+  clients = set()
+  for val in pharma_sensors:
+    clients.add(val.client)
+  clients = list(clients)
+  for user in clients:
+    client = frappe.get_doc("Client", user)
+    organization = client.organization
+    if not organization:
+      organization = ''
+    ## Check whether monthly report exists and create
+    if ymonth != omonth:
+      omonth = ymonth
+    if yyear != oyear:
+      oyear = yyear
+    ofile = str(oyear) + str(omonth) + '_farmacia_' + client.user + '.xlsx'
+    dst_file = dir_src + "reports/" + ofile
+    oreport = Path(dst_file)
+    if oreport.exists():
+      ## Filepath exists
+      isFile = True
+    else:
+      ## File create
+      shutil.copy(src_file, dst_file)
+    ## Loads existing or recently created monthly workbook 
+    wbook = openpyxl.load_workbook(dst_file)
+    sheet = wbook['Farmacia']
+    ## Writes Organization Name on header
+    sheet.cell(row= 2, column=4).value = str(organization)
+    sheet.cell(row= 2, column= 54).value = str(omonth)
+    sheet.cell(row= 2, column= 62).value = str(oyear)
+    ## Select Fridges and Zones from Sensors property of Client
+    selectFridge = []
+    selectZone = []
+    for sensor in pharma_sensors:
+      if "temp-" in sensor.sensor_shortcut and client.user == sensor.client:
+        selectFridge.append(sensor)
+      if "th-" in sensor.sensor_shortcut and client.user == sensor.client:
+        selectZone.append(sensor)
+    ## Write Values for only 1 fridge
+    for nFridges, fridge in enumerate(selectFridge, start=1): 
+      if nFridges == 1:
+        ## Select Sensor Log for last day provided that script is running at 0:00 current day
+        sensor_log = frappe.db.sql("""
+          SELECT *
+          FROM `tabSensor Log`
+          WHERE sensor=%s AND docstatus<2 AND date=%s
+          LIMIT 1
+        """, (fridge.sensor_shortcut, daybefore), True)
+        ## Select Item Log for Sensor on Yesterday
+        log = frappe.db.sql("""
+          SELECT *
+          FROM `tabLog Item`
+          WHERE parent=%s
+        """, sensor_log[0].name, True)
+        maximo = sensor_log[0]['max']
+        minimo = sensor_log[0]['min']
+        count = sensor_log[0].points
+        location = fridge.room
+        fridgeserial = fridge.serial   
+        ## Select last data from a range in morning and another one for the afternoon
+        for row, item in enumerate(log, start=0):
+          if datetime.datetime.strptime(daybefore + " 06:00:00.00", '%Y-%m-%d %H:%M:%S.%f') < item.datadate < datetime.datetime.strptime(daybefore + " 12:00:00.00", '%Y-%m-%d %H:%M:%S.%f'):
+            datamorning = item
+          elif datetime.datetime.strptime(daybefore + " 17:00:00.00", '%Y-%m-%d %H:%M:%S.%f') < item.datadate < datetime.datetime.strptime(daybefore + " 23:00:00.00", '%Y-%m-%d %H:%M:%S.%f'):
+            datafternoon = item    
+        ## Write data to Sheet
+        #print("M:" + str(datamorning.value) + " T:" + str(datafternoon.value))
+        sheet.cell(row= 6, column= 2).value = location + " (" + str(fridgeserial) + ")"
+        #morning data
+        if datamorning and -2 < float(datamorning.value) < 12:
+          sheet.cell(row = 19 - round(float(datamorning.value),0) , column = yday*2+3).value = "x"
+        #afternoon data
+        if datafternoon and -2 < float(datafternoon.value) < 12:
+          sheet.cell(row = 19 - round(float(datafternoon.value),0) , column = yday*2+4).value = "y"
+        #maximum reading
+        if maximo != -float('inf'):
+          sheet.cell(row = 22 , column = yday*2+3).value = str(int(round(maximo,0)))
+        if float(maximo) > 8:
+          sheet.cell(row = 22 , column = yday*2+3).font = Font(color = "FF0000")
+        #minimum reading
+        if minimo != float('inf'):
+          sheet.cell(row = 23 , column = yday*2+3).value = str(int(round(minimo,0)))
+        if float(minimo)<2:
+          sheet.cell(row = 23 , column = yday*2+3).font = Font(color = "FF0000")
+        #print("fridge from " + organization + " (" + fridgeserial + ") Max:" + str(maximo) + " Min:" + str(minimo) + " count(" + str(count) + ") on " + daybefore)
+    ## Write Values for zones
+    for nZones, zone in enumerate(selectZone, start=1):     
+      ## Select Sensor Log for last day provided that script is running at 0:00 current day
+      sensor_log = frappe.db.sql("""
+        SELECT *
+        FROM `tabSensor Log`
+        WHERE sensor=%s AND docstatus<2 AND date=%s
+        LIMIT 1
+      """, (zone.sensor_shortcut, daybefore), True)
+      ## Select Item Log for Sensor on Yesterday
+      log = frappe.db.sql("""
+        SELECT *
+        FROM `tabLog Item`
+        WHERE parent=%s
+      """, sensor_log[0].name, True)
+      maximo = sensor_log[0]['max']
+      minimo = sensor_log[0]['min']
+      count = sensor_log[0].points
+      locarea = zone.room
+      zoneserial = zone.serial
+      ## Write header for zone sensor
+      sheet.cell(row= 24 + (nZones - 1)*4, column= 2).value = locarea + " (" + str(zoneserial) + ")"
+      ## Calculate humidity values from payload
+      counter = 0
+      avgval = 0
+      humidity = 0
+      for item in log:
+        counter += 1
+        valhumid = float((json.loads(item.payload)['payload']['reading']['val_humid']))
+        avgval = avgval + valhumid
+      if counter > 0:
+        humidity = round(avgval/counter,1)  
+      ## Write values to cells
+      ## maximum reading
+      if maximo != -float('inf'):
+        sheet.cell(row = 25 + (nZones - 1)*4, column = yday*2 + 3).value = str(int(round(maximo,0)))
+      if float(maximo)>25:
+        sheet.cell(row = 25 + (nZones - 1)*4, column = yday*2 + 3).font = Font(color = "FF0000")
+      ## minimum reading
+      if minimo != float('inf'):
+        sheet.cell(row = 26 + (nZones - 1)*4 , column = yday*2 + 3).value = str(int(round(minimo,0)))
+      if float(minimo)<12:
+        sheet.cell(row = 26 + (nZones - 1)*4, column = yday*2 + 3).font = Font(color = "FF0000")
+      ## humidity reading
+        sheet.cell(row = 27 + (nZones - 1)*4 , column = yday*2 + 3).value = str(int(round(humidity,0)))
+      if float(humidity) > 65:
+        sheet.cell(row = 27 + (nZones - 1)*4, column = yday*2 + 3).font = Font(color = "FF0000")
+      #print("zone from " + organization + " (" + zoneserial + ") Max:" + str(maximo) + " Min:" + str(minimo) + " H:" + str(humidity) + " count(" + str(count) + ") on " + daybefore)
+            
+    #Close workbook and upload to cloud
+    wbook.save(dst_file)
+    #Once saved the workbook upload to nextcloud
+    #Better substitute by recommendations in https://urllib3.readthedocs.io/en/latest/advanced-usage.html#ssl-warnings
+    urllib3.disable_warnings()
+    path = ('/Informes/' + oyear + '/' + ofile)
+    remotepath = path.encode("ascii", "ignore").decode("ascii").strip()
+    nc_server = client.cloud_gateway
+    nc_user = client.cloud_user
+    nc_secret = get_decrypted_password("Client", client.user, "cloud_secret", False)
+    nextcloud = owncloud.Client(nc_server)
+    nextcloud.login(nc_user, nc_secret)
+    nextcloud.put_file(remotepath, dst_file)

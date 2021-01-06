@@ -100,7 +100,10 @@ scheduler_events = {
  	"cron": {
     "*/5 * * * *": [
  		  "pibicontrol.pibicontrol.api.ping_devices_via_mqtt"
- 	  ]
+ 	  ],
+    "* 1 * * *": [
+      "pibicontrol.pibicontrol.api.create_xls_report"
+    ]  
   }
 # 	"daily": [
 # 		"pibicontrol.tasks.daily"
