@@ -126,13 +126,17 @@ def mng_alert(sensor, variable, value, start, alert_log):
     if start:
       if variable == "last_seen":
         msg = sensor.name + " offline. Please check!"
+      elif variable == "offline":
+        msg = sensor.name + " has some web service " + variable + ". Please check!"
       elif variable == "status":
-          msg = sensor.name + ". Sensor has been switched on. Please check!"
+        msg = sensor.name + ". Sensor has been switched on. Please check!"
       else:
         msg = sensor.name + " detected abnormal value " + str(value) + " in " + variable + ". Please check!"
     else:
       if variable == "last_seen":
         msg = sensor.name + " again online. Rest easy!"
+      elif variable == "offline":
+        msg = sensor.name + " has web services again online. Rest easy!"
       elif variable == "status":
         msg = sensor.name + ". Sensor has been switched off. Rest easy!"
       else:
@@ -446,10 +450,10 @@ def create_xls_report():
         sheet.cell(row = 27 + (nZones - 1)*4, column = yday*2 + 3).font = Font(color = "FF0000")
       #print("zone from " + organization + " (" + zoneserial + ") Max:" + str(maximo) + " Min:" + str(minimo) + " H:" + str(humidity) + " count(" + str(count) + ") on " + daybefore)
             
-    #Close workbook and upload to cloud
+    ## Close workbook and upload to cloud
     wbook.save(dst_file)
-    #Once saved the workbook upload to nextcloud
-    #Better substitute by recommendations in https://urllib3.readthedocs.io/en/latest/advanced-usage.html#ssl-warnings
+    ## Once saved the workbook upload to nextcloud
+    ## Better substitute by recommendations in https://urllib3.readthedocs.io/en/latest/advanced-usage.html     ## ssl-warnings
     urllib3.disable_warnings()
     path = ('/Informes/' + oyear + '/' + ofile)
     remotepath = path.encode("ascii", "ignore").decode("ascii").strip()
@@ -459,3 +463,55 @@ def create_xls_report():
     nextcloud = owncloud.Client(nc_server)
     nextcloud.login(nc_user, nc_secret)
     nextcloud.put_file(remotepath, dst_file)
+
+def check_web_services():
+  ## In order to remove error on self-signed-certificates or overpassed
+  ssl._create_default_https_context = ssl._create_unverified_context
+  ## Pinging Function
+  def pinger_urllib(host):
+    try:
+      start_time = time.time()
+      urllib.request.urlopen(host).read()
+      return (time.time() - start_time) * 1000.0
+    except:
+      return float('inf')
+  ## Task Main Function    
+  def task(m, device):
+    delay = float(pinger_urllib(m))
+    if delay == float('inf'):
+      ## Check if offline alert is active and send alert and detailed email
+      (active_alert, start) = get_alert("offline", device.name)
+      if start == True:
+        mng_alert(device, 'offline', 1, start, active_alert)
+        #print(m + ' from ' + device.sensor_shortcut + ' is offline')
+        email_list = []
+        alert_email = "Web Service " + m + " from " + device.sensor_shortcut + " is offline. Please check!"
+        subject = m + " Offline" 
+        email_list.append(device.client)
+        frappe.sendmail(recipients=email_list, subject=subject, message=cstr(alert_email))
+    else:
+      ## Check if offline alert is active and close
+      (active_alert, start) = get_alert("offline", device.name)
+      if start == False:
+        mng_alert(device, 'offline', 1, start, active_alert)
+        #print(m + ' from ' + device.sensor_shortcut + ' again online')
+        email_list = []
+        alert_email = "Web Service " + m + " from " + device.sensor_shortcut + " is online again. Rest Easy!"
+        subject = m + " Online Again" 
+        email_list.append(device.client)
+        frappe.sendmail(recipients=email_list, subject=subject, message=cstr(alert_email))
+    print('%-30s %-15s %5.0f [ms]' % (m, device.sensor_shortcut, delay))
+  ## Get all web services from active sensors
+  sensors = frappe.db.sql("""
+    SELECT *
+    FROM `tabSensor`
+    WHERE disabled=%s AND docstatus<2 AND NOT web_services IS %s
+    """, (0, None), True)
+  ## Ping every sensor for its web services in list  
+  for sensor in sensors:
+    if "," in sensor.web_services:
+      sensor_list = list(sensor.web_services.split(","))
+      for item in sensor_list:
+        task(item, sensor)
+    else:
+      task(sensor.web_services, sensor)
