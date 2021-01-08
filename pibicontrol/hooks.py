@@ -98,7 +98,7 @@ jenv = {
 
 scheduler_events = {
  	"cron": {
-    "*/5 * * * *": [
+    "*/6 * * * *": [
  		  "pibicontrol.pibicontrol.api.ping_devices_via_mqtt"
  	  ],
     "*/6 * * * *": [

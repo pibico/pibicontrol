@@ -28,7 +28,7 @@ class SensorLog(Document):
       stock = frappe.get_doc("Stock Item", doc.stock_item)
       ## Complete the read only attributes based on taken measures
       self.points = len(self.log_item)
-      if stock.sensor_type == "pump":
+      if stock.sensor_type == "pump" or stock.sensor_type == "pir":
         self.min = 0
         self.max = 1
         for data in self.log_item:
@@ -83,6 +83,13 @@ class SensorLog(Document):
               (active_alert, start) = get_alert(ts.variable, doc.name)
               env_vol = float(payload['payload']['reading']['val_vol'])
               check_threshold(doc, ts, env_vol, start, active_alert)
+          elif stock.sensor_type == "soil":
+            # Secondary Temp reading
+            soil_temp = ''
+            if ts.variable == "soil_temp":
+              (active_alert, start) = get_alert(ts.variable, doc.name)
+              soil_temp = float(payload['payload']['reading']['val_temp'])
+              check_threshold(doc, ts, soil_temp, start, active_alert)    
 
 def check_threshold(doc, ts, var, start, active_alert):
   if float(var) >= float(ts.upper_value) and start == True:

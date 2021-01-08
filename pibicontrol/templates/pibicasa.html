@@ -527,6 +527,21 @@
           </div>
           {% endif %} 
         {% endfor %}  
+        </div>
+        <div class="row">
+        {% for log in sensor_logs %}
+          <div class="col-xl-2 col-lg-3 col-md-3 col-sm-4 col-xs-6 m-0 p-0 px-2 mb-2">
+            <div class="card">
+              <div class="quarter-unit m-0 p-0">
+                <dtitle><small><a class="text-primary" href="{{ frappe.get_url() }}:8080/desk#Form/Sensor/{{log.sensor}}">{{ log.sensor }}</a></small></dtitle>
+	      		    <hr class="m-0 p-0">
+                {% set idx = log.log_item | length - 1 %}
+                <p class="card-text m-0 p-0 text-center"><big class="info-user text-danger">{{ log.log_item[idx].value }} </big>{{ log.log_item[idx].uom }}</p>
+                <small class="text-info" style="position: absolute; bottom: 6px; right: 12px;">{{ log.log_item[idx].datadate.strftime("%a, %d-%m-%y %H:%M") }}</small>
+              </div>
+            </div>
+          </div>  
+        {% endfor %}
         </div>  
         <div class="card-columns">
           <!-- Daily Notifications -->
@@ -580,7 +595,7 @@
                 </thead>
                 <tbody>  
                 {% for log in sensor_logs %}
-                  {% set item_count = log.log_item | length -1 %}
+                  {% set item_count = log.log_item | length - 1 %}
                   {% set strpay = json.loads(log.log_item[item_count].payload) %}
                   <tr>
                     <td style="color: #b2c831;">{{ log.log_item[item_count].idx }}</small></td>
