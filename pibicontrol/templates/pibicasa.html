@@ -546,7 +546,7 @@
         <div class="card-columns">
           <!-- Daily Notifications -->
           <div class="card m-0 p-0 px-1 mb-2">
-            <div class="third-unit">
+            <div class="half-unit">
       		    <dtitle>Daily Notifications</dtitle>
 	      		  <hr>
               <div class="accordion" id="alert_log">
@@ -619,12 +619,23 @@
           </div>
           <!-- Table of sensors -->
           <div class="card m-0 p-0 px-1 mb-2">
-            <div class="dash-unit">
+            <div class="twothird-unit">
               <dtitle>Chart</dtitle>
 	      	    <hr>
       		    <div class="sensor-chart m-2 mb-0" id="sensor_chart"></div>   
             </div>
           </div>
+          {% if customer %}
+            {% if customer[0].cam_url %}
+            <div class="card m-0 p-0 px-1 mb-2">
+              <div class="twothird-unit p-1 py-0">
+                <div class="embed-responsive embed-responsive-4by3">
+                  <iframe style="border-radius: 6px;" class="embed-responsive-item" src="{{  customer[0].cam_url }}" allowfullscreen></iframe>
+                </div>  
+              </div>
+            </div>
+            {% endif %}
+          {% endif %}
           <!-- Current Weather -->
           <div class="card m-0 p-0 px-1 mb-2">
             <div class="dash-unit">
@@ -788,8 +799,8 @@
       const sensor_chart = new frappe.Chart( '#sensor_chart', {
         data: data,   
         title: sensor,
-	      type: 'axis-mixed', // or 'bar', 'line', 'pie', 'percentage'
-	      height: 360,
+	      type: 'bar', // or 'bar', 'line', 'pie', 'percentage'
+	      height: 240,
 	      colors: ['blue', 'magenta'],
 	      tooltipOptions: {
 		      formatTooltipX: d => (d + '').toUpperCase(),

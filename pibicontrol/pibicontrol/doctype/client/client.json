@@ -15,6 +15,7 @@
   "sec_break_0",
   "cloud_gateway",
   "cloud_user",
+  "cam_url",
   "col_break_2",
   "mobile_no",
   "cloud_secret"
@@ -89,9 +90,14 @@
    "fieldname": "cloud_secret",
    "fieldtype": "Password",
    "label": "Cloud Secret"
+  },
+  {
+   "fieldname": "cam_url",
+   "fieldtype": "Data",
+   "label": "Cam URL"
   }
  ],
- "modified": "2021-01-06 12:47:32.324549",
+ "modified": "2021-01-09 20:21:54.747703",
  "modified_by": "Administrator",
  "module": "Pibicontrol",
  "name": "Client",
