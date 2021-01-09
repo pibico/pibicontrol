@@ -132,22 +132,22 @@ def mng_alert(sensor, variable, value, start, alert_log):
       if variable == "last_seen":
         msg = sensor.name + " offline. Please check!"
       elif variable == "offline":
-        msg = sensor.name + " has some web service " + variable + ". Please check!"
+        msg = sensor.name + " web service " + variable + ". Please check!"
       elif variable == "status":
         msg = sensor.name + ". Sensor has been switched on. Please check!"
       elif variable == "pir_alarm":
-        msg = sensor.name + ". Sensor has detected presence. Please check!"
+        msg = sensor.name + ". Sensor detected presence. Please check!"
       else:
         msg = sensor.name + " detected abnormal value " + str(value) + " in " + variable + ". Please check!"
     else:
       if variable == "last_seen":
         msg = sensor.name + " again online. Rest easy!"
       elif variable == "offline":
-        msg = sensor.name + " has web services again online. Rest easy!"
+        msg = sensor.name + " web services again online. Rest easy!"
       elif variable == "status":
         msg = sensor.name + ". Sensor has been switched off. Rest easy!"
       elif variable == "pir_alarm":
-        msg = sensor.name + ". Presence removed. Rest easy!"
+        msg = sensor.name + ". Normality restored. Rest easy!"
       else:
         msg = sensor.name + " recovered normal value " + str(value) + " in " + variable + ". Rest easy!"
     ## Check Active Channels and prepare a thread to alert

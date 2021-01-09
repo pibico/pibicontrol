@@ -101,7 +101,7 @@ scheduler_events = {
     "*/6 * * * *": [
  		  "pibicontrol.pibicontrol.api.ping_devices_via_mqtt"
  	  ],
-    "*/6 * * * *": [
+    "*/12 * * * *": [
  		  "pibicontrol.pibicontrol.api.check_web_services"
  	  ],  
     "* 1 * * *": [
