@@ -256,7 +256,7 @@
           <!-- Third Row -->
           <div class="col-lg-6 col-md-6 p-2 m-0">
             <div class="card mb-2">
-              <div class="twothird-unit">
+              <div class="dash-unit">
                 <dtitle>CPU Chart</dtitle>
 	      		    <hr>
       		      <div class="sensor-chart m-2 mb-0" id="cpu_chart"></div>   
@@ -265,13 +265,16 @@
           </div>
           <div class="col-lg-6 col-md-6 p-2 m-0">
             <div class="card mb-2">
-              <div class="twothird-unit">
+              <div class="dash-unit">
                 <dtitle>PibiCo Info</dtitle>
 	      		    <hr>
       		      <div class="m-2 mb-0">
-                  <a href="https://www.youtube.com/watch?v=bEFjRJGxheA">
+                  <div class="embed-responsive embed-responsive-16by9">
+                    <iframe style="border-radius: 6px;" class="embed-responsive-item" src="https://www.youtube.com/embed/bEFjRJGxheA" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+                  </div>  
+                  <!--<a href="https://www.youtube.com/watch?v=bEFjRJGxheA">
                     <iframe style="min-height: calc(100vh/5); border-radius: 9px;" src="https://www.youtube.com/embed/bEFjRJGxheA" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" width="100%" frameborder="0"></iframe>
-                   </a>
+                   </a>-->
                    
                 </div>
                 <p class="mb-1 pb-0 mr-1" style="position: absolute; bottom: 0px; right: 0px;">&copy; PibiCo 2020</p>   
@@ -526,7 +529,7 @@
         data: data,   
         title: sensor,
 	      type: 'axis-mixed', // or 'bar', 'line', 'pie', 'percentage'
-	      height: 270,
+	      height: 450,
 	      colors: ['blue', 'red', 'green'],
 	      tooltipOptions: {
 		      formatTooltipX: d => (d + '').toUpperCase(),
