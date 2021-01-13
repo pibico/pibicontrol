@@ -109,7 +109,7 @@
           <!-- Second Row -->
           <div class="col-lg-3 col-md-3 p-2 m-0">
             <div class="card mb-2">
-              <div class="half-unit">
+              <div class="third-unit">
       		      <dtitle>CPUs</dtitle>
       		      <hr>
 			          <div class="cont info-user p-0 m-0">
@@ -121,9 +121,49 @@
               </div>
             </div>
           </div>
+          <div class="col-lg-3 col-md-3 p-2 m-0">
+            <div class="card mb-2">
+              <div class="third-unit">
+      		      <dtitle>Clients</dtitle>
+      		      <hr>
+			          <div class="cont info-user p-0 m-0">                                 
+                  <a href="{{ frappe.get_url() }}:8080/desk#List/Client" target="_blank"><span aria-hidden="true" class="li_user fs1"></span></a>                            
+                  <p><bold style="font-size: 36px;">{{ sensor_doc | map(attribute='client') | unique | list | length }}</bold> <ok>clients</ok></p>                
+			          </div>
+                <p class="mb-1 pb-0 mr-1" style="position: absolute; bottom: 0px; right: 0px;">Clients Accessible</p>                
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-3 p-2 m-0">
+            <div class="card mb-1">
+              <div class="third-unit">
+      		      <dtitle>Data Logs</dtitle>
+      		      <hr>
+			          <div class="cont info-user p-0 m-0">
+                  <a href="{{ frappe.get_url() }}:8080/desk#List/Sensor Log/" target="_blank"><span aria-hidden="true" class="li_data fs1"></span></a>             
+                  <p><bold>{{ sensor_logs | sum('points') }}</bold> <ok>meas</ok></p>                
+			          </div>
+                <p class="mb-1 pb-0 mr-1" style="position: absolute; bottom: 0px; right: 0px;">Logs from 00:00</p>                
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-3 p-2 m-0">
+            <div class="card mb-2">
+              <div class="third-unit">
+      		      <dtitle>Daily Alerts</dtitle>
+	      		    <hr>
+                <div class="info-user">
+                  <a href="{{ frappe.get_url() }}:8080/desk#List/Alert Log?name={{ frappe.utils.get_datetime(frappe.utils.nowdate()).strftime('%y%m%d') }}" target="_blank"><span aria-hidden="true" class="li_news fs1 mb-0 pb-0"></span></a>
+					        <p><bold style="font-size: 36px;">{{ alert_logs | length }}</bold> <bad style="font-size: 9pt;">alerts</bad></p>
+                </div>
+                <p class="mb-1 pb-0 mr-1" style="position: absolute; bottom: 0px; right: 0px;">Sensor Alerts</p>              
+              </div>
+            </div>
+          </div>
+          <!-- First Row -->
           <div class="col-lg-6 col-md-6 p-2 m-0">
             <div class="card mb-2">
-              <div class="half-unit">
+              <div class="dash-unit">
       		      <dtitle>Daily Notifications</dtitle>
 	      		    <hr>
                 <div class="accordion" id="alert_log">
@@ -156,47 +196,9 @@
               </div>
             </div>
           </div>
-          <div class="col-lg-3 col-md-3 p-2 m-0">
+          <div class="col-lg-6 col-md-6 p-2 m-0">
             <div class="card mb-2">
-              <div class="half-unit">
-      		      <dtitle>Daily Alerts</dtitle>
-	      		    <hr>
-                <div class="info-user">
-                  <a href="{{ frappe.get_url() }}:8080/desk#List/Alert Log?name={{ frappe.utils.get_datetime(frappe.utils.nowdate()).strftime('%y%m%d') }}" target="_blank"><span aria-hidden="true" class="li_news fs1 mb-0 pb-0"></span></a>
-					        <p><bold style="font-size: 36px;">{{ alert_logs | length }}</bold> <bad style="font-size: 9pt;">alerts</bad></p>
-                </div>
-                <p class="mb-1 pb-0 mr-1" style="position: absolute; bottom: 0px; right: 0px;">Sensor Alerts</p>              
-              </div>
-            </div>
-          </div>
-          <!-- First Row -->
-          <div class="col-lg-3 col-md-3 p-2 m-0">
-            <div class="card mb-2">
-              <div class="third-unit">
-      		      <dtitle>Clients</dtitle>
-      		      <hr>
-			          <div class="cont info-user p-0 m-0">                                 
-                  <a href="{{ frappe.get_url() }}:8080/desk#List/Client" target="_blank"><span aria-hidden="true" class="li_user fs1"></span></a>                            
-                  <p><bold style="font-size: 36px;">{{ sensor_doc | map(attribute='client') | unique | list | length }}</bold> <ok>clients</ok></p>                
-			          </div>
-                <p class="mb-1 pb-0 mr-1" style="position: absolute; bottom: 0px; right: 0px;">Clients Accessible</p>                
-              </div>
-            </div>
-            <div class="card mb-1">
-              <div class="third-unit">
-      		      <dtitle>Data Logs</dtitle>
-      		      <hr>
-			          <div class="cont info-user p-0 m-0">
-                  <a href="{{ frappe.get_url() }}:8080/desk#List/Sensor Log/" target="_blank"><span aria-hidden="true" class="li_data fs1"></span></a>             
-                  <p><bold>{{ sensor_logs | sum('points') }}</bold> <ok>meas</ok></p>                
-			          </div>
-                <p class="mb-1 pb-0 mr-1" style="position: absolute; bottom: 0px; right: 0px;">Logs from 00:00</p>                
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-9 col-md-9 p-2 m-0">
-            <div class="card mb-2">
-              <div class="twothird-unit">
+              <div class="dash-unit">
                 <dtitle>Data</dtitle>
 	              <hr class="mb-2">
                 <table id="sensors" class="display compact cell-border responsive nowrap" width="100%" cellspacing="0" style="font-size: 10pt; z-index: 1; position: relative;">
@@ -554,7 +556,7 @@
     dom: '<"top"if>rt<"bottom"p><"clear">',
     //dom: '<"bottom"f>rtip<"clear">',
     //dom: 'B<"bottom"f>rtip<"clear">',
-    pageLength: 5,
+    pageLength: 10,
     buttons: [
       //'copyHtml5',
       {extend: 'excelHtml5', text: 'xls', className: 'btn btn-primary btn-xs'},

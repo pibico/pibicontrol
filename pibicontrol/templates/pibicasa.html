@@ -546,7 +546,7 @@
         <div class="card-columns">
           <!-- Daily Notifications -->
           <div class="card m-0 p-0 px-1 mb-2">
-            <div class="half-unit">
+            <div class="dash-unit">
       		    <dtitle>Daily Notifications</dtitle>
 	      		  <hr>
               <div class="accordion" id="alert_log">
@@ -579,8 +579,15 @@
             </div>
           </div>
           <!-- Group of sensors -->
-          <div class="card mb-2">
-            <div class="twothird-unit">
+          <div class="card m-0 p-0 px-1 mb-2">
+            <div class="dash-unit">
+              <dtitle>Chart</dtitle>
+	      	    <hr>
+      		    <div class="sensor-chart m-2 mb-0" id="sensor_chart"></div>   
+            </div>
+          </div>
+          <div class="card m-0 p-0 px-1 mb-2">
+            <div class="dash-unit">
               <dtitle>Data</dtitle>
 	            <hr class="mb-2">
               <table id="sensors" class="display compact cell-border responsive nowrap" width="100%" cellspacing="0" style="font-size: 10pt; z-index: 1; position: relative;">
@@ -618,13 +625,6 @@
             </div>
           </div>
           <!-- Table of sensors -->
-          <div class="card m-0 p-0 px-1 mb-2">
-            <div class="twothird-unit">
-              <dtitle>Chart</dtitle>
-	      	    <hr>
-      		    <div class="sensor-chart m-2 mb-0" id="sensor_chart"></div>   
-            </div>
-          </div>
           {% if customer %}
             {% if customer[0].cam_url %}
             <div class="card m-0 p-0 px-1 mb-2">
@@ -800,7 +800,7 @@
         data: data,   
         title: sensor,
 	      type: 'bar', // or 'bar', 'line', 'pie', 'percentage'
-	      height: 240,
+	      height: 390,
 	      colors: ['blue', 'magenta'],
 	      tooltipOptions: {
 		      formatTooltipX: d => (d + '').toUpperCase(),
@@ -825,7 +825,7 @@
     dom: '<"top"if>rt<"bottom"p><"clear">',
     //dom: '<"bottom"f>rtip<"clear">',
     //dom: 'B<"bottom"f>rtip<"clear">',
-    pageLength: 5,
+    pageLength: 10,
     buttons: [
       //'copyHtml5',
       {extend: 'excelHtml5', text: 'xls', className: 'btn btn-primary btn-xs'},

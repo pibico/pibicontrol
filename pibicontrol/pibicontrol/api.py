@@ -6,7 +6,7 @@ import frappe
 import datetime, json, subprocess
 from frappe import _, msgprint
 
-from frappe.utils import cstr
+from frappe.utils import cstr, time_diff_in_seconds, get_files_path
 from frappe.core.doctype.sms_settings.sms_settings import send_sms
 from pibicontrol.pibicontrol.doctype.telegram_settings.telegram_settings import send_telegram
 from pibicontrol.pibicontrol.doctype.mqtt_settings.mqtt_settings import send_mqtt
@@ -14,7 +14,6 @@ from pibicontrol.pibicontrol.doctype.mqtt_settings.mqtt_settings import send_mqt
 import paho.mqtt.client as mqtt
 import os, ssl, urllib, time, json
 from frappe.utils.password import get_decrypted_password
-from frappe.utils import get_files_path
 
 DATE_FORMAT = "%Y-%m-%d"
 TIME_FORMAT = "%H:%M:%S.%f"
@@ -103,6 +102,22 @@ def get_chart_dataset (doc):
     'third_uom': third_uom
   }
 
+def check_off_schedule(sensor):
+  off_time = datetime.datetime.now().time().strftime(TIME_FORMAT)
+  from_time = 0
+  to_time = 0
+  ## Calculate difference in seconds from current time to Off Schedule From Time
+  if sensor.off_from_time:
+    from_time = time_diff_in_seconds(off_time, str(sensor.off_from_time))
+  ## Calculate difference in seconds from current time to Off Schedule To Time  
+  if sensor.off_to_time:
+    to_time = time_diff_in_seconds(off_time, str(sensor.off_to_time))
+  ## if off_time is between from time and to time not sending messages  
+  if from_time > 0 and to_time < 0:
+    return True
+  else:
+    return False      
+
 def get_alert(variable, name):
   start = True
   ## Get active alerts for the Sensor based on not having to_time value in record
@@ -116,12 +131,20 @@ def get_alert(variable, name):
   )
   ## Get last Alert Log
   active_alert = None
-  if len(last_log) > 0:
-    active_alert = frappe.get_doc("Alert Log", last_log[0].name)
-    ## If recorded alert is not closed then will be a starting alert
-    if active_alert:
-      if not active_alert.alert_item[len(active_alert.alert_item)-1].to_time:
-        start = False
+  if last_log:
+    if len(last_log) > 0:
+      active_alert = frappe.get_doc("Alert Log", last_log[0].name)
+      ## If recorded alert is not closed then will be a starting alert
+      if active_alert:
+        if not active_alert.alert_item[len(active_alert.alert_item)-1].to_time:
+          start = False
+  
+  
+  
+  
+  
+  
+  
   return (active_alert, start)
 
 def mng_alert(sensor, variable, value, start, alert_log):
@@ -220,7 +243,10 @@ def mng_alert(sensor, variable, value, start, alert_log):
         alert_log.append("alert_item", alert_json)
         alert_log.save()
         frappe.msgprint(_("[INFO] Created New Log"))
-    ## Sending messages to recipients
+    ## Sending messages to recipients provided that alerts are not on off schedule
+    if check_off_schedule(sensor):
+      doSend = False
+    ## Send messages
     if len(sms_list) > 0 and doSend:
       send_sms(sms_list, cstr(alert_sms))
     if len(telegram_list) > 0 and doSend:
@@ -498,7 +524,9 @@ def check_web_services():
         alert_email = "Web Service " + m + " from " + device.sensor_shortcut + " is offline. Please check!"
         subject = m + " Offline" 
         email_list.append(device.client)
-        frappe.sendmail(recipients=email_list, subject=subject, message=cstr(alert_email))
+        ## Sending messages to recipients provided that alerts are not on off schedule
+        if not check_off_schedule(device):
+          frappe.sendmail(recipients=email_list, subject=subject, message=cstr(alert_email))
     else:
       ## Check if offline alert is active and close
       (active_alert, start) = get_alert("offline", device.name)
@@ -509,14 +537,15 @@ def check_web_services():
         alert_email = "Web Service " + m + " from " + device.sensor_shortcut + " is online again. Rest Easy!"
         subject = m + " Online Again" 
         email_list.append(device.client)
-        frappe.sendmail(recipients=email_list, subject=subject, message=cstr(alert_email))
+        if not check_off_schedule(device):
+          frappe.sendmail(recipients=email_list, subject=subject, message=cstr(alert_email))
     print('%-30s %-15s %5.0f [ms]' % (m, device.sensor_shortcut, delay))
   ## Get all web services from active sensors
   sensors = frappe.db.sql("""
     SELECT *
     FROM `tabSensor`
-    WHERE disabled=%s AND docstatus<2 AND NOT web_services IS %s
-    """, (0, None), True)
+    WHERE disabled=%s AND docstatus<2 AND NOT web_services IS %s AND alerts_active=%s 
+    """, (0, None, 1), True)
   ## Ping every sensor for its web services in list  
   for sensor in sensors:
     if "," in sensor.web_services:

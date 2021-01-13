@@ -7,7 +7,7 @@ import frappe
 from frappe.model.document import Document
 
 from frappe import _, msgprint
-import json
+import json, time
 
 from pibicontrol.pibicontrol.api import get_alert, mng_alert
 
@@ -46,14 +46,13 @@ class SensorLog(Document):
       payload = json.loads(self.log_item[len(self.log_item)-1].payload)
       ## Search in threshold alerts
       for ts in doc.threshold_item:
-        ## Check threshold data from active variables
+        ## Check threshold data from active variables and if not in Off Schedule
         if ts.active:
           ## Primary Common Reading to all sensors
           if ts.variable == mainread:
             (active_alert, start) = get_alert(ts.variable, doc.name)         
             check_threshold(doc, ts, value, start, active_alert)
-          
-		      ## Specific Readings taken in payload depending on sensor type
+          ## Specific Readings taken in payload depending on sensor type
           ## Sensor CPU
           if stock.sensor_type == "cpu":
             ## Secondary CPU Reading
