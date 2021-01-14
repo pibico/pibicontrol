@@ -1,4 +1,6 @@
 {
+ "allow_import": 1,
+ "allow_rename": 1,
  "autoname": "field:user",
  "creation": "2020-12-27 08:38:34.121122",
  "doctype": "DocType",
@@ -97,7 +99,7 @@
    "label": "Cam URL"
   }
  ],
- "modified": "2021-01-09 20:21:54.747703",
+ "modified": "2021-01-13 16:38:06.581011",
  "modified_by": "Administrator",
  "module": "Pibicontrol",
  "name": "Client",

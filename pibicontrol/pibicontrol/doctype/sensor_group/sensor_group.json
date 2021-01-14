@@ -1,4 +1,5 @@
 {
+ "allow_import": 1,
  "allow_rename": 1,
  "autoname": "field:title",
  "creation": "2020-12-15 13:24:37.697999",
@@ -49,7 +50,7 @@
  ],
  "has_web_view": 1,
  "is_published_field": "published",
- "modified": "2020-12-28 21:13:06.513650",
+ "modified": "2021-01-13 16:02:37.310810",
  "modified_by": "Administrator",
  "module": "Pibicontrol",
  "name": "Sensor Group",

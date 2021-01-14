@@ -1,4 +1,6 @@
 {
+ "allow_import": 1,
+ "allow_rename": 1,
  "autoname": "field:shortcut",
  "creation": "2020-12-21 17:20:28.137893",
  "doctype": "DocType",
@@ -28,7 +30,7 @@
    "label": "UOM"
   }
  ],
- "modified": "2020-12-21 17:42:06.573905",
+ "modified": "2021-01-13 14:46:39.287452",
  "modified_by": "Administrator",
  "module": "Pibicontrol",
  "name": "Variable",

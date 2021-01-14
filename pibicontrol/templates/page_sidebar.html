@@ -2,17 +2,17 @@
 <style>
   /* Sidebar Menu */
   
-  @import "{{ frappe.get_url()}}:8080/assets/SBAdmin/css/styles.css";
+  @import "{{ frappe.get_url()}}:8008/assets/SBAdmin/css/styles.css";
   /* Main Window Styles */
-  @import "{{ frappe.get_url()}}:8080/assets/SingleAdmin/css/datatables.css";
-  @import "{{ frappe.get_url()}}:8080/assets/SingleAdmin/fontawesome_5.15.1/css/all.min.css";
-  @import "{{ frappe.get_url()}}:8080/assets/SingleAdmin/css/weather-icons.min.css";
-  @import "{{ frappe.get_url()}}:8080/assets/SingleAdmin/css/weather-icons-wind.min.css";
+  @import "{{ frappe.get_url()}}:8008/assets/SingleAdmin/css/datatables.css";
+  @import "{{ frappe.get_url()}}:8008/assets/SingleAdmin/fontawesome_5.15.1/css/all.min.css";
+  @import "{{ frappe.get_url()}}:8008/assets/SingleAdmin/css/weather-icons.min.css";
+  @import "{{ frappe.get_url()}}:8008/assets/SingleAdmin/css/weather-icons-wind.min.css";
   
-  @import "{{ frappe.get_url()}}:8080/assets/SingleAdmin/css/main.css";
-  @import "{{ frappe.get_url()}}:8080/assets/SingleAdmin/css/font-style.css";
+  @import "{{ frappe.get_url()}}:8008/assets/SingleAdmin/css/main.css";
+  @import "{{ frappe.get_url()}}:8008/assets/SingleAdmin/css/font-style.css";
   
-  @import "{{ frappe.get_url()}}:8080/assets/css/frappe_charts.min.css"
+  @import "{{ frappe.get_url()}}:8008/assets/css/frappe_charts.min.css"
   
   html, body {
     margin: auto;
@@ -33,7 +33,7 @@
 {% block content %}
   <div class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand bg-light">
-      <a class="navbar-brand text-primary" href="{{ frappe.get_url()}}:8080/"><b>Inicio</b></a>
+      <a class="navbar-brand text-primary" href="{{ frappe.get_url()}}:8008/"><b>Inicio</b></a>
       <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href=""><i class="fa fa-bars"></i></button>
     </nav>
     <div id="layoutSidenav">
@@ -50,11 +50,11 @@
               </a>
               <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
                 <nav class="sb-sidenav-menu-nested nav">
-                  <a class="nav-link" href="{{ frappe.get_url()}}:8080/desk" style="font-weight: 450;">
+                  <a class="nav-link" href="{{ frappe.get_url()}}:8008/desk" style="font-weight: 450;">
                     <div class="sb-nav-link-icon"><i class="fa fa-server"></i></div>
                     DeskTop
                   </a>
-                  <a class="nav-link" href="{{ frappe.get_url()}}:8080/desk#modules/Website" style="font-weight: 450;">
+                  <a class="nav-link" href="{{ frappe.get_url()}}:8008/desk#modules/Website" style="font-weight: 450;">
                     <div class="sb-nav-link-icon"><i class="fa fa-globe"></i></div>
                     WebSite
                   </a>
@@ -87,9 +87,9 @@
       </div>
  
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
-  <script src="{{ frappe.get_url()}}:8080/assets/SingleAdmin/fontawesome_5.15.1/js/all.min.js"></script>
-  <script src="{{ frappe.get_url()}}:8080/assets/SBAdmin/js/scripts.js"></script>
+  <script src="{{ frappe.get_url()}}:8008/assets/SingleAdmin/fontawesome_5.15.1/js/all.min.js"></script>
+  <script src="{{ frappe.get_url()}}:8008/assets/SBAdmin/js/scripts.js"></script>
   
-  <script type="text/javascript" src="{{ frappe.get_url()}}:8080/assets/SingleAdmin/js/datatables.js"></script>
-  <script src="{{ frappe.get_url()}}:8080/assets/js/frappe_charts.min.js"></script>
+  <script type="text/javascript" src="{{ frappe.get_url()}}:8008/assets/SingleAdmin/js/datatables.js"></script>
+  <script src="{{ frappe.get_url()}}:8008/assets/js/frappe_charts.min.js"></script>
 {% endblock %}

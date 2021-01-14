@@ -1,4 +1,5 @@
 {
+ "allow_import": 1,
  "allow_rename": 1,
  "autoname": "field:sensor_shortcut",
  "creation": "2020-12-15 13:02:19.231828",
@@ -284,7 +285,7 @@
    "label": "Threshold Gap"
   }
  ],
- "modified": "2021-01-11 20:16:03.690311",
+ "modified": "2021-01-13 16:17:16.963012",
  "modified_by": "Administrator",
  "module": "Pibicontrol",
  "name": "Sensor",

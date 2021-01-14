@@ -1,4 +1,6 @@
 {
+ "allow_import": 1,
+ "allow_rename": 1,
  "autoname": "field:abbreviation",
  "creation": "2020-12-15 13:12:22.605027",
  "doctype": "DocType",
@@ -39,7 +41,7 @@
    "label": "UOM"
   }
  ],
- "modified": "2020-12-22 09:44:01.145789",
+ "modified": "2021-01-13 14:54:12.220243",
  "modified_by": "Administrator",
  "module": "Pibicontrol",
  "name": "Sensor Type",
