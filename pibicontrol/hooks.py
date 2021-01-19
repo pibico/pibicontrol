@@ -104,7 +104,7 @@ scheduler_events = {
     "*/9 * * * *": [
  		  "pibicontrol.pibicontrol.api.check_web_services"
  	  ],  
-    "* 1 * * *": [
+    "15 0 * * *": [
       "pibicontrol.pibicontrol.api.create_xls_report"
     ]  
   }

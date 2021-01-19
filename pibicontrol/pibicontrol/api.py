@@ -138,13 +138,8 @@ def get_alert(variable, name):
       if active_alert:
         if not active_alert.alert_item[len(active_alert.alert_item)-1].to_time:
           start = False
-  
-  
-  
-  
-  
-  
-  
+    ## Script (future) for not having log
+      
   return (active_alert, start)
 
 def mng_alert(sensor, variable, value, start, alert_log):
@@ -465,7 +460,8 @@ def create_xls_report():
       humidity = 0
       for item in log:
         counter += 1
-        valhumid = float((json.loads(item.payload)['payload']['reading']['val_humid']))
+        valitem = json.loads(item.payload)
+        valhumid = (valitem['payload']['reading']['val_humid'])
         avgval = avgval + valhumid
       if counter > 0:
         humidity = round(avgval/counter,1)  
@@ -481,10 +477,10 @@ def create_xls_report():
       if float(minimo)<12:
         sheet.cell(row = 26 + (nZones - 1)*4, column = yday*2 + 3).font = Font(color = "FF0000")
       ## humidity reading
-        sheet.cell(row = 27 + (nZones - 1)*4 , column = yday*2 + 3).value = str(int(round(humidity,0)))
+      sheet.cell(row = 27 + (nZones - 1)*4 , column = yday*2 + 3).value = str(int(round(humidity,0)))
       if float(humidity) > 65:
         sheet.cell(row = 27 + (nZones - 1)*4, column = yday*2 + 3).font = Font(color = "FF0000")
-      #print("zone from " + organization + " (" + zoneserial + ") Max:" + str(maximo) + " Min:" + str(minimo) + " H:" + str(humidity) + " count(" + str(count) + ") on " + daybefore)
+      #print("zone from " + organization + " (" + zoneserial + ") Max:" + str(maximo) + " Min:" + str(minimo) + " H:" + str(humidity) + " count(" + str(counter) + ") on " + daybefore)
             
     ## Close workbook and upload to cloud
     wbook.save(dst_file)
