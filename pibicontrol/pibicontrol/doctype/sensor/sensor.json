@@ -89,6 +89,7 @@
    "unique": 1
   },
   {
+   "default": "{\n \"type\":\"FeatureCollection\",\n \"features\":[\n   {\n    \"type\":\"Feature\",\n    \"properties\":{},\n    \"geometry\":{\n     \"type\":\"Point\",\n     \"coordinates\":[-5.659499,43.537627]\n     }\n   }\n  ]\n}",
    "fieldname": "location",
    "fieldtype": "Geolocation",
    "label": "Location"
@@ -285,7 +286,7 @@
    "label": "Threshold Gap"
   }
  ],
- "modified": "2021-01-13 16:17:16.963012",
+ "modified": "2021-03-28 20:14:43.388410",
  "modified_by": "Administrator",
  "module": "Pibicontrol",
  "name": "Sensor",

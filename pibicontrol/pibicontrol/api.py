@@ -540,8 +540,8 @@ def check_web_services():
   sensors = frappe.db.sql("""
     SELECT *
     FROM `tabSensor`
-    WHERE disabled=%s AND docstatus<2 AND NOT web_services IS %s AND alerts_active=%s 
-    """, (0, None, 1), True)
+    WHERE disabled=%s AND docstatus<2 AND NOT web_services=%s AND alerts_active=%s 
+    """, (0, '', 1), True)
   ## Ping every sensor for its web services in list  
   for sensor in sensors:
     if "," in sensor.web_services:
@@ -550,3 +550,4 @@ def check_web_services():
         task(item, sensor)
     else:
       task(sensor.web_services, sensor)
+    time.sleep(0.15)  
