@@ -142,6 +142,36 @@ def get_alert(variable, name):
       
   return (active_alert, start)
 
+def reschedule_alert():
+  ## Get active alerts not having to_time value in record
+  alert_list = frappe.get_list(
+    doctype = "Alert Item",
+    fields = ['*'],
+    filters = [['parent', 'like', frappe.utils.add_days(frappe.utils.getdate(), -1).strftime("%y%m%d") + "_%"],['docstatus', '<', 2]]
+  )
+  for alert in alert_list:
+    if not alert.to_time:
+      alert_log = frappe.get_doc("Alert Log", alert.parent)
+      for row in alert_log.alert_item:
+        if not row.to_time:
+          ## Write Data for new Alert
+          alert_json = row
+          ## Code for creating new doc
+          alert_new = frappe.new_doc('Alert Log')
+          alert_new.sensor = alert_log.sensor
+          alert_new.date = frappe.utils.getdate().strftime(DATE_FORMAT)
+          alert_new.variable = alert_log.variable
+          ## Adds log to array  
+          alert_new.append("alert_item", alert_json)
+          alert_list = frappe.get_list(
+            doctype = "Alert Log",
+            fields = ['name'],
+            filters = [['sensor', '=', alert_log.sensor], ['docstatus', '<', 2], ['date', '=', frappe.utils.getdate().strftime(DATE_FORMAT)]]
+          )
+          if not alert_list:
+            alert_new.save()
+            print(_("[INFO] Rescheduled Old Alert"))
+  
 def mng_alert(sensor, variable, value, start, alert_log):
   """ doc is Sensor, variable is variable, value is actual value for variable, start is True or False whether the alert is beginning or ending, active_alert is active_alert """
   if not sensor.disabled and sensor.alerts_active:

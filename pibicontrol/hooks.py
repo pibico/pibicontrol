@@ -106,6 +106,9 @@ scheduler_events = {
  	  ],
     "15 0 * * *": [
       "pibicontrol.pibicontrol.api.create_xls_report"
+    ],
+    "0 0 * * *": [
+      "pibicontrol.pibicontrol.api.reschedule_alert"
     ]
   }
 # 	"daily": [
