@@ -85,8 +85,8 @@
                       {% if len_fridge > 0 %}
                       <li>
 			                  <i class="unread"></i>
-						            <a href="{{ frappe.get_url() }}:8008/desk#Form/Sensor Log/{{log.name}}"><i class="info-user far fa-snowflake my-2 p-0 ml-2 text-warning" style="position: absolute; top: 0px;"></i></a>
-						            <p class="sender"><small><a class="text-primary" href="{{ frappe.get_url() }}:8008/desk#Form/Sensor/{{log.sensor}}">{{ log.sensor }}</a></small></p>
+						            <a href="{{ frappe.get_url() }}/desk#Form/Sensor Log/{{log.name}}"><i class="info-user far fa-snowflake my-2 p-0 ml-2 text-warning" style="position: absolute; top: 0px;"></i></a>
+						            <p class="sender"><small><a class="text-primary" href="{{ frappe.get_url() }}/desk#Form/Sensor/{{log.sensor}}">{{ log.sensor }}</a></small></p>
 						            <p class="message mt-1">
                           <b>Temperature</b> <span class="meas">{{ log.log_item[len_fridge-1].value }}</span> &deg;C <small><b>M/m</b> <span class="meas">{{ log.max }}/{{ log.min }}</span> &deg;C</small>
                           <br>
@@ -100,7 +100,7 @@
                             <a href="#" type="button" onclick="get_chart({{ chart }});return(false);"><i class="info-user fas fa-chart-bar mr-1"></i></a>
                             {% endif %}
                           {% endfor %}   
-                          <a href="{{ frappe.get_url() }}:8008/desk#Form/Sensor Log/{{log.name}}"><i class="info-user fas fa-chart-line mr-1"></i></a>  
+                          <a href="{{ frappe.get_url() }}/desk#Form/Sensor Log/{{log.name}}"><i class="info-user fas fa-chart-line mr-1"></i></a>  
                           {% if customer %}<a title="1m" href="{{customer[0].cloud_gateway}}" target="_blank"><i class="info-user far fa-calendar"></i></a>{% endif %}                   
                           </a>
 			                  </div>
@@ -130,8 +130,8 @@
                       {% if len_pharma > 0 %}
                       <li>
 			                  <i class="unread"></i>
-						            <a href="{{ frappe.get_url() }}:8008/desk#Form/Sensor Log/{{log.name}}"><i class="info-user fas fa-temperature-low my-2 p-0 ml-2 text-warning" style="position: absolute; top: 0px;"></i></a>
-						            <p class="sender"><small><a class="text-primary" href="{{ frappe.get_url() }}:8008/desk#Form/Sensor/{{log.sensor}}">{{ log.sensor }}</a></small></p>
+						            <a href="{{ frappe.get_url() }}/desk#Form/Sensor Log/{{log.name}}"><i class="info-user fas fa-temperature-low my-2 p-0 ml-2 text-warning" style="position: absolute; top: 0px;"></i></a>
+						            <p class="sender"><small><a class="text-primary" href="{{ frappe.get_url() }}/desk#Form/Sensor/{{log.sensor}}">{{ log.sensor }}</a></small></p>
 						            <p class="message mt-1">
                           <b>Temperature</b> <span class="meas">{{ log.log_item[len_pharma-1].value }}</span> &deg;C <small><b>M/m</b> <span class="meas">{{ log.max }}/{{ log.min }}</span> &deg;C</small>
                           <br>
@@ -146,7 +146,7 @@
                             <a href="#" type="button" onclick="get_chart({{ chart }});return(false);"><i class="info-user fas fa-chart-bar mr-1"></i></a>
                             {% endif %}
                           {% endfor %}   
-                          <a href="{{ frappe.get_url() }}:8008/desk#Form/Sensor Log/{{log.name}}"><i class="info-user fas fa-chart-line mr-1"></i></a>            
+                          <a href="{{ frappe.get_url() }}/desk#Form/Sensor Log/{{log.name}}"><i class="info-user fas fa-chart-line mr-1"></i></a>            
                           {% if customer %}<a title="1m" href="{{customer[0].cloud_gateway}}" target="_blank"><i class="info-user far fa-calendar"></i></a>{% endif %}
 			                  </div>
                       </li>
@@ -192,9 +192,9 @@
                     <div id="collapse{{ loop.index }}" class="accordion-body collapse in">
                       <div class="accordion-inner">
                       {% if val.alert_item[idx].to_time == None %}
-                         <a href="{{ frappe.get_url() }}:8008/desk#List/Alert Log?name={{val.name}}" target="_blank">Alert</a> <small>{{val.alert_item[idx].variable}} @{{val.alert_item[idx].value}}</small> from <strong>{{ frappe.format(val.alert_item[idx].from_time, {'fieldtype': 'Time'})}}</strong>
+                         <a href="{{ frappe.get_url() }}/desk#List/Alert Log?name={{val.name}}" target="_blank">Alert</a> <small>{{val.alert_item[idx].variable}} @{{val.alert_item[idx].value}}</small> from <strong>{{ frappe.format(val.alert_item[idx].from_time, {'fieldtype': 'Time'})}}</strong>
                       {% else %}
-                         <a href="{{ frappe.get_url() }}:8008/desk#List/Alert Log?name={{val.name}}" target="_blank">Alert</a> <small>{{val.alert_item[idx].variable}}</small> at <strong>{{ frappe.format(val.alert_item[idx].to_time, {'fieldtype': 'Time'})}}</strong>
+                         <a href="{{ frappe.get_url() }}/desk#List/Alert Log?name={{val.name}}" target="_blank">Alert</a> <small>{{val.alert_item[idx].variable}}</small> at <strong>{{ frappe.format(val.alert_item[idx].to_time, {'fieldtype': 'Time'})}}</strong>
                       {% endif %}  
                       </div>   
                     </div>

@@ -137,7 +137,7 @@
                     {% set idx = log.log_item | length -1 %}  
                     {% set status = log.log_item[idx]['value'] | int %}                            
                     <div class="d-flex">
-                      <div class="pl-2"><a href="{{frappe.get_url()}}:8008/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }}</small></a></div>
+                      <div class="pl-2"><a href="{{frappe.get_url()}}/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }}</small></a></div>
                       <div class="switch my-0 py-0 mb-1 ml-auto">
                         <input type="radio" class="switch-input" name="motor{{loop.index}}" value="on" id="motor{{loop.index}}_on" onclick="javascript:switchOn('{{log.sensor}}','{{sensor_doc.relay_pin}}','{{sensor_doc.info_pin}}');" {%if status %}checked=""{% endif %}>
 					              <label for="motor{{loop.index}}_on" class="switch-label switch-label-off">on</label>
@@ -171,7 +171,7 @@
                     {% set idx = log.log_item | length -1 %}  
                     {% set status = log.log_item[idx]['value'] | int %}                            
                     <div class="d-flex">
-                      <div class="pl-2"><a href="{{frappe.get_url()}}:8008/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }}</small></a></div>
+                      <div class="pl-2"><a href="{{frappe.get_url()}}/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }}</small></a></div>
                       <div class="switch my-0 py-0 mb-1 ml-auto">
                         <input type="radio" class="switch-input" name="light{{loop.index}}" value="on" id="light{{loop.index}}_on" onclick="javascript:switchOn('{{log.sensor}}','{{sensor_doc[0].relay_pin}}','{{sensor_doc[0].info_pin}}');" {%if status %}checked=""{% endif %}>
 					              <label for="light{{loop.index}}_on" class="switch-label switch-label-off">on</label>
@@ -205,7 +205,7 @@
                     {% set idx = log.log_item | length -1 %}  
                     {% set status = log.log_item[idx]['value'] | int %}                          
                     <div class="d-flex">
-                      <div class="pl-2"><a href="{{frappe.get_url()}}:8008/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }}</small></a></div>
+                      <div class="pl-2"><a href="{{frappe.get_url()}}/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }}</small></a></div>
                       <div class="switch my-0 py-0 mb-1 ml-auto">
                         <input type="radio" class="switch-input" name="blind{{loop.index}}" value="on" id="blind{{loop.index}}_on" onclick="javascript:switchOn('{{log.sensor}}','{{sensor_doc[0].relay_pin}}','{{sensor_doc[0].info_pin}}');" {%if status %}checked=""{% endif %}>
 					              <label for="blind{{loop.index}}_on" class="switch-label switch-label-off">on</label>
@@ -239,7 +239,7 @@
                     {% set idx = log.log_item | length -1 %}
                     {% set status = log.log_item[idx]['value'] | int %}                             
                     <div class="d-flex">
-                      <div class="pl-2"><a href="{{frappe.get_url()}}:8008/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }}</small></a></div>
+                      <div class="pl-2"><a href="{{frappe.get_url()}}/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }}</small></a></div>
                       <div class="switch my-0 py-0 mb-1 ml-auto">
                         <input type="radio" class="switch-input" name="pump{{loop.index}}" value="on" id="pump{{loop.index}}_on" onclick="javascript:switchOn('{{log.sensor}}','{{sensor_doc[0].relay_pin}}','{{sensor_doc[0].info_pin}}');" {%if status %}checked=""{% endif %}>
 					              <label for="pump{{loop.index}}_on" class="switch-label switch-label-off">on</label>
@@ -273,7 +273,7 @@
                     {% set idx = log.log_item | length -1 %}
                     {% set status = log.log_item[idx]['value'] | int %}                   
                     <div class="d-flex">
-                      <div class="pl-2"><a href="{{frappe.get_url()}}:8008/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }} ({{status}})</small></a></div>
+                      <div class="pl-2"><a href="{{frappe.get_url()}}/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }} ({{status}})</small></a></div>
                       <div class="switch my-0 py-0 mb-1 ml-auto">
                         <input type="radio" class="switch-input" name="valve{{loop.index}}" value="on" id="valve{{loop.index}}_on" onclick="javascript:switchOn('{{log.sensor}}','{{sensor_doc[0].relay_pin}}','{{sensor_doc[0].info_pin}}');" {%if status %}checked=""{% endif %}>
 					              <label for="valve{{loop.index}}_on" class="switch-label switch-label-off">on</label>
@@ -307,7 +307,7 @@
                     {% set idx = log.log_item | length -1 %}  
                     {% set status = log.log_item[idx]['value'] | int %}                        
                     <div class="d-flex">
-                      <div class="pl-2"><a href="{{frappe.get_url()}}:8008/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }}</small></a></div>
+                      <div class="pl-2"><a href="{{frappe.get_url()}}/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }}</small></a></div>
                       <div class="switch my-0 py-0 mb-1 ml-auto">
                         <input type="radio" class="switch-input" name="switch{{loop.index}}" value="on" id="switch{{loop.index}}_on" onclick="javascript:switchOn('{{log.sensor}}','{{sensor_doc[0].relay_pin}}','{{sensor_doc[0].info_pin}}');" {%if status %}checked=""{% endif %}>
 					              <label for="switch{{loop.index}}_on" class="switch-label switch-label-off">on</label>
@@ -341,7 +341,7 @@
                     {% set idx = log.log_item | length -1 %}  
                     {% set status = log.log_item[idx]['value'] | int %}                        
                     <div class="d-flex">
-                      <div class="pl-2"><a href="{{frappe.get_url()}}:8008/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }}</small></a></div>
+                      <div class="pl-2"><a href="{{frappe.get_url()}}/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }}</small></a></div>
                       <div class="hvac my-0 py-0 mb-1 ml-auto">
                         <input type="radio" class="switch-input" name="hvac{{loop.index}}" value="on" id="hvac{{loop.index}}_on" onclick="javascript:switchOn('{{log.sensor}}','{{sensor_doc[0].relay_pin}}','{{sensor_doc[0].info_pin}}');" {%if status %}checked=""{% endif %}>
 					              <label for="hvac{{loop.index}}_on" class="switch-label switch-label-off">on</label>
@@ -375,7 +375,7 @@
                     {% set idx = log.log_item | length -1 %}  
                     {% set status = log.log_item[idx]['value'] | int %}                        
                     <div class="d-flex">
-                      <div class="pl-2"><a href="{{frappe.get_url()}}:8008/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }}</small></a></div>
+                      <div class="pl-2"><a href="{{frappe.get_url()}}/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }}</small></a></div>
                       <div class="canopy my-0 py-0 mb-1 ml-auto">
                         <input type="radio" class="switch-input" name="canopy{{loop.index}}" value="on" id="canopy{{loop.index}}_on" onclick="javascript:switchOn('{{log.sensor}}','{{sensor_doc[0].relay_pin}}','{{sensor_doc[0].info_pin}}');" {%if status %}checked=""{% endif %}>
 					              <label for="canopy{{loop.index}}_on" class="switch-label switch-label-off">on</label>
@@ -409,7 +409,7 @@
                     {% set idx = log.log_item | length -1 %}  
                     {% set status = log.log_item[idx]['value'] | int %}                        
                     <div class="d-flex">
-                      <div class="pl-2"><a href="{{frappe.get_url()}}:8008/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }}</small></a></div>
+                      <div class="pl-2"><a href="{{frappe.get_url()}}/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }}</small></a></div>
                       <div class="door my-0 py-0 mb-1 ml-auto">
                         <input type="radio" class="switch-input" name="door{{loop.index}}" value="on" id="door{{loop.index}}_on" onclick="javascript:switchOn('{{log.sensor}}','{{sensor_doc[0].relay_pin}}','{{sensor_doc[0].info_pin}}');" {%if status %}checked=""{% endif %}>
 					              <label for="door{{loop.index}}_on" class="switch-label switch-label-off">on</label>
@@ -443,7 +443,7 @@
                     {% set idx = log.log_item | length -1 %}  
                     {% set status = log.log_item[idx]['value'] | int %}                        
                     <div class="d-flex">
-                      <div class="pl-2"><a href="{{frappe.get_url()}}:8008/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }}</small></a></div>
+                      <div class="pl-2"><a href="{{frappe.get_url()}}/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }}</small></a></div>
                       <div class="window my-0 py-0 mb-1 ml-auto">
                         <input type="radio" class="switch-input" name="window{{loop.index}}" value="on" id="window{{loop.index}}_on" onclick="javascript:switchOn('{{log.sensor}}','{{sensor_doc[0].relay_pin}}','{{sensor_doc[0].info_pin}}');" {%if status %}checked=""{% endif %}>
 					              <label for="window{{loop.index}}_on" class="switch-label switch-label-off">on</label>
@@ -477,7 +477,7 @@
                     {% set idx = log.log_item | length -1 %}  
                     {% set status = log.log_item[idx]['value'] | int %}                        
                     <div class="d-flex">
-                      <div class="pl-2"><a href="{{frappe.get_url()}}:8008/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }}</small></a></div>
+                      <div class="pl-2"><a href="{{frappe.get_url()}}/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }}</small></a></div>
                       <div class="camera my-0 py-0 mb-1 ml-auto">
                         <input type="radio" class="switch-input" name="camera{{loop.index}}" value="on" id="camera{{loop.index}}_on" onclick="javascript:switchOn('{{log.sensor}}','{{sensor_doc[0].relay_pin}}','{{sensor_doc[0].info_pin}}');" {%if status %}checked=""{% endif %}>
 					              <label for="camera{{loop.index}}_on" class="switch-label switch-label-off">on</label>
@@ -511,7 +511,7 @@
                     {% set idx = log.log_item | length -1 %}  
                     {% set status = log.log_item[idx]['value'] | int %}                        
                     <div class="d-flex">
-                      <div class="pl-2"><a href="{{frappe.get_url()}}:8008/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }}</small></a></div>
+                      <div class="pl-2"><a href="{{frappe.get_url()}}/desk#Form/Sensor Log/{{log.name}}"><small>{{ log.sensor }}</small></a></div>
                       <div class="alarm my-0 py-0 mb-1 ml-auto">
                         <input type="radio" class="switch-input" name="alarm{{loop.index}}" value="on" id="alarm{{loop.index}}_on" onclick="javascript:switchOn('{{log.sensor}}','{{sensor_doc[0].relay_pin}}','{{sensor_doc[0].info_pin}}');" {%if status %}checked=""{% endif %}>
 					              <label for="alarm{{loop.index}}_on" class="switch-label switch-label-off">on</label>
@@ -533,7 +533,7 @@
           <div class="col-xl-2 col-lg-3 col-md-3 col-sm-4 col-xs-6 m-0 p-0 px-2 mb-2">
             <div class="card">
               <div class="quarter-unit m-0 p-0">
-                <dtitle><small><a class="text-primary" href="{{ frappe.get_url() }}:8008/desk#Form/Sensor/{{log.sensor}}">{{ log.sensor }}</a></small></dtitle>
+                <dtitle><small><a class="text-primary" href="{{ frappe.get_url() }}/desk#Form/Sensor/{{log.sensor}}">{{ log.sensor }}</a></small></dtitle>
 	      		    <hr class="m-0 p-0">
                 {% set idx = log.log_item | length - 1 %}
                 <p class="card-text m-0 p-0 text-center"><big class="info-user text-danger">{{ log.log_item[idx].value }} </big>{{ log.log_item[idx].uom }}</p>
@@ -567,9 +567,9 @@
                   <div id="collapse{{ loop.index }}" class="accordion-body collapse in">
                     <div class="accordion-inner">
                     {% if val.alert_item[idx].to_time == None %}
-                       <a href="{{ frappe.get_url() }}:8008/desk#List/Alert Log?name={{val.name}}" target="_blank">Alert</a> <small>{{val.alert_item[idx].variable}} @{{val.alert_item[idx].value}}</small> from <strong>{{ frappe.format(val.alert_item[idx].from_time, {'fieldtype': 'Time'})}}</strong>
+                       <a href="{{ frappe.get_url() }}/desk#List/Alert Log?name={{val.name}}" target="_blank">Alert</a> <small>{{val.alert_item[idx].variable}} @{{val.alert_item[idx].value}}</small> from <strong>{{ frappe.format(val.alert_item[idx].from_time, {'fieldtype': 'Time'})}}</strong>
                     {% else %}
-                       <a href="{{ frappe.get_url() }}:8008/desk#List/Alert Log?name={{val.name}}" target="_blank">Alert</a> <small>{{val.alert_item[idx].variable}}</small> at <strong>{{ frappe.format(val.alert_item[idx].to_time, {'fieldtype': 'Time'})}}</strong>
+                       <a href="{{ frappe.get_url() }}/desk#List/Alert Log?name={{val.name}}" target="_blank">Alert</a> <small>{{val.alert_item[idx].variable}}</small> at <strong>{{ frappe.format(val.alert_item[idx].to_time, {'fieldtype': 'Time'})}}</strong>
                     {% endif %}  
                     </div>   
                   </div>
@@ -855,7 +855,7 @@
     if ( colIdx > 1) {
       var rowPosition = oTable.fnGetPosition( this ); //row position of record in table
       var sensor = oTable.fnGetData(rowPosition,2);
-      window.open("{{ frappe.get_url() }}:8008/desk#Form/Sensor/" + sensor, "_self")
+      window.open("{{ frappe.get_url() }}/desk#Form/Sensor/" + sensor, "_self")
     }
   });
   </script>

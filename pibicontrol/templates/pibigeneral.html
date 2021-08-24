@@ -113,7 +113,7 @@
       		      <dtitle>CPUs</dtitle>
       		      <hr>
 			          <div class="cont info-user p-0 m-0">
-                  <a href="{{ frappe.get_url() }}:8008/desk#List/Sensor?sensor_group={{ name }}" target="_blank"><span aria-hidden="true" class="li_display fs1 mb-0 pb-0"></span></a>
+                  <a href="{{ frappe.get_url() }}/desk#List/Sensor?sensor_group={{ name }}" target="_blank"><span aria-hidden="true" class="li_display fs1 mb-0 pb-0"></span></a>
 			            <p><bold style="font-size: 36px;">{{ sensor_doc | selectattr('disabled', 'equalto', 0) | list | length }}</bold> <ok>on</ok> |
 					        <bold style="font-size: 36px;">{{ sensor_doc | selectattr('disabled', 'equalto', 1) | list | length }}</bold> <bad>off</bad></p>                
 			          </div>
@@ -127,7 +127,7 @@
       		      <dtitle>Clients</dtitle>
       		      <hr>
 			          <div class="cont info-user p-0 m-0">                                 
-                  <a href="{{ frappe.get_url() }}:8008/desk#List/Client" target="_blank"><span aria-hidden="true" class="li_user fs1"></span></a>                            
+                  <a href="{{ frappe.get_url() }}/desk#List/Client" target="_blank"><span aria-hidden="true" class="li_user fs1"></span></a>                            
                   <p><bold style="font-size: 36px;">{{ sensor_doc | map(attribute='client') | unique | list | length }}</bold> <ok>clients</ok></p>                
 			          </div>
                 <p class="mb-1 pb-0 mr-1" style="position: absolute; bottom: 0px; right: 0px;">Clients Accessible</p>                
@@ -140,7 +140,7 @@
       		      <dtitle>Data Logs</dtitle>
       		      <hr>
 			          <div class="cont info-user p-0 m-0">
-                  <a href="{{ frappe.get_url() }}:8008/desk#List/Sensor Log/" target="_blank"><span aria-hidden="true" class="li_data fs1"></span></a>             
+                  <a href="{{ frappe.get_url() }}/desk#List/Sensor Log/" target="_blank"><span aria-hidden="true" class="li_data fs1"></span></a>             
                   <p><bold>{{ sensor_logs | sum('points') }}</bold> <ok>meas</ok></p>                
 			          </div>
                 <p class="mb-1 pb-0 mr-1" style="position: absolute; bottom: 0px; right: 0px;">Logs from 00:00</p>                
@@ -153,7 +153,7 @@
       		      <dtitle>Daily Alerts</dtitle>
 	      		    <hr>
                 <div class="info-user">
-                  <a href="{{ frappe.get_url() }}:8008/desk#List/Alert Log?name={{ frappe.utils.get_datetime(frappe.utils.nowdate()).strftime('%y%m%d') }}" target="_blank"><span aria-hidden="true" class="li_news fs1 mb-0 pb-0"></span></a>
+                  <a href="{{ frappe.get_url() }}/desk#List/Alert Log?name={{ frappe.utils.get_datetime(frappe.utils.nowdate()).strftime('%y%m%d') }}" target="_blank"><span aria-hidden="true" class="li_news fs1 mb-0 pb-0"></span></a>
 					        <p><bold style="font-size: 36px;">{{ alert_logs | length }}</bold> <bad style="font-size: 9pt;">alerts</bad></p>
                 </div>
                 <p class="mb-1 pb-0 mr-1" style="position: absolute; bottom: 0px; right: 0px;">Sensor Alerts</p>              
@@ -184,9 +184,9 @@
                     <div id="collapse{{ loop.index }}" class="accordion-body collapse in">
                       <div class="accordion-inner">
                       {% if val.alert_item[idx].to_time == None %}
-                         <a href="{{ frappe.get_url() }}:8008/desk#List/Alert Log?name={{val.name}}" target="_blank">Alert</a> <small>{{val.alert_item[idx].variable}} @{{val.alert_item[idx].value}}</small> from <strong>{{ frappe.format(val.alert_item[idx].from_time, {'fieldtype': 'Time'})}}</strong>
+                         <a href="{{ frappe.get_url() }}/desk#List/Alert Log?name={{val.name}}" target="_blank">Alert</a> <small>{{val.alert_item[idx].variable}} @{{val.alert_item[idx].value}}</small> from <strong>{{ frappe.format(val.alert_item[idx].from_time, {'fieldtype': 'Time'})}}</strong>
                       {% else %}
-                         <a href="{{ frappe.get_url() }}:8008/desk#List/Alert Log?name={{val.name}}" target="_blank">Alert</a> <small>{{val.alert_item[idx].variable}}</small> at <strong>{{ frappe.format(val.alert_item[idx].to_time, {'fieldtype': 'Time'})}}</strong>
+                         <a href="{{ frappe.get_url() }}/desk#List/Alert Log?name={{val.name}}" target="_blank">Alert</a> <small>{{val.alert_item[idx].variable}}</small> at <strong>{{ frappe.format(val.alert_item[idx].to_time, {'fieldtype': 'Time'})}}</strong>
                       {% endif %}  
                       </div>   
                     </div>
@@ -586,7 +586,7 @@
     if ( colIdx > 1) {
       var rowPosition = oTable.fnGetPosition( this ); //row position of record in table
       var sensor = oTable.fnGetData(rowPosition,2);
-      window.open("{{ frappe.get_url() }}:8008/desk#Form/Sensor/" + sensor, "_self")
+      window.open("{{ frappe.get_url() }}/desk#Form/Sensor/" + sensor, "_self")
     }
   });
   </script>
